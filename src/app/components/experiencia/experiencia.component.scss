@@ -1,0 +1,72 @@
+.experiencia {
+  background: #181818; /* mismo fondo que el contenedor de experiencias */
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 280px;
+  color: #fff;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+  }
+
+  h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ffd86b; /* tono dorado */
+    margin-bottom: 1rem;
+  }
+
+  .note {
+    color: #ccc;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+  }
+
+  .price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 1rem;
+
+    span {
+      font-size: 0.9rem;
+      color: #999;
+    }
+  }
+
+  .categoria {
+    color: #bbb;
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .btn {
+    background: #e79b23;
+    border: none;
+    border-radius: 2rem;
+    color: #000;
+    padding: 0.6rem 1.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: #ffcc66;
+      transform: scale(1.05);
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: 320px;
+  }
+}

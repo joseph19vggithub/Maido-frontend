@@ -1,0 +1,47 @@
+<header class="site-header">
+  <div class="container header-inner">
+    <!-- Logo con icono + texto -->
+    <a href="#inicio" class="brand">
+      <img src="assets/img/logo.png" alt="MAIDO Logo" class="brand-logo" />
+      <span class="brand-text">MAIDO</span>
+    </a>
+
+    <!-- Menú principal -->
+    <nav>
+      <ul class="nav-list" [class.open]="menuAbierto">
+        <li><a href="#inicio" (click)="toggleMenu()">Inicio</a></li>
+        <li><a href="#mitsuharu" (click)="toggleMenu()">Información Personal</a></li>
+        <li><a href="#experiencias" (click)="toggleMenu()">Nuestras Experiencias</a></li>
+        <li><a href="#contacto" (click)="toggleMenu()">Contacto</a></li>
+        <li>
+          <a
+            href="https://maido.mesa247.pe"
+            target="_blank"
+            rel="noopener"
+            class="btn btn-primary"
+            (click)="toggleMenu()"
+          >
+            Reserva
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Iconos sociales -->
+    <div class="socials">
+      <a href="https://www.instagram.com/maido/" target="_blank" rel="noopener">
+        <img src="assets/icons/instagram.svg" alt="Instagram" />
+      </a>
+      <a href="https://www.facebook.com/maido" target="_blank" rel="noopener">
+        <img src="assets/icons/facebook.svg" alt="Facebook" />
+      </a>
+    </div>
+
+    <!-- Botón hamburguesa (móvil) -->
+    <button class="hamburger" (click)="toggleMenu()" aria-label="Abrir menú">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>

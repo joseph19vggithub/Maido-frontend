@@ -1,0 +1,116 @@
+.contacto {
+  background: linear-gradient(180deg, #0f0f0f 0%, #141414 100%);
+  padding: 100px 0;
+  color: #fff;
+  text-align: center;
+
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #ffd86b; /* dorado elegante */
+  }
+
+  .section-lead {
+    color: #ccc;
+    font-size: 1.1rem;
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-inline: auto;
+  }
+
+  /* === TARJETA DEL FORMULARIO === */
+  .contact-form {
+    background: rgba(24, 24, 24, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1.2rem;
+    padding: 2.5rem 2rem;
+    max-width: 600px;
+    margin-inline: auto;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+    }
+
+    display: grid;
+    gap: 1.2rem;
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+
+      label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #ffd86b;
+        font-size: 0.95rem;
+      }
+
+      input,
+      textarea {
+        padding: 0.9rem 1rem;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: #1b1b1b;
+        color: #fff;
+        font-size: 1rem;
+        outline: none;
+        transition: border 0.25s ease, background 0.25s ease;
+
+        &::placeholder {
+          color: #888;
+        }
+
+        &:focus {
+          border-color: #ffd86b;
+          background: #222;
+        }
+      }
+
+      textarea {
+        resize: none;
+      }
+    }
+
+    /* === BOTÓN === */
+    .btn {
+      background: #ffd86b;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      padding: 0.9rem 1.8rem;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+      width: 100%;
+
+      &:hover {
+        background: #ffe08c;
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+  }
+
+  /* === RESPONSIVO === */
+  @media (max-width: 768px) {
+    padding: 70px 0;
+
+    .section-title {
+      font-size: 2rem;
+    }
+
+    .contact-form {
+      padding: 2rem 1.5rem;
+    }
+  }
+}
+

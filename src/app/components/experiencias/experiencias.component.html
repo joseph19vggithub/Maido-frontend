@@ -1,0 +1,23 @@
+<section class="section experiencias" id="experiencias">
+  <div class="container">
+
+    <h2 class="section-title">Nuestras Experiencias</h2>
+
+    <!-- Contenedor horizontal: imagen al lado del texto/cards -->
+    <div class="experiencias-horizontal">
+      <!-- Imagen -->
+      <div class="experiencias-img">
+        <img src="assets/img/mesa247.png" alt="Mesa247" />
+      </div>
+
+      <!-- Cards de experiencias -->
+      <div class="grid cards">
+        <app-experiencia
+          *ngFor="let exp of experiencias"
+          [experiencia]="exp"
+        ></app-experiencia>
+      </div>
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,151 @@
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(11, 11, 12, 0.7);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  /* === LOGO + TEXTO === */
+  .brand {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    font-size: 1.2rem;
+
+    &:hover {
+      color: var(--primary);
+    }
+
+    .brand-logo {
+      height: 50px;
+      width: auto;
+      display: block;
+      margin-right: 0.5rem;
+      transition: opacity 0.25s;
+
+      &:hover {
+        opacity: 0.85;
+      }
+    }
+
+    .brand-text {
+      display: inline-block;
+    }
+  }
+
+  /* Ajuste para móviles */
+  @media (max-width: 680px) {
+    .brand-logo {
+      height: 40px;
+    }
+
+    .brand-text {
+      font-size: 1rem;
+    }
+  }
+
+  /* === MENÚ PRINCIPAL === */
+  .nav-list {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+
+    a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.5rem 0.6rem;
+      border-radius: 8px;
+      transition: all 0.25s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--primary);
+      }
+
+      /* Enlace activo (cuando se usa scroll o anclaje) */
+      &.active {
+        color: var(--primary);
+        border-bottom: 2px solid var(--primary);
+      }
+    }
+
+    &.open {
+      transform: translateY(0);
+    }
+  }
+
+  /* === ICONOS SOCIALES === */
+  .socials img {
+    width: 24px;
+    height: 24px;
+    opacity: 0.85;
+    transition: opacity 0.25s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  /* === BOTÓN HAMBURGUESA === */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+
+    span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text);
+      margin: 4px 0;
+      transition: 0.25s;
+    }
+  }
+}
+
+/* === RESPONSIVE (móvil) === */
+@media (max-width: 680px) {
+  .nav-list {
+    position: fixed;
+    inset: 64px 0 auto 0;
+    background: rgba(11, 11, 12, 0.95);
+    backdrop-filter: blur(10px);
+    flex-direction: column;
+    padding: 1.5rem;
+    transform: translateY(-120%);
+    transition: transform 0.25s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    gap: 1.25rem;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .socials {
+    display: none;
+  }
+}
+
+/* === EFECTO DE DESPLAZAMIENTO SUAVE === */
+html {
+  scroll-behavior: smooth;
+}

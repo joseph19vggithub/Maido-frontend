@@ -1,0 +1,17 @@
+<article class="card experiencia" *ngIf="experiencia">
+  <h3>{{ experiencia.nombre }}</h3>
+  <p class="note">{{ experiencia.descripcion }}</p>
+
+  <p class="price">
+    S/ {{ experiencia.precio }}
+    <span *ngIf="!experiencia.disponible">(No disponible)</span>
+  </p>
+
+  <p class="categoria" *ngIf="experiencia.categoria">
+    Categoría: {{ experiencia.categoria.nombre }}
+  </p>
+
+  <a href="https://maido.mesa247.pe" target="_blank" class="btn btn-primary">
+    Reservar
+  </a>
+</article>

@@ -1,0 +1,51 @@
+.mitsuharu {
+  background: var(--bg-alt);
+  color: var(--text);
+
+  .cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .text {
+    p {
+      margin-bottom: 1rem;
+    }
+
+    
+    }
+  }
+
+  .photo {
+    height: 420px;
+    border-radius: var(--radius);
+    background-size: contain;
+background-repeat: no-repeat;
+background-position: center;
+
+    border: 1px solid var(--outline);
+    box-shadow: var(--shadow);
+  }
+
+  /* Responsivo */
+  @media (max-width: 800px) {
+    .cols {
+      grid-template-columns: 1fr;
+      text-align: center;
+
+      .photo {
+        order: -1;
+        height: 320px;
+      }
+
+      .text {
+        .extra-img {
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+    }
+  }
+
