@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+
 // Importar los componentes standalone que usas en el template
 import { HeaderComponent } from './components/header/header.component';
 import { HeroComponent } from './components/hero/hero.component';
@@ -9,6 +10,7 @@ import { ExperienciasComponent } from './components/experiencias/experiencias.co
 import { MitsuharuComponent } from './components/mitsuharu/mitsuharu.component';
 import { ContactoComponent } from './components/contacto/contacto.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { ChatbotComponent } from './components/chatbot/chatbot.component';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +23,8 @@ import { FooterComponent } from './components/footer/footer.component';
     ExperienciasComponent,
     MitsuharuComponent,
     ContactoComponent,
-    FooterComponent
+    FooterComponent,
+    ChatbotComponent,
   ],
   templateUrl: './app.component.html',
 })

@@ -1,0 +1,34 @@
+<!-- Botón flotante -->
+<div class="chatbot-button" (click)="toggleChat()">
+  <img src="assets/img/chat-icon.ico" alt="Chat Icon" class="chatbot-icon" />
+</div>
+
+<!-- Ventana del chatbot -->
+<div class="chatbot-window" *ngIf="isOpen">
+  <div class="chat-header">
+    <span>Asistente Maido 🤖</span>
+    <button class="close-btn" (click)="toggleChat()">✖</button>
+  </div>
+
+  <div class="chat-body" #chatBody>
+    <div *ngFor="let msg of messages" [ngClass]="msg.from" class="message">
+      <span>{{ msg.text }}</span>
+    </div>
+
+    <!-- Indicador de escritura del bot -->
+    <div class="typing-indicator" *ngIf="isTyping">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <div class="chat-input">
+    <input
+      type="text"
+      placeholder="Escribe un mensaje..."
+      [(ngModel)]="userInput"
+      (keydown.enter)="sendMessage()"
+    />
+    <button (click)="sendMessage()">Enviar</button>
+  </div>
+</div>
+
