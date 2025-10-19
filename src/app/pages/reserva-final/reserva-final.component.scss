@@ -1,0 +1,205 @@
+.reserva-final {
+  min-height: 100vh;
+  background: #fafafa;
+  padding: 30px 16px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+
+  /* 🟡 Barra de pasos */
+  .progress-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      color: #999;
+      font-size: 0.85rem;
+
+      .number {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #e0e0e0;
+        color: #555;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        margin-bottom: 6px;
+        transition: all 0.3s ease;
+      }
+
+      &.active .number {
+        background: #c21807;
+        color: white;
+      }
+
+      &.completed .number {
+        background: #caa246;
+        color: white;
+      }
+
+      .label {
+        font-weight: 500;
+      }
+    }
+
+    .line {
+      flex: 1;
+      height: 2px;
+      background: #ccc;
+      &.completed {
+        background: #caa246;
+      }
+    }
+  }
+
+  /* 🧾 Contenido principal */
+  .content {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    padding: 24px;
+    width: 100%;
+    max-width: 480px;
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+
+      .brand {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+
+        .logo {
+          background: #c21807;
+          color: #fff;
+          border-radius: 50%;
+          width: 38px;
+          height: 38px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: bold;
+        }
+
+        strong {
+          font-size: 1.4rem;
+          color: #c21807;
+        }
+      }
+
+      h2 {
+        margin-top: 10px;
+        font-size: 1.4rem;
+        color: #222;
+      }
+
+      .subtitle {
+        font-size: 0.95rem;
+        color: #666;
+        margin-top: 4px;
+      }
+    }
+
+    .form-group,
+    .form-group-row {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 12px;
+
+      label {
+        font-weight: 600;
+        margin-bottom: 4px;
+        color: #444;
+      }
+
+      input,
+      select,
+      textarea {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 1rem;
+        outline: none;
+        &:focus {
+          border-color: #c21807;
+        }
+      }
+    }
+
+    .form-group-row {
+      flex-direction: row;
+      justify-content: space-between;
+
+      .form-group {
+        flex: 1;
+
+        &:first-child {
+          margin-right: 8px;
+        }
+      }
+    }
+
+    .resumen {
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 8px;
+
+      h3 {
+        color: #c21807;
+        margin-bottom: 6px;
+      }
+
+      p {
+        margin: 4px 0;
+        font-size: 0.95rem;
+      }
+    }
+
+    .acciones {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+
+      .btn {
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .btn.primary {
+        background: #c21807;
+        color: white;
+        border: none;
+        &:hover {
+          background: #a51406;
+        }
+      }
+
+      .btn.ghost {
+        background: transparent;
+        border: 2px solid #c21807;
+        color: #c21807;
+        &:hover {
+          background: #fbeaea;
+        }
+      }
+    }
+  }
+}

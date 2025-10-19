@@ -1,0 +1,31 @@
+<section class="confirmacion-container">
+  <div class="confirmacion-card">
+    <div class="icono-exito">🎉</div>
+
+    <h1 class="titulo">¡Reserva Confirmada!</h1>
+
+    <p class="mensaje">
+      Gracias, <strong>{{ nombreReserva }}</strong>.  
+      Tu reserva fue procesada correctamente.
+    </p>
+
+    <div class="detalles" *ngIf="datosReserva">
+      <p><strong>📅 Fecha:</strong> {{ datosReserva.fecha || 'No especificada' }}</p>
+      <p><strong>🕒 Hora:</strong> {{ datosReserva.hora || 'No especificada' }}</p>
+      <p><strong>👥 Personas:</strong> {{ datosReserva.personas || '—' }}</p>
+      <p *ngIf="datosReserva.mensaje">
+        <strong>💬 Comentarios:</strong> {{ datosReserva.mensaje }}
+      </p>
+    </div>
+
+    <p class="mensaje-secundario">
+      Pronto recibirás un correo con los detalles de tu reserva.  
+      ¡Te esperamos en Maido!
+    </p>
+
+    <div class="acciones">
+      <a routerLink="/" class="btn-volver">Volver al inicio</a>
+      <a routerLink="/experiencias" class="btn-experiencias">Ver experiencias</a>
+    </div>
+  </div>
+</section>

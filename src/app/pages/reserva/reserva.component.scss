@@ -1,0 +1,116 @@
+.reserva-container {
+  min-height: 100vh;
+  background: url('/assets/img/PORTADAMAIDO.jpg') center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 1;
+  }
+}
+
+.reserva-card {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  animation: fadeInUp 0.8s ease-out;
+
+  .reserva-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #c21807;
+  }
+
+  .reserva-subtitle {
+    text-align: center;
+    color: #444;
+    margin-bottom: 30px;
+    font-size: 1.05rem;
+  }
+
+  .reserva-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+
+      label {
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #222;
+      }
+
+      input,
+      select,
+      textarea {
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        outline: none;
+        font-size: 1rem;
+        transition: border 0.2s ease, box-shadow 0.2s ease;
+
+        &:focus {
+          border-color: #c21807;
+          box-shadow: 0 0 4px rgba(194, 24, 7, 0.3);
+        }
+      }
+    }
+
+    .btn-reserva {
+      background: #c21807;
+      color: white;
+      border: none;
+      padding: 14px 20px;
+      font-size: 1.1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-top: 10px;
+
+      &:hover {
+        background: #a51406;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(194, 24, 7, 0.4);
+      }
+    }
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

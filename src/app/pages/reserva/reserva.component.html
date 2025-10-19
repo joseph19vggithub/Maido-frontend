@@ -1,0 +1,59 @@
+<section class="reserva-container">
+  <div class="reserva-card">
+    <h1 class="reserva-title">Reserva tu experiencia Maido 🍣</h1>
+    <p class="reserva-subtitle">
+      Completa los pasos para asegurar tu mesa y vivir la experiencia Nikkei.
+    </p>
+
+    <form class="reserva-form">
+      <div class="form-group">
+        <label for="nombre">Nombre completo</label>
+        <input type="text" id="nombre" placeholder="Ej. Javier Cruz" />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Correo electrónico</label>
+        <input type="email" id="email" placeholder="Ej. javier@mail.com" />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="personas">Número de personas</label>
+          <select id="personas">
+            <option>1 persona</option>
+            <option>2 personas</option>
+            <option>3 personas</option>
+            <option>4 personas</option>
+            <option>5 o más</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="fecha">Fecha</label>
+          <input type="date" id="fecha" />
+        </div>
+
+        <div class="form-group">
+          <label for="hora">Hora</label>
+          <select id="hora">
+            <option>12:00 pm</option>
+            <option>1:00 pm</option>
+            <option>7:00 pm</option>
+            <option>8:00 pm</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="mensaje">Comentarios (opcional)</label>
+        <textarea
+          id="mensaje"
+          rows="3"
+          placeholder="Ej. Preferencia de asiento o alergias..."
+        ></textarea>
+      </div>
+<button class="btn-reserva" (click)="confirmarReserva($event)">Confirmar reserva</button>
+
+    </form>
+  </div>
+</section>

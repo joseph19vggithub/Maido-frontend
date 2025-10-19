@@ -1,14 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
 
-
-// Importar los componentes standalone que usas en el template
+// Importa solo los componentes globales (que aparecen en TODAS las páginas)
 import { HeaderComponent } from './components/header/header.component';
-import { HeroComponent } from './components/hero/hero.component';
-import { ExperienciaComponent } from './components/experiencia/experiencia.component';
-import { ExperienciasComponent } from './components/experiencias/experiencias.component';
-import { MitsuharuComponent } from './components/mitsuharu/mitsuharu.component';
-import { ContactoComponent } from './components/contacto/contacto.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { ChatbotComponent } from './components/chatbot/chatbot.component';
 
@@ -17,14 +12,10 @@ import { ChatbotComponent } from './components/chatbot/chatbot.component';
   standalone: true,
   imports: [
     CommonModule,
-    HeaderComponent,
-    HeroComponent,
-    ExperienciaComponent,
-    ExperienciasComponent,
-    MitsuharuComponent,
-    ContactoComponent,
-    FooterComponent,
-    ChatbotComponent,
+    RouterOutlet,     // ✅ Necesario para que funcione <router-outlet>
+    HeaderComponent,  // ✅ Header global
+    FooterComponent,  // ✅ Footer global
+    ChatbotComponent  // ✅ Chatbot flotante
   ],
   templateUrl: './app.component.html',
 })
