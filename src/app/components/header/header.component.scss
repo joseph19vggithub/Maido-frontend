@@ -87,6 +87,40 @@
       transform: translateY(0);
     }
   }
+/* === BOTÓN "INICIAR SESIÓN" === */
+.login-btn {
+  margin-left: 1.5rem; /* 👈 separa el botón del menú */
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  transition: background 0.3s ease, transform 0.2s ease;
+  white-space: nowrap; /* evita que el texto se parta */
+
+  &:hover {
+    background: var(--brandD);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+/* En pantallas pequeñas */
+@media (max-width: 680px) {
+  .login-btn {
+    margin-left: 0;
+    margin-top: 0.5rem;
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
 
   /* === ICONOS SOCIALES === */
   .socials img {
@@ -100,7 +134,7 @@
     }
   }
 
-  /* === BOTÓN HAMBURGUESA === */
+  /* === BOTÓN HAMBURGUESA === (ya no lo usas, pero lo dejo por si lo mantienes en otra vista) */
   .hamburger {
     display: none;
     flex-direction: column;
@@ -142,6 +176,12 @@
 
   .socials {
     display: none;
+  }
+
+  /* Botón de inicio de sesión visible también en móvil */
+  .login-btn {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.9rem;
   }
 }
 

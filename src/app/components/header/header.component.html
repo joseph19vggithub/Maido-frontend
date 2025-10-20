@@ -1,47 +1,49 @@
 <header class="site-header">
   <div class="container header-inner">
-    <!-- Logo con icono + texto -->
-    <a href="#inicio" class="brand">
+    <!-- Logo -->
+    <a [routerLink]="['/']" fragment="inicio" class="brand" (click)="toggleMenu()">
       <img src="assets/img/logo.png" alt="MAIDO Logo" class="brand-logo" />
       <span class="brand-text">MAIDO</span>
     </a>
 
     <!-- Menú principal -->
-    <nav>
+    <nav class="nav-menu">
       <ul class="nav-list" [class.open]="menuAbierto">
-        <li><a href="#inicio" (click)="toggleMenu()">Inicio</a></li>
-        <li><a href="#mitsuharu" (click)="toggleMenu()">Información Personal</a></li>
-        <li><a href="#experiencias" (click)="toggleMenu()">Nuestras Experiencias</a></li>
-        <li><a href="#contacto" (click)="toggleMenu()">Contacto</a></li>
+        <li>
+          <a [routerLink]="['/']" fragment="inicio" (click)="toggleMenu()">Inicio</a>
+        </li>
+        <li>
+          <a [routerLink]="['/']" fragment="mitsuharu" (click)="toggleMenu()">Información Personal</a>
+        </li>
+        <li>
+          <a [routerLink]="['/']" fragment="experiencias" (click)="toggleMenu()">Nuestras Experiencias</a>
+        </li>
+        <li>
+          <a [routerLink]="['/']" fragment="contacto" (click)="toggleMenu()">Contacto</a>
+        </li>
+
+        <!-- ✅ "Reservar" abre en nueva pestaña -->
         <li>
           <a
-            href="https://maido.mesa247.pe"
+            href="/reserva"
             target="_blank"
-            rel="noopener"
-            class="btn btn-primary"
+            rel="noopener noreferrer"
             (click)="toggleMenu()"
           >
-            Reserva
+            Reservar
           </a>
         </li>
       </ul>
     </nav>
 
-    <!-- Iconos sociales -->
-    <div class="socials">
-      <a href="https://www.instagram.com/maido/" target="_blank" rel="noopener">
-        <img src="assets/icons/instagram.svg" alt="Instagram" />
-      </a>
-      <a href="https://www.facebook.com/maido" target="_blank" rel="noopener">
-        <img src="assets/icons/facebook.svg" alt="Facebook" />
-      </a>
-    </div>
-
-    <!-- Botón hamburguesa (móvil) -->
-    <button class="hamburger" (click)="toggleMenu()" aria-label="Abrir menú">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
+    <!-- ✅ Botón Iniciar Sesión que abre en nueva pestaña -->
+    <a
+      href="/login"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="login-btn"
+    >
+      Iniciar sesión
+    </a>
   </div>
 </header>

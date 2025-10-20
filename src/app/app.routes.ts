@@ -6,6 +6,8 @@ import { ExperienciasComponent } from './components/experiencias/experiencias.co
 import { MitsuharuComponent } from './components/mitsuharu/mitsuharu.component';
 import { ContactoComponent } from './components/contacto/contacto.component';
 import { ConfirmacionReservaComponent } from './pages/confirmacion-reserva/confirmacion-reserva.component';
+import { LoginComponent } from './pages/login/login.component';
+
 
 export const routes: Routes = [
   { path: '', component: InicioComponent }, // ✅ Nueva página de inicio
@@ -13,5 +15,6 @@ export const routes: Routes = [
   { path: 'informacion', component: InformacionComponent },
   { path: 'confirmacion', component: ConfirmacionReservaComponent },
   { path: 'confirmacion-reserva', component: ConfirmacionReservaComponent }, // 👈 NUEVA RUTA
+  { path: 'login', component: LoginComponent }, // 👈 nueva ruta de inicio de sesión
   { path: '**', redirectTo: '' }
 ];
