@@ -1,9 +1,9 @@
-<!-- Header siempre visible -->
-<app-header></app-header>
+<!-- Header y Bot solo si NO estamos en /mesero -->
+<app-header *ngIf="!isMesero"></app-header>
 
-<!-- Aquí Angular carga las páginas según la ruta -->
+<!-- Contenido de la app -->
 <router-outlet></router-outlet>
 
-<!-- Chatbot y footer si quieres que estén en todas las páginas -->
-<app-chatbot></app-chatbot>
-<app-footer></app-footer>
+<!-- Footer y Chatbot solo si NO estamos en /mesero -->
+<app-footer *ngIf="!isMesero"></app-footer>
+<app-chatbot *ngIf="!isMesero"></app-chatbot>

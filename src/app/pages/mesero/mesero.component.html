@@ -1,0 +1,171 @@
+<!-- ===== Header ===== -->
+<header class="topbar">
+  <div class="brand">
+    <img class="logo-img" [src]="logoUrl" alt="MAIDO" />
+    <div class="title">MAIDO • Mesero</div>
+  </div>
+
+  <div class="right">
+    <span class="pill text">Mesa seleccionada: <strong>{{ mesaLabel() }}</strong></span>
+    <button class="pill ghost" [class.active]="modo==='carta'" (click)="modo='carta'">A la carta</button>
+
+    <select class="pill select" [(ngModel)]="personasSel">
+      <option [ngValue]="1">1 persona</option>
+      <option [ngValue]="2">2 personas</option>
+      <option [ngValue]="3">3 personas</option>
+      <option [ngValue]="4">4 personas</option>
+      <option [ngValue]="5">5 personas</option>
+      <option [ngValue]="6">6 personas</option>
+    </select>
+
+    <button class="pill ok" (click)="enviar()">Enviar a cocina</button>
+    <button class="pill warn" (click)="marcarListo()">Marcar listo</button>
+    <button class="pill gold" (click)="marcarReservada()">Marcar reservada</button>
+    <button class="pill clear" (click)="liberarMesa()">Liberar mesa</button>
+  </div>
+</header>
+
+<!-- ===== Grid principal ===== -->
+<div class="grid">
+  <!-- Col Mesas -->
+  <section class="card">
+    <div class="card-head">
+      <h2>Mesas</h2>
+    </div>
+
+    <div class="status">
+      <span class="muted">Estado:</span>
+      <span class="chip"
+            [class.free]="estadoMesa==='libre'"
+            [class.busy]="estadoMesa==='ocupada'"
+            [class.reservada]="estadoMesa==='reservada'">
+        {{ estadoMesa }}
+      </span>
+    </div>
+
+    <div class="tabs">
+      <button class="tab" *ngFor="let p of pisos" [class.active]="pisoSeleccionado===p" (click)="seleccionarPiso(p)">
+        Piso {{ p }}
+      </button>
+    </div>
+
+    <div class="mesas">
+      <button
+        class="mesa"
+        *ngFor="let n of mesasPorPiso[pisoSeleccionado]"
+        [class.active]="mesaSeleccionada===n"
+        [class.ocupada]="getEstadoMesa(mesaKeyOf(pisoSeleccionado,n))==='ocupada'"
+        [class.reservada]="getEstadoMesa(mesaKeyOf(pisoSeleccionado,n))==='reservada'"
+        (click)="seleccionarMesa(pisoSeleccionado, n)">
+        {{ n }}
+      </button>
+    </div>
+
+    <div class="legend">
+      <span><span class="dot free"></span> Libre</span>
+      <span><span class="dot busy"></span> Ocupada</span>
+      <span><span class="dot res"></span> Reservada</span>
+    </div>
+  </section>
+
+  <!-- Col Carta -->
+  <section class="card">
+    <h2>Carta</h2>
+
+    <div class="filters">
+      <input class="search" placeholder="Buscar plato..." [(ngModel)]="q" />
+      <select class="pill select" [(ngModel)]="catSel">
+        <option *ngFor="let c of categorias" [ngValue]="c">{{ c }}</option>
+      </select>
+      <select class="pill select" [(ngModel)]="notaRapida">
+        <option [ngValue]="''">Nota rápida…</option>
+        <option [ngValue]="'Sin sal'">Sin sal</option>
+        <option [ngValue]="'Poco picante'">Poco picante</option>
+        <option [ngValue]="'Sin cebolla'">Sin cebolla</option>
+      </select>
+    </div>
+
+    <div class="chips">
+      <button class="chip" *ngFor="let c of categorias" [class.active]="catSel===c" (click)="setCategoria(c)">
+        {{ c }}
+      </button>
+    </div>
+
+    <div class="list">
+      <div class="row" *ngFor="let it of menuFiltrado()">
+        <div class="info">
+          <div class="name">{{ it.nombre }}</div>
+          <div class="sub">{{ it.sub }}</div>
+        </div>
+
+        <div class="price">S/ {{ it.precio.toFixed(2) }}</div>
+
+        <div class="qty">
+          <button class="icon" (click)="dec(it)">−</button>
+          <input class="qtybox" type="number" min="1" [(ngModel)]="qty[it.id]" />
+          <button class="icon" (click)="inc(it)">+</button>
+        </div>
+
+        <button class="add" (click)="addItem(it)">Añadir</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Col Pedido -->
+  <section class="card">
+    <h2>Pedido</h2>
+
+    <div class="personas">
+      <button class="round" [class.active]="personaActiva===1" (click)="setPersonaActiva(1)">1</button>
+      <button class="round" [class.active]="personaActiva===2" (click)="setPersonaActiva(2)">2</button>
+    </div>
+
+    <div class="total">
+      <span>Total</span>
+      <strong>S/ {{ total.toFixed(2) }}</strong>
+    </div>
+
+    <textarea rows="4" placeholder="Observaciones de la mesa (cumpleaños, etc.)" [(ngModel)]="notaRapida"></textarea>
+
+    <!-- CORREGIDO: referencia ASCII sin tildes -->
+    <ng-container *ngIf="pedido.length; else emptyTpl">
+      <div class="orderlist">
+        <div class="oline" *ngFor="let l of pedido; let i = index">
+          <div class="oline-info">
+            <div class="oline-name">{{ l.nombre }}</div>
+            <div class="oline-sub">P{{ l.persona }} • x{{ l.cantidad }}</div>
+          </div>
+          <div class="oline-price">S/ {{ (l.precio * l.cantidad).toFixed(2) }}</div>
+          <button class="oline-remove" (click)="removeLine(i)">✕</button>
+        </div>
+      </div>
+
+      <div class="order-actions mt">
+        <button class="btn ghost" (click)="vaciarPedido()">Vaciar</button>
+        <button class="btn primary" (click)="confirmarPedido()">Confirmar pedido</button>
+      </div>
+    </ng-container>
+
+    <ng-template #emptyTpl>
+      <div class="order-actions center mt">
+        <button class="btn primary" (click)="confirmarPedido()">Confirmar pedido</button>
+      </div>
+    </ng-template>
+  </section>
+</div>
+
+<!-- ===== Toasts ===== -->
+<div class="toast-wrap">
+  <div class="toast"
+       *ngFor="let t of toasts"
+       [class.success]="t.kind==='success'"
+       [class.info]="t.kind==='info'"
+       [class.warning]="t.kind==='warning'"
+       [class.danger]="t.kind==='danger'">
+    <div class="icon">●</div>
+    <div class="msg">{{ t.msg }}</div>
+
+    <!-- CORREGIDO: estilo con guion y unidad ms -->
+    <div class="bar" [style.animation-duration.ms]="t.ms"></div>
+  </div>
+</div>
