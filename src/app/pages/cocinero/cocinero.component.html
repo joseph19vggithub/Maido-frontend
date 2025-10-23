@@ -1,0 +1,43 @@
+<div class="cocinero-container">
+  <h1>📋 Pedidos en Cocina</h1>
+
+  <div *ngIf="cargando" class="loading">Cargando pedidos...</div>
+  <div *ngIf="!cargando && pedidos.length === 0" class="no-pedidos">
+    No hay pedidos pendientes.
+  </div>
+
+  <div class="pedidos-grid" *ngIf="pedidos.length > 0">
+    <div class="pedido-card" *ngFor="let pedido of pedidos" [style.borderColor]="getColorPorEstado(pedido.estado)">
+      <div class="pedido-header">
+        <h2>Pedido #{{ pedido.id }}</h2>
+        <span class="estado" [ngStyle]="{'background-color': getColorPorEstado(pedido.estado)}">
+          {{ pedido.estado | uppercase }}
+        </span>
+      </div>
+
+      <p class="fecha">🕒 {{ pedido.fecha | date:'short' }}</p>
+
+      <table class="detalle">
+        <thead>
+          <tr><th>Plato</th><th>Cant.</th><th>Precio</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let det of pedido.pedidoDetalles">
+            <td>{{ det.nombre }}</td>
+            <td>{{ det.cantidad }}</td>
+            <td>S/ {{ det.precioUnitario }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="acciones">
+        <button class="btn azul" (click)="cambiarEstado(pedido, 'en_preparacion')">
+          👨‍🍳 En preparación
+        </button>
+        <button class="btn verde" (click)="cambiarEstado(pedido, 'listo')">
+          ✅ Listo
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

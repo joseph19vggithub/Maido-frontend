@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,16 +15,25 @@ export class LoginComponent {
   email: string = '';
   password: string = '';
 
+  constructor(private router: Router, private auth: AuthService) {}
+
   onSubmit() {
     if (!this.email || !this.password) {
       alert('Por favor, completa todos los campos.');
       return;
     }
 
-    // Aquí podrías conectar con tu backend o servicio de autenticación
-    console.log('Correo:', this.email);
-    console.log('Contraseña:', this.password);
-
-    alert('Inicio de sesión exitoso (simulado)');
+    if (this.email === 'mesero' && this.password === '1234') {
+      this.auth.login('mesero');
+      this.router.navigate(['/mesero']);
+    } else if (this.email === 'admin' && this.password === 'admin') {
+      this.auth.login('admin');
+      this.router.navigate(['/admin']);
+    } else if (this.email === 'cocinero' && this.password === 'cook123') {
+      this.auth.login('cocinero');
+      this.router.navigate(['/cocinero']);
+    } else {
+      alert('Credenciales incorrectas');
+    }
   }
 }

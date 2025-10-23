@@ -6,8 +6,14 @@
   </div>
 
   <div class="right">
-    <span class="pill text">Mesa seleccionada: <strong>{{ mesaLabel() }}</strong></span>
-    <button class="pill ghost" [class.active]="modo==='carta'" (click)="modo='carta'">A la carta</button>
+    <!-- Estado y opciones -->
+    <span class="pill text">
+      Mesa seleccionada: <strong>{{ mesaLabel() }}</strong>
+    </span>
+
+    <button class="pill ghost" [class.active]="modo==='carta'" (click)="modo='carta'">
+      A la carta
+    </button>
 
     <select class="pill select" [(ngModel)]="personasSel">
       <option [ngValue]="1">1 persona</option>
@@ -22,8 +28,12 @@
     <button class="pill warn" (click)="marcarListo()">Marcar listo</button>
     <button class="pill gold" (click)="marcarReservada()">Marcar reservada</button>
     <button class="pill clear" (click)="liberarMesa()">Liberar mesa</button>
+
+    <!-- 🔴 Botón de cierre de sesión -->
+    <button class="pill logout" (click)="logout()">Cerrar sesión</button>
   </div>
 </header>
+
 
 <!-- ===== Grid principal ===== -->
 <div class="grid">

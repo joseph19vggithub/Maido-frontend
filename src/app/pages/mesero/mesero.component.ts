@@ -1,6 +1,9 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { PedidoService } from '../../services/pedido.service'; // ✅ nuevo import
 
 type EstadoMesa = 'libre' | 'ocupada' | 'reservada';
 
@@ -40,13 +43,9 @@ export class MeseroComponent {
   };
   mesaSeleccionada: number | null = 1;
 
-  // estado "chip" mostrado para la mesa actual
   estadoMesa: EstadoMesa = 'libre';
-
-  // mapa de estados por mesa
   mesaEstados: Record<string, EstadoMesa> = {};
 
-  // personas / nota
   personaActiva = 1;
   personasSel = 2;
   notaRapida: string = '';
@@ -81,6 +80,19 @@ export class MeseroComponent {
   toasts: Array<{ id: number; kind: 'success' | 'info' | 'warning' | 'danger'; msg: string; ms: number }> = [];
   private tid = 0;
 
+  // ✅ Inyección de dependencias
+  constructor(
+    private router: Router,
+    private auth: AuthService,
+    private pedidoService: PedidoService // 👈 agregado para conectar al backend
+  ) {}
+
+  // 🔴 Cerrar sesión
+  logout() {
+    this.auth.logout();
+    this.router.navigate(['/login']);
+  }
+
   // ======== Helpers Mesa ========
   get mesaKey(): string {
     return this.mesaSeleccionada ? this.mesaKeyOf(this.pisoSeleccionado, this.mesaSeleccionada) : '';
@@ -106,7 +118,6 @@ export class MeseroComponent {
   // ======== Acciones UI ========
   seleccionarPiso(p: number) {
     this.pisoSeleccionado = p;
-    // si la mesa anterior no existe en el piso nuevo, resetea
     this.mesaSeleccionada = this.mesasPorPiso[p][0] ?? null;
     this.estadoMesa = this.getEstadoMesa(this.mesaKey);
   }
@@ -171,12 +182,27 @@ export class MeseroComponent {
     this.toast('success', `Pedido confirmado (${this.pedido.length} ítems). Total S/ ${this.total.toFixed(2)}`);
   }
 
+  // ✅ NUEVA VERSIÓN del método ENVIAR (con conexión a SQL)
   enviar() {
     if (!this.pedido.length) {
       this.toast('warning', 'No hay ítems para enviar.');
       return;
     }
-    this.toast('info', 'Pedido enviado a cocina.');
+
+    const pedidoData = {
+      mesa: this.mesaSeleccionada,
+      cliente: null,
+      detalles: this.pedido,
+      total: this.total
+    };
+
+    this.pedidoService.crearPedido(pedidoData).subscribe({
+      next: () => {
+        this.toast('success', 'Pedido enviado a cocina.');
+        this.vaciarPedido();
+      },
+      error: () => this.toast('danger', 'Error al enviar pedido.'),
+    });
   }
 
   marcarListo() {
@@ -205,7 +231,6 @@ export class MeseroComponent {
     this.total = this.pedido.reduce((acc, l) => acc + l.precio * l.cantidad, 0);
   }
 
-  /** Marca ocupada si hay ítems; si no hay y no está reservada, vuelve a libre */
   private syncEstadoConPedido() {
     const key = this.mesaKey;
     if (!key) return;

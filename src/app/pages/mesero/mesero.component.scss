@@ -340,3 +340,36 @@ textarea {
 
 /* Leyenda: colores más alineados */
 .dot.busy { background: var(--brand-red); }
+/* ====== Botón “Cerrar sesión” ====== */
+.pill.logout {
+  background: var(--danger); /* usa el rojo de tu tema */
+  border-color: var(--danger);
+  color: #fff;
+  font-weight: 700;
+  padding: 0 14px;
+  transition: 0.2s ease;
+}
+
+.pill.logout:hover {
+  filter: brightness(1.1);
+}
+
+/* ====== Responsive: mantener logout visible y alineado ====== */
+@media (max-width: 900px) {
+  .topbar {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .topbar .right {
+    width: 100%;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .pill.logout {
+    margin-top: 6px;
+    align-self: flex-end;
+  }
+}
