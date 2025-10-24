@@ -1,0 +1,42 @@
+<section class="menu-clientes">
+  <header class="menu-header">
+    <img src="assets/img/logo.png" alt="MAIDO Logo" class="logo" />
+    <h1>Menú Digital 🍣</h1>
+  </header>
+
+  <!-- 🔍 Buscador y categorías -->
+  <div class="filters">
+    <input
+      type="text"
+      [(ngModel)]="q"
+      placeholder="Buscar plato..."
+      class="search-box"
+    />
+
+    <div class="chips">
+      <button
+        *ngFor="let c of categorias"
+        [class.active]="c === catSel"
+        (click)="setCategoria(c)"
+      >
+        {{ c }}
+      </button>
+    </div>
+  </div>
+
+  <!-- 📋 Lista de platos -->
+  <div class="menu-grid">
+    <div class="card" *ngFor="let it of menuFiltrado()">
+      <img
+        [src]="it.imagen"
+        [alt]="it.nombre"
+        (error)="imagenFallback($event)"
+      />
+      <div class="info">
+        <h3>{{ it.nombre }}</h3>
+        <p>{{ it.descripcion }}</p>
+        <span class="precio">S/ {{ it.precio.toFixed(2) }}</span>
+      </div>
+    </div>
+  </div>
+</section>

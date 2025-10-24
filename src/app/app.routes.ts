@@ -8,6 +8,8 @@ import { InicioComponent } from './pages/inicio/inicio.component';
 import { ReservaComponent } from './pages/reserva/reserva.component';
 import { InformacionComponent } from './pages/informacion/informacion.component';
 import { ConfirmacionReservaComponent } from './pages/confirmacion-reserva/confirmacion-reserva.component';
+import { MenuClientesComponent } from './pages/menu-clientes/menu-clientes.component';
+
 
 export const routes: Routes = [
   { path: '', component: InicioComponent, pathMatch: 'full' },
@@ -21,6 +23,8 @@ export const routes: Routes = [
   { path: 'mesero', component: MeseroComponent, canActivate: [authGuard], data: { role: 'mesero' } },
   { path: 'admin', component: AdminComponent, canActivate: [authGuard], data: { role: 'admin' } },
   { path: 'cocinero', component: CocineroComponent, canActivate: [authGuard], data: { role: 'cocinero' } },
+  { path: 'menu', component: MenuClientesComponent },
+
 
   { path: '**', redirectTo: '' },
 ];

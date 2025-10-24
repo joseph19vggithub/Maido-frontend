@@ -9,31 +9,41 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
   email: string = '';
   password: string = '';
+  errorMsg: string = '';
+  loading = false;
 
   constructor(private router: Router, private auth: AuthService) {}
 
   onSubmit() {
     if (!this.email || !this.password) {
-      alert('Por favor, completa todos los campos.');
+      this.errorMsg = 'Por favor, completa todos los campos.';
       return;
     }
 
-    if (this.email === 'mesero' && this.password === '1234') {
-      this.auth.login('mesero');
-      this.router.navigate(['/mesero']);
-    } else if (this.email === 'admin' && this.password === 'admin') {
-      this.auth.login('admin');
-      this.router.navigate(['/admin']);
-    } else if (this.email === 'cocinero' && this.password === 'cook123') {
-      this.auth.login('cocinero');
-      this.router.navigate(['/cocinero']);
-    } else {
-      alert('Credenciales incorrectas');
-    }
+    this.loading = true;
+    this.errorMsg = '';
+
+    this.auth.loginWithCredentials(this.email, this.password).subscribe({
+      next: (res) => {
+        this.loading = false;
+
+        if (!res.ok) {
+          this.errorMsg = 'Credenciales incorrectas.';
+          return;
+        }
+
+        // Redirigir según el rol
+        this.router.navigate(['/' + res.role]);
+      },
+      error: () => {
+        this.loading = false;
+        this.errorMsg = 'Error de conexión con el servidor.';
+      },
+    });
   }
 }

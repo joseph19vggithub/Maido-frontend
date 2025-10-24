@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { PedidoService } from '../../services/pedido.service'; // ✅ nuevo import
+import { PedidoService } from '../../services/pedido.service'; // ✅ Import correcto
 
 type EstadoMesa = 'libre' | 'ocupada' | 'reservada';
 
@@ -12,7 +12,7 @@ interface MenuItem {
   nombre: string;
   sub: string;
   precio: number;
-  categoria: string; // nigiri, tiraditos, etc.
+  categoria: string;
 }
 
 interface OrderLine {
@@ -31,10 +31,8 @@ interface OrderLine {
   styleUrls: ['./mesero.component.scss'],
 })
 export class MeseroComponent {
-  // ======== Estado general ========
   logoUrl = 'assets/img/logo.png';
   modo: 'carta' = 'carta';
-
   pisos = [1, 2];
   pisoSeleccionado = 1;
   mesasPorPiso: Record<number, number[]> = {
@@ -42,7 +40,6 @@ export class MeseroComponent {
     2: Array.from({ length: 12 }, (_, i) => i + 1),
   };
   mesaSeleccionada: number | null = 1;
-
   estadoMesa: EstadoMesa = 'libre';
   mesaEstados: Record<string, EstadoMesa> = {};
 
@@ -50,7 +47,6 @@ export class MeseroComponent {
   personasSel = 2;
   notaRapida: string = '';
 
-  // ======== Carta / filtros ========
   q = '';
   categorias = ['nigiri', 'tiraditos', 'temaki / rolls', 'calientes', 'arroces', 'postres'];
   catSel = 'nigiri';
@@ -72,28 +68,23 @@ export class MeseroComponent {
     );
   });
 
-  // ======== Pedido ========
   pedido: OrderLine[] = [];
   total = 0;
 
-  // ======== Toasts ========
   toasts: Array<{ id: number; kind: 'success' | 'info' | 'warning' | 'danger'; msg: string; ms: number }> = [];
   private tid = 0;
 
-  // ✅ Inyección de dependencias
   constructor(
     private router: Router,
     private auth: AuthService,
-    private pedidoService: PedidoService // 👈 agregado para conectar al backend
+    private pedidoService: PedidoService // ✅ Agregado
   ) {}
 
-  // 🔴 Cerrar sesión
   logout() {
     this.auth.logout();
     this.router.navigate(['/login']);
   }
 
-  // ======== Helpers Mesa ========
   get mesaKey(): string {
     return this.mesaSeleccionada ? this.mesaKeyOf(this.pisoSeleccionado, this.mesaSeleccionada) : '';
   }
@@ -115,7 +106,6 @@ export class MeseroComponent {
     if (key === this.mesaKey) this.estadoMesa = estado;
   }
 
-  // ======== Acciones UI ========
   seleccionarPiso(p: number) {
     this.pisoSeleccionado = p;
     this.mesaSeleccionada = this.mesasPorPiso[p][0] ?? null;
@@ -136,7 +126,6 @@ export class MeseroComponent {
     this.personaActiva = n;
   }
 
-  // ======== Cantidades ========
   inc(it: MenuItem) {
     const v = this.qty[it.id] ?? 1;
     this.qty[it.id] = v + 1;
@@ -147,7 +136,6 @@ export class MeseroComponent {
     this.qty[it.id] = Math.max(1, v - 1);
   }
 
-  // ======== Pedido ========
   addItem(it: MenuItem) {
     const line: OrderLine = {
       id: Date.now(),
@@ -182,7 +170,7 @@ export class MeseroComponent {
     this.toast('success', `Pedido confirmado (${this.pedido.length} ítems). Total S/ ${this.total.toFixed(2)}`);
   }
 
-  // ✅ NUEVA VERSIÓN del método ENVIAR (con conexión a SQL)
+  // ✅ Corregido: usa el método create() en lugar de crearPedido()
   enviar() {
     if (!this.pedido.length) {
       this.toast('warning', 'No hay ítems para enviar.');
@@ -196,7 +184,7 @@ export class MeseroComponent {
       total: this.total
     };
 
-    this.pedidoService.crearPedido(pedidoData).subscribe({
+    this.pedidoService.create(pedidoData).subscribe({
       next: () => {
         this.toast('success', 'Pedido enviado a cocina.');
         this.vaciarPedido();
@@ -226,7 +214,6 @@ export class MeseroComponent {
     this.toast('success', `Mesa ${this.mesaLabel()} liberada.`);
   }
 
-  // ======== Internos ========
   private recalcularTotal() {
     this.total = this.pedido.reduce((acc, l) => acc + l.precio * l.cantidad, 0);
   }
@@ -243,7 +230,6 @@ export class MeseroComponent {
     }
   }
 
-  // ======== Toasts ========
   toast(kind: 'success' | 'info' | 'warning' | 'danger', msg: string, ms = 2800) {
     const id = ++this.tid;
     this.toasts.push({ id, kind, msg, ms });

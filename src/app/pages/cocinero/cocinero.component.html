@@ -23,7 +23,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let det of pedido.pedidoDetalles">
-            <td>{{ det.nombre }}</td>
+            <td>{{ det.experiencia?.nombre || 'Sin nombre' }}</td>
             <td>{{ det.cantidad }}</td>
             <td>S/ {{ det.precioUnitario }}</td>
           </tr>

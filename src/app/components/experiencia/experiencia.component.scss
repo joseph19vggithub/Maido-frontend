@@ -1,33 +1,35 @@
 .experiencia {
-  background: #181818; /* mismo fondo que el contenedor de experiencias */
+  background: rgba(24, 24, 24, 0.5); /* ✅ semitransparente */
+  backdrop-filter: blur(14px); /* efecto glass */
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 1rem;
   padding: 2rem;
   text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  width: 280px;
+  color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  width: 280px;
-  color: #fff;
 
   &:hover {
     transform: translateY(-6px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+    background: rgba(255, 184, 0, 0.1);
+    box-shadow: 0 8px 30px rgba(255, 184, 0, 0.3);
   }
 
   h3 {
     font-size: 1.4rem;
     font-weight: 700;
-    color: #ffd86b; /* tono dorado */
+    color: #ffd86b;
     margin-bottom: 1rem;
   }
 
   .note {
-    color: #ccc;
+    color: #e5e5e5;
     font-size: 1rem;
-    line-height: 1.5;
     margin-bottom: 1.5rem;
   }
 
@@ -36,37 +38,30 @@
     font-weight: 700;
     color: #fff;
     margin-bottom: 1rem;
-
-    span {
-      font-size: 0.9rem;
-      color: #999;
-    }
   }
 
   .categoria {
-    color: #bbb;
+    color: #ccc;
     font-size: 0.95rem;
     margin-bottom: 1.5rem;
   }
 
   .btn {
-    background: #e79b23;
-    border: none;
-    border-radius: 2rem;
-    color: #000;
+    background: transparent;
+    border: 2px solid #ffb300;
+    color: #ffb300;
     padding: 0.6rem 1.8rem;
+    border-radius: 2rem;
     font-weight: 600;
     text-decoration: none;
     transition: all 0.3s ease;
 
     &:hover {
-      background: #ffcc66;
-      transform: scale(1.05);
+      background: #ffb300;
+      color: #111;
+      transform: translateY(-3px);
+      box-shadow: 0 0 10px rgba(231, 155, 35, 0.6);
     }
   }
-
-  @media (max-width: 768px) {
-    width: 100%;
-    max-width: 320px;
-  }
 }
+  

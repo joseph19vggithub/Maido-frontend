@@ -29,11 +29,8 @@
       </div>
 
       <button type="submit" class="login-btn">Entrar</button>
-    </form>
 
-    <div class="extra-options">
-      <a href="#">¿Olvidaste tu contraseña?</a>
-      <a href="#">Crear una cuenta nueva</a>
-    </div>
+      <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+    </form>
   </div>
 </section>

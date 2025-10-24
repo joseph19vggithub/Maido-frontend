@@ -8,7 +8,7 @@ import { Pedido } from '../../models/pedido.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './cocinero.component.html',
-  styleUrls: ['./cocinero.component.scss']
+  styleUrls: ['./cocinero.component.scss'],
 })
 export class CocineroComponent implements OnInit {
   pedidos: Pedido[] = [];
@@ -18,8 +18,6 @@ export class CocineroComponent implements OnInit {
 
   ngOnInit() {
     this.cargarPedidos();
-    // 🔁 Refrescar cada 10 segundos automáticamente
-    setInterval(() => this.cargarPedidos(), 10000);
   }
 
   cargarPedidos() {
@@ -32,7 +30,7 @@ export class CocineroComponent implements OnInit {
       error: err => {
         console.error('Error al cargar pedidos', err);
         this.cargando = false;
-      }
+      },
     });
   }
 
@@ -41,18 +39,20 @@ export class CocineroComponent implements OnInit {
 
     this.pedidoService.actualizarEstado(pedido.id, nuevoEstado).subscribe({
       next: () => {
-        pedido.estado = nuevoEstado; // actualización instantánea en UI
+        pedido.estado = nuevoEstado;
       },
-      error: err => console.error('Error al actualizar estado', err)
+      error: err => {
+        console.error('Error al actualizar estado del pedido', err);
+      },
     });
   }
 
   getColorPorEstado(estado: string): string {
     switch (estado) {
-      case 'pendiente': return '#ff9800'; // naranja
-      case 'en_preparacion': return '#2196f3'; // azul
-      case 'listo': return '#4caf50'; // verde
-      default: return '#9e9e9e'; // gris
+      case 'pendiente': return '#ff9800';
+      case 'en_preparacion': return '#2196f3';
+      case 'listo': return '#4caf50';
+      default: return '#9e9e9e';
     }
   }
 }
