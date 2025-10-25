@@ -1,80 +1,30 @@
 <section class="reserva-final">
-  <!-- 🟡 Barra de progreso -->
-  <div class="progress-bar">
-    <div class="step completed">
-      <span class="number">1</span>
-      <span class="label">Seleccionar</span>
-    </div>
-    <div class="line completed"></div>
-    <div class="step active">
-      <span class="number">2</span>
-      <span class="label">Confirmar datos</span>
-    </div>
-    <div class="line"></div>
-    <div class="step">
-      <span class="number">3</span>
-      <span class="label">Finalizar</span>
-    </div>
+  <div class="confetti-container">
+    <div class="confetti" *ngFor="let i of [].constructor(30)"></div>
   </div>
 
-  <!-- 🧾 Contenido principal -->
-  <div class="content">
-    <header>
-      <div class="brand">
-        <div class="logo">M</div>
-        <strong>MAIDO</strong>
-      </div>
-      <h2>Confirmar Reserva</h2>
-      <p class="subtitle">Por favor, completa los siguientes datos para confirmar tu reserva.</p>
-    </header>
+  <div class="reserva-card">
+    <div class="icon">🎉</div>
+    <h1>¡Reserva Confirmada!</h1>
+    <p class="mensaje">
+      Gracias, <strong>{{ nombre || 'invitado' }}</strong>.  
+      Tu reserva fue procesada correctamente.
+    </p>
 
-    <form class="reserva-form" (submit)="confirmarReserva($event)">
-      <div class="form-group">
-        <label>Nombre completo</label>
-        <input type="text" placeholder="Tu nombre completo" [(ngModel)]="nombre" name="nombre" required />
-      </div>
+    <div class="resumen">
+      <p><i class="fa-regular fa-calendar"></i> <strong>Fecha:</strong> {{ fecha }}</p>
+      <p><i class="fa-regular fa-clock"></i> <strong>Hora:</strong> {{ hora }}</p>
+      <p><i class="fa-solid fa-user-group"></i> <strong>Personas:</strong> {{ personasSeleccionadas }}</p>
+    </div>
 
-      <div class="form-group">
-        <label>Correo electrónico</label>
-        <input type="email" placeholder="tu@correo.com" [(ngModel)]="email" name="email" required />
-      </div>
+    <p class="info">
+      Pronto recibirás un correo con los detalles de tu reserva.  
+      ¡Te esperamos en <strong>Maido</strong>!
+    </p>
 
-      <div class="form-group">
-        <label>Teléfono</label>
-        <input type="tel" placeholder="+51 999 999 999" [(ngModel)]="telefono" name="telefono" />
-      </div>
-
-      <div class="form-group-row">
-        <div class="form-group">
-          <label>Fecha</label>
-          <input type="date" [(ngModel)]="fecha" name="fecha" required />
-        </div>
-
-        <div class="form-group">
-          <label>Hora</label>
-          <select [(ngModel)]="hora" name="hora" required>
-            <option value="">Seleccione una hora</option>
-            <option *ngFor="let h of horas" [value]="h">{{ h }}</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Comentarios adicionales</label>
-        <textarea rows="3" placeholder="Escribe aquí..." [(ngModel)]="comentarios" name="comentarios"></textarea>
-      </div>
-
-      <div class="resumen">
-        <h3>Resumen</h3>
-        <p><strong>Personas:</strong> {{ personasSeleccionadas || '2' }}</p>
-        <p><strong>Fecha:</strong> {{ fecha || 'No seleccionada' }}</p>
-        <p><strong>Hora:</strong> {{ hora || 'No seleccionada' }}</p>
-      </div>
-
-      <div class="acciones">
-        <button type="button" class="btn ghost" (click)="volver()">Atrás</button>
-        <button type="submit" class="btn primary">Confirmar Reserva</button>
-      </div>
-    </form>
+    <div class="acciones">
+      <button class="btn volver" (click)="irInicio()">Volver al inicio</button>
+      <button class="btn experiencias" (click)="verExperiencias()">Ver experiencias</button>
+    </div>
   </div>
 </section>

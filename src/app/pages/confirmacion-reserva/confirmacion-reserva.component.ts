@@ -25,11 +25,13 @@ export class ConfirmacionReservaComponent implements OnInit {
     }
   }
 
-  volverInicio() {
-    this.router.navigate(['/']);
+  // 🔹 Redirige al inicio
+  irInicio(): void {
+    this.router.navigate(['/'], { fragment: 'inicio' });
   }
 
-  nuevaReserva() {
-    this.router.navigate(['/reserva']);
+  // 🔹 Redirige a la sección de experiencias
+  irExperiencias(): void {
+    this.router.navigate(['/'], { fragment: 'experiencias' });
   }
 }

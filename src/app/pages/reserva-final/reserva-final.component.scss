@@ -1,205 +1,223 @@
 .reserva-final {
   min-height: 100vh;
-  background: #fafafa;
-  padding: 30px 16px 80px;
+  background: url('/assets/img/PORTADAMAIDO.jpg') center/cover no-repeat;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  font-family: 'Inter', sans-serif;
+  justify-content: center;
+  padding: 60px 20px;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  font-family: 'Segoe UI', sans-serif;
 
-  /* 🟡 Barra de pasos */
-  .progress-bar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 1;
+  }
 
-    .step {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      color: #999;
-      font-size: 0.85rem;
+  /* ✨ Confeti animado */
+  .confetti-container {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 2;
+    pointer-events: none;
 
-      .number {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background: #e0e0e0;
-        color: #555;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        margin-bottom: 6px;
-        transition: all 0.3s ease;
-      }
-
-      &.active .number {
-        background: #c21807;
-        color: white;
-      }
-
-      &.completed .number {
-        background: #caa246;
-        color: white;
-      }
-
-      .label {
-        font-weight: 500;
-      }
-    }
-
-    .line {
-      flex: 1;
-      height: 2px;
-      background: #ccc;
-      &.completed {
-        background: #caa246;
-      }
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: hsl(calc(var(--i, 0) * 15), 80%, 60%);
+      top: -10px;
+      left: calc(5% * var(--i));
+      opacity: 0.9;
+      border-radius: 2px;
+      animation: fall 6s linear infinite;
+      animation-delay: calc(var(--i) * -0.3s);
     }
   }
 
-  /* 🧾 Contenido principal */
-  .content {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    padding: 24px;
+  .reserva-card {
+    position: relative;
+    z-index: 3;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    padding: 45px 35px;
     width: 100%;
-    max-width: 480px;
+    max-width: 550px;
+    text-align: center;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+    animation: fadeInUp 1s ease;
 
-    header {
-      text-align: center;
-      margin-bottom: 24px;
-
-      .brand {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-
-        .logo {
-          background: #c21807;
-          color: #fff;
-          border-radius: 50%;
-          width: 38px;
-          height: 38px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: bold;
-        }
-
-        strong {
-          font-size: 1.4rem;
-          color: #c21807;
-        }
-      }
-
-      h2 {
-        margin-top: 10px;
-        font-size: 1.4rem;
-        color: #222;
-      }
-
-      .subtitle {
-        font-size: 0.95rem;
-        color: #666;
-        margin-top: 4px;
-      }
+    .icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      animation: pop 1.2s ease;
     }
 
-    .form-group,
-    .form-group-row {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 12px;
-
-      label {
-        font-weight: 600;
-        margin-bottom: 4px;
-        color: #444;
-      }
-
-      input,
-      select,
-      textarea {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 10px;
-        font-size: 1rem;
-        outline: none;
-        &:focus {
-          border-color: #c21807;
-        }
-      }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: #faf8f4;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #fff, #a2003c, #ff005c, #fff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 300% 100%;
+      animation: tituloBrillo 8s ease-in-out infinite;
     }
 
-    .form-group-row {
-      flex-direction: row;
-      justify-content: space-between;
-
-      .form-group {
-        flex: 1;
-
-        &:first-child {
-          margin-right: 8px;
-        }
-      }
+    .mensaje {
+      color: #eaeaea;
+      font-size: 1rem;
+      margin-bottom: 20px;
+      line-height: 1.5;
     }
 
     .resumen {
-      background: #f9f9f9;
-      border-radius: 8px;
-      padding: 12px;
-      margin-top: 8px;
-
-      h3 {
-        color: #c21807;
-        margin-bottom: 6px;
-      }
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 15px;
+      margin-bottom: 20px;
+      text-align: left;
+      font-size: 0.95rem;
+      color: #fff;
+      box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.05);
 
       p {
-        margin: 4px 0;
-        font-size: 0.95rem;
+        margin: 8px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        i {
+          color: #ff005c;
+        }
       }
+    }
+
+    .info {
+      color: #d8d8d8;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 30px;
     }
 
     .acciones {
       display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
 
       .btn {
-        padding: 10px 20px;
-        border-radius: 8px;
+        padding: 0.8rem 1.8rem;
         font-weight: 600;
+        border-radius: 30px;
+        letter-spacing: 0.04em;
         cursor: pointer;
-        transition: all 0.3s ease;
-      }
-
-      .btn.primary {
-        background: #c21807;
-        color: white;
-        border: none;
-        &:hover {
-          background: #a51406;
-        }
-      }
-
-      .btn.ghost {
+        text-transform: uppercase;
+        font-size: 0.95rem;
+        transition: all 0.35s ease;
+        border: 1.8px solid #faf8f4;
         background: transparent;
-        border: 2px solid #c21807;
-        color: #c21807;
+        color: #faf8f4;
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(90deg, #a2003c, #ff005c);
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 0.5s ease;
+          z-index: 0;
+        }
+
+        &:hover::before {
+          transform: scaleX(1);
+        }
+
         &:hover {
-          background: #fbeaea;
+          color: #111;
+          box-shadow: 0 0 15px rgba(255, 0, 92, 0.4);
+        }
+
+        span,
+        & {
+          position: relative;
+          z-index: 1;
+        }
+
+        &.volver {
+          border-color: rgba(255, 255, 255, 0.5);
         }
       }
     }
+  }
+}
+
+/* 🌟 Animaciones */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tituloBrillo {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 🎉 Confeti cayendo */
+@keyframes fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0.6;
+  }
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .reserva-card {
+    padding: 30px 25px;
   }
 }

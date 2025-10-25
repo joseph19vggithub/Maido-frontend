@@ -21,7 +21,27 @@
 
     <!-- Columna 3: Redes y reserva -->
     <div class="footer-section social">
-      <h4>Conecta</h4>
+      <div class="social-header">
+        <h4>Conecta</h4>
+        <a class="reserva-link" (click)="abrirReserva()">
+          Reserva aquí
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            class="icon-link"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M14 3h7v7"></path>
+            <path d="M10 14L21 3"></path>
+            <path d="M21 10v11H10"></path>
+          </svg>
+        </a>
+      </div>
+
       <div class="socials">
         <a href="https://www.instagram.com/maido/" target="_blank" rel="noopener">
           <img src="assets/icons/instagram.svg" alt="Instagram" />
@@ -30,9 +50,6 @@
           <img src="assets/icons/facebook.svg" alt="Facebook" />
         </a>
       </div>
-
-      <!-- Botón de reserva -->
-      <button class="reserva-btn" (click)="abrirReserva()">Reserva aquí</button>
     </div>
   </div>
 

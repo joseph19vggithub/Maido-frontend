@@ -1,116 +1,227 @@
 .cocinero-container {
-  padding: 2rem;
-  background-color: #111;
-  color: #f5f5f5;
   min-height: 100vh;
+  padding: 3rem 2rem;
+  background: radial-gradient(circle at top left, #1a1a1a, #0e0e10 70%);
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+  animation: fadeIn 1s ease;
+  backdrop-filter: blur(8px);
 
   h1 {
     text-align: center;
-    margin-bottom: 1.5rem;
-    font-size: 2rem;
-    color: #ffb300;
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    background: linear-gradient(90deg, #e59b2f, #a2003c, #e59b2f);
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    letter-spacing: 1px;
+    animation: gradientMove 4s ease infinite, fadeInDown 0.8s ease;
   }
 
   .loading,
   .no-pedidos {
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: #bbb;
     margin-top: 2rem;
+    animation: fadeIn 1s ease;
   }
 
   .pedidos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.8rem;
+    animation: fadeInUp 0.8s ease;
   }
 
   .pedido-card {
-    background-color: #1b1b1b;
-    border: 2px solid #444;
-    border-radius: 10px;
-    padding: 1rem;
-    box-shadow: 0 0 10px #0006;
-    transition: 0.3s ease;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 1.2rem 1.4rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 179, 0, 0.12),
+        rgba(162, 0, 60, 0.12)
+      );
+      z-index: -1;
+    }
 
     &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 0 20px #0009;
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(255, 179, 0, 0.3);
+      border-color: rgba(255, 179, 0, 0.5);
+    }
+
+    /* 💫 Animación cuando cambia el estado */
+    &.animando {
+      animation: estadoCambio 0.8s ease-in-out;
+    }
+
+    @keyframes estadoCambio {
+      0% {
+        box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+        transform: scale(1);
+      }
+      40% {
+        box-shadow: 0 0 25px rgba(255, 179, 0, 0.6);
+        transform: scale(1.03);
+      }
+      100% {
+        box-shadow: 0 0 10px rgba(255, 179, 0, 0.3);
+        transform: scale(1);
+      }
     }
 
     .pedido-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 0.6rem;
 
       h2 {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         margin: 0;
+        color: #fff;
       }
 
       .estado {
         padding: 0.4rem 0.8rem;
         border-radius: 8px;
         color: #fff;
-        font-size: 0.9rem;
-        font-weight: bold;
+        font-size: 0.85rem;
+        font-weight: 600;
         text-transform: uppercase;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        transition: background-color 0.5s ease;
       }
     }
 
     .fecha {
       font-size: 0.9rem;
       color: #bbb;
-      margin: 0.5rem 0 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
     }
 
     table.detalle {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 1rem;
+      font-size: 0.9rem;
 
-      th, td {
-        border-bottom: 1px solid #333;
+      th,
+      td {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         padding: 0.5rem;
         text-align: left;
       }
 
       th {
         color: #ffb300;
+        font-weight: 600;
+      }
+
+      td {
+        color: #ddd;
       }
     }
 
     .acciones {
       display: flex;
       justify-content: space-between;
+      gap: 0.6rem;
 
       .btn {
         flex: 1;
-        margin: 0 0.3rem;
         padding: 0.6rem 0.8rem;
         border: none;
-        border-radius: 8px;
-        color: white;
+        border-radius: 10px;
         font-weight: 600;
+        color: #fff;
         cursor: pointer;
-        transition: background 0.3s;
+        transition: all 0.3s ease;
+        background: linear-gradient(90deg, #ffb300, #a2003c);
+        box-shadow: 0 0 12px rgba(255, 179, 0, 0.25);
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 0 18px rgba(255, 179, 0, 0.45);
+        }
 
         &.azul {
-          background-color: #1976d2;
-
-          &:hover {
-            background-color: #1565c0;
-          }
+          background: linear-gradient(90deg, #2196f3, #1565c0);
         }
 
         &.verde {
-          background-color: #43a047;
-
-          &:hover {
-            background-color: #388e3c;
-          }
+          background: linear-gradient(90deg, #4caf50, #2e7d32);
         }
       }
+    }
+  }
+
+  /* === Animaciones generales === */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes gradientMove {
+    0% {
+      background-position: 0% center;
+    }
+    100% {
+      background-position: 200% center;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    h1 {
+      font-size: 1.8rem;
     }
   }
 }

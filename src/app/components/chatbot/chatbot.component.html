@@ -12,10 +12,22 @@
 
   <div class="chat-body" #chatBody>
     <div *ngFor="let msg of messages" [ngClass]="msg.from" class="message">
-      <span>{{ msg.text }}</span>
+      <span class="text">{{ msg.text }}</span>
+
+      <!-- 🔘 Botones interactivos del bot -->
+      <div class="bot-buttons" *ngIf="msg.buttons && msg.from === 'bot'">
+        <button
+          *ngFor="let b of msg.buttons"
+          (click)="sendMessage(b.value, b.route)"
+        >
+          {{ b.label }}
+        </button>
+      </div>
+
+      <span class="time">{{ msg.time }}</span>
     </div>
 
-    <!-- Indicador de escritura del bot -->
+    <!-- 💭 Indicador de escritura -->
     <div class="typing-indicator" *ngIf="isTyping">
       <span></span><span></span><span></span>
     </div>
@@ -31,4 +43,3 @@
     <button (click)="sendMessage()">Enviar</button>
   </div>
 </div>
-

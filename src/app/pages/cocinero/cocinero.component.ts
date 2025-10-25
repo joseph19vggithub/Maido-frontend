@@ -11,7 +11,7 @@ import { Pedido } from '../../models/pedido.model';
   styleUrls: ['./cocinero.component.scss'],
 })
 export class CocineroComponent implements OnInit {
-  pedidos: Pedido[] = [];
+  pedidos: (Pedido & { animando?: boolean })[] = []; // ✅ tipo extendido
   cargando = false;
 
   constructor(private pedidoService: PedidoService) {}
@@ -24,7 +24,8 @@ export class CocineroComponent implements OnInit {
     this.cargando = true;
     this.pedidoService.getPendientes().subscribe({
       next: data => {
-        this.pedidos = data;
+        // ✅ Añadir propiedad animando a cada pedido
+        this.pedidos = data.map(p => ({ ...p, animando: false }));
         this.cargando = false;
       },
       error: err => {
@@ -34,12 +35,16 @@ export class CocineroComponent implements OnInit {
     });
   }
 
-  cambiarEstado(pedido: Pedido, nuevoEstado: string) {
+  cambiarEstado(pedido: Pedido & { animando?: boolean }, nuevoEstado: string) {
     if (!pedido.id) return;
 
     this.pedidoService.actualizarEstado(pedido.id, nuevoEstado).subscribe({
       next: () => {
         pedido.estado = nuevoEstado;
+
+        // 💫 Activar animación visual al cambiar estado
+        pedido.animando = true;
+        setTimeout(() => (pedido.animando = false), 800);
       },
       error: err => {
         console.error('Error al actualizar estado del pedido', err);
@@ -49,7 +54,7 @@ export class CocineroComponent implements OnInit {
 
   getColorPorEstado(estado: string): string {
     switch (estado) {
-      case 'pendiente': return '#ff9800';
+      case 'pendiente': return '#ffb300';
       case 'en_preparacion': return '#2196f3';
       case 'listo': return '#4caf50';
       default: return '#9e9e9e';

@@ -28,10 +28,10 @@
       180deg,
       rgba(255, 255, 255, 0.1) 0%,
       rgba(255, 255, 255, 0.05) 100%
-    ); /* degradado suave */
+    );
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 18px;
-    padding: 2rem 1.8rem 2.5rem;
+    padding: 2rem 1.8rem 2.3rem;
     box-shadow: 0 0 35px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(15px) saturate(140%);
     -webkit-backdrop-filter: blur(15px) saturate(140%);
@@ -40,7 +40,6 @@
     transform: translateY(40px);
     transition: opacity 0.8s ease, transform 0.8s ease, visibility 0.8s ease;
 
-    /* ✨ Glow dinámico */
     &::before {
       content: '';
       position: absolute;
@@ -64,7 +63,6 @@
       transform: translateY(0);
     }
 
-    /* 💫 Pulse elegante */
     &:hover::before {
       opacity: 0.5;
       filter: blur(15px);
@@ -105,7 +103,7 @@
   .section-title {
     font-size: 2.2rem;
     font-weight: 700;
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.5rem;
     text-transform: uppercase;
     background: linear-gradient(90deg, #fff, #a2003c, #ff005c, #fff);
     background-clip: text;
@@ -118,7 +116,7 @@
   .section-lead {
     color: #ddd;
     font-size: 1rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.6rem;
     max-width: 600px;
     margin-inline: auto;
     line-height: 1.5;
@@ -128,28 +126,31 @@
   .info-grid {
     display: grid;
     grid-template-columns: 1.2fr 0.9fr;
-    gap: 1.5rem;
-    align-items: center;
+    gap: 1rem;
+    align-items: flex-start;
+    justify-content: center; /* ✅ centra visualmente las columnas */
     text-align: left;
 
+    /* 🔹 Agrega padding lateral interno a ambas columnas */
     .col {
       display: flex;
       flex-direction: column;
-      gap: 1.2rem;
+      gap: 0.9rem;
+      padding-inline: 1.2rem; /* 👈 mueve todo un poco hacia adentro */
     }
 
     .info-item {
       h3 {
-        color: #ff005c;
+        color: #e65a8c; /* tono rosa elegante */
         font-weight: 700;
-        margin-bottom: 0.2rem;
+        margin-bottom: 0.15rem;
         font-size: 1.05rem;
       }
 
       p {
         color: #eee;
-        font-size: 0.95rem;
-        line-height: 1.5;
+        font-size: 0.94rem;
+        line-height: 1.45;
       }
 
       a {
@@ -159,49 +160,89 @@
         transition: 0.3s ease;
 
         &:hover {
-          color: #ff005c;
-          border-bottom: 1px solid #ff005c;
+          color: #f6a3c0; /* rosa perlado suave */
+          border-bottom: 1px solid rgba(255, 170, 190, 0.5);
         }
       }
     }
 
+    /* 🗺️ Botón Google Maps con efecto glass y pulso */
     .btn-mapa {
-      display: inline-block;
-      margin-top: 0.4rem;
-      padding: 0.5rem 1rem;
-      background: linear-gradient(90deg, #a2003c, #ff005c);
-      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-top: 0.35rem;
+      padding: 0.58rem 1.05rem;
+      border-radius: 10px;
       font-weight: 600;
-      border-radius: 8px;
       text-decoration: none;
-      transition: all 0.3s ease;
+      color: #fff;
+      background: linear-gradient(90deg, rgba(162, 0, 60, 0.85), rgba(211, 77, 112, 0.85));
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 4px 14px rgba(162, 0, 60, 0.18);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+      animation: mapaPulse 3.2s ease-in-out infinite;
 
       &:hover {
         transform: translateY(-2px);
-        background: linear-gradient(90deg, #ff005c, #a2003c);
+        background: linear-gradient(90deg, rgba(211, 77, 112, 0.95), rgba(162, 0, 60, 0.95));
+        box-shadow: 0 6px 18px rgba(162, 0, 60, 0.28);
+      }
+
+      &:active {
+        transform: translateY(0);
+        box-shadow: 0 3px 10px rgba(162, 0, 60, 0.22);
+      }
+
+      .icon-mapa {
+        width: 17px;
+        height: 17px;
+        stroke: #fff;
+        opacity: 0.9;
+        transition: opacity 0.25s ease, transform 0.25s ease;
+
+        &:hover {
+          opacity: 1;
+          transform: scale(1.1);
+        }
       }
     }
 
+    @keyframes mapaPulse {
+      0% {
+        box-shadow: 0 4px 14px rgba(162, 0, 60, 0.18);
+      }
+      50% {
+        box-shadow: 0 6px 22px rgba(162, 0, 60, 0.28);
+      }
+      100% {
+        box-shadow: 0 4px 14px rgba(162, 0, 60, 0.18);
+      }
+    }
+
+    /* ⏰ Bloque horario */
     .horario {
       text-align: center;
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 12px;
-      padding: 1.5rem 1rem;
+      padding: 1.4rem 1.5rem; /* 👈 más aire interno lateral */
       align-self: center;
       min-width: 240px;
+      margin-right: 0.5rem; /* 👈 pequeño balance hacia el centro */
 
       h3 {
         color: #fff;
         font-weight: 700;
-        margin-bottom: 0.6rem;
+        margin-bottom: 0.4rem;
         font-size: 1.05rem;
       }
 
       p {
         color: #ccc;
-        margin: 0.4rem 0;
-        line-height: 1.4;
+        margin: 0.3rem 0;
+        line-height: 1.35;
 
         strong {
           color: #fff;
@@ -229,10 +270,11 @@
     .info-grid {
       grid-template-columns: 1fr;
       text-align: center;
-      gap: 1.8rem;
+      gap: 1.4rem;
 
       .col {
         align-items: center;
+        padding-inline: 0;
       }
 
       .horario {

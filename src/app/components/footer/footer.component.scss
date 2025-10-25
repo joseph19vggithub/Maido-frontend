@@ -9,7 +9,7 @@
   overflow: hidden;
   box-shadow: 0 0 25px rgba(162, 0, 60, 0.15);
 
-  /* ✨ resplandor dinámico */
+  /* ✨ resplandor dinámico general */
   &::before {
     content: '';
     position: absolute;
@@ -72,7 +72,7 @@
     }
   }
 
-  /* 🅰️ Columna 1: logo + descripción */
+  /* 🅰️ Columna 1 */
   .brand {
     .footer-logo {
       width: 75px;
@@ -88,7 +88,7 @@
     }
   }
 
-  /* 🅱️ Columna 2: enlaces */
+  /* 🅱️ Columna 2 */
   .footer-nav {
     display: flex;
     flex-direction: column;
@@ -106,22 +106,88 @@
     }
   }
 
-  /* 🅲️ Columna 3: redes + reserva */
+  /* 🅲️ Columna 3 */
   .social {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* ✅ alinea todo a la izquierda */
+    align-items: flex-start;
     text-align: left;
+    gap: 0.8rem;
 
-    h4 {
-      align-self: flex-start;
+    /* Cabecera (Conecta + Reserva aquí) */
+    .social-header {
+      display: flex;
+      align-items: center;
+      gap: 1.8rem; /* 🔹 Más separación horizontal entre Conecta y Reserva */
+
+      h4 {
+        color: var(--text);
+        font-size: 1rem;
+        margin: 0;
+        font-weight: 600;
+      }
+
+      .reserva-link {
+        position: relative;
+        color: var(--text);
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-decoration: none;
+        cursor: pointer;
+        padding: 0.35rem 0.9rem 0.4rem;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(5px);
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        animation: pulseGlow 3s ease-in-out infinite;
+
+        .icon-link {
+          width: 14px;
+          height: 14px;
+          opacity: 0.8;
+        }
+
+        &:hover {
+          color: #fff;
+          background: rgba(162, 0, 60, 0.25);
+          border-color: rgba(162, 0, 60, 0.6);
+          box-shadow: 0 0 14px rgba(162, 0, 60, 0.5);
+          transform: translateY(-1px);
+        }
+
+        &:active {
+          transform: scale(0.97);
+          box-shadow: 0 0 8px rgba(162, 0, 60, 0.3);
+        }
+      }
+
+      /* ✨ Animación del pulso */
+      @keyframes pulseGlow {
+        0% {
+          box-shadow: 0 0 8px rgba(162, 0, 60, 0.25);
+          border-color: rgba(255, 255, 255, 0.15);
+        }
+        50% {
+          box-shadow: 0 0 16px rgba(162, 0, 60, 0.4);
+          border-color: rgba(162, 0, 60, 0.4);
+        }
+        100% {
+          box-shadow: 0 0 8px rgba(162, 0, 60, 0.25);
+          border-color: rgba(255, 255, 255, 0.15);
+        }
+      }
     }
 
+    /* Íconos sociales */
     .socials {
       display: flex;
       gap: 1rem;
-      margin-bottom: 1rem;
       justify-content: flex-start;
+      margin-top: 0.3rem;
 
       img {
         width: 28px;
@@ -136,49 +202,22 @@
       }
     }
 
-    /* 🔹 Botón "Reserva aquí" perfectamente alineado con "Conecta" */
-    .reserva-btn {
-      margin-top: 0.2rem;
-      margin-left: 0.1rem;
-      background: transparent;
-      border: 1px solid var(--brand);
-      color: var(--brand);
-      font-size: 0.85rem;
-      padding: 0.5rem 1.2rem;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-align: center;
-      min-width: 140px;
-      line-height: 1;
-      position: relative;
-      top: -4px; /* ✅ eleva solo el texto sin mover el contorno */
-
-      &:hover {
-        background: var(--brand);
-        color: #fff;
-        box-shadow: 0 0 12px rgba(162, 0, 60, 0.5);
-        transform: translateY(-1px);
-      }
-
-      &:active {
-        transform: scale(0.96);
-        box-shadow: 0 0 8px rgba(162, 0, 60, 0.3);
-      }
-    }
-
-    /* ✅ en móviles se centra todo sin romper el alineado visual */
+    /* Responsivo */
     @media (max-width: 899px) {
       align-items: center;
       text-align: center;
 
-      .socials {
-        justify-content: center;
+      .social-header {
+        flex-direction: column;
+        gap: 0.5rem;
+
+        .reserva-link {
+          font-size: 0.9rem;
+        }
       }
 
-      .reserva-btn {
-        top: -2px; /* leve ajuste */
-        margin-left: 0;
+      .socials {
+        justify-content: center;
       }
     }
   }

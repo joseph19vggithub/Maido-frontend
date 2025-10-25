@@ -13,6 +13,7 @@
           [(ngModel)]="email"
           placeholder="ejemplo@correo.com"
           required
+          [disabled]="loading"
         />
       </div>
 
@@ -25,10 +26,20 @@
           [(ngModel)]="password"
           placeholder="Tu contraseña"
           required
+          [disabled]="loading"
         />
       </div>
 
-      <button type="submit" class="login-btn">Entrar</button>
+      <!-- Botón con spinner -->
+      <button type="submit" class="login-btn" [disabled]="loading">
+        <ng-container *ngIf="!loading; else cargando">
+          Entrar
+        </ng-container>
+        <ng-template #cargando>
+          <div class="spinner"></div>
+          Entrando…
+        </ng-template>
+      </button>
 
       <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
     </form>

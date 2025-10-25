@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Experiencia } from '../../models/experiencia.model';
 import { ExperienciaComponent } from '../experiencia/experiencia.component';
@@ -11,7 +11,7 @@ import { Categoria } from '../../models/categoria.model';
   templateUrl: './experiencias.component.html',
   styleUrls: ['./experiencias.component.scss']
 })
-export class ExperienciasComponent {
+export class ExperienciasComponent implements AfterViewInit {
   experiencias: Experiencia[] = [
     {
       id: 1,
@@ -54,4 +54,29 @@ export class ExperienciasComponent {
       pedidoDetalles: []
     }
   ];
+
+  constructor(private renderer: Renderer2) {}
+
+  /**
+   * Detecta cuando las tarjetas o secciones entran al viewport
+   * y aplica la clase "visible" para activar la animación fade-up.
+   */
+  ngAfterViewInit() {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            this.renderer.addClass(entry.target, 'visible');
+            observer.unobserve(entry.target); // Evita reanimar una vez visible
+          }
+        });
+      },
+      { threshold: 0.25 } // porcentaje visible para activar animación
+    );
+
+    // Observa todas las secciones que deben animarse
+    const elementos = document.querySelectorAll('.fade-up, .card, .info-box');
+    elementos.forEach((el) => observer.observe(el));
+  }
 }
+

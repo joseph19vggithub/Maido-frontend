@@ -1,105 +1,225 @@
 .confirmacion-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8f5f0, #fff);
-  padding: 2rem;
-}
-
-.confirmacion-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 2.5rem 2rem;
-  max-width: 500px;
-  width: 100%;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  animation: fadeInUp 0.6s ease-out;
-}
-
-.icono-exito {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  color: #caa246;
-}
-
-.titulo {
-  font-family: 'Playfair Display', serif;
-  color: #222;
-  font-size: 2rem;
-  margin-bottom: 1rem;
-}
-
-.mensaje {
-  font-size: 1.1rem;
-  color: #555;
-  margin-bottom: 1.5rem;
-}
-
-.detalles {
-  text-align: left;
-  background: #fafafa;
-  border-radius: 10px;
-  padding: 1rem;
-  margin: 1.5rem 0;
-
-  p {
-    margin: 0.3rem 0;
-    font-size: 0.95rem;
-    color: #333;
-  }
-}
-
-.mensaje-secundario {
-  color: #777;
-  font-size: 0.95rem;
-  margin-bottom: 1.5rem;
-}
-
-.acciones {
+  background: url('/assets/img/PORTADAMAIDO.jpg') center/cover no-repeat;
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 1rem;
+  padding: 60px 20px;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  font-family: 'Segoe UI', sans-serif;
 
-  a {
-    display: inline-block;
-    padding: 0.7rem 1.4rem;
-    border-radius: 999px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.25s ease;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 1;
   }
 
-  .btn-volver {
-    background: #caa246;
-    color: #111;
+  /* 🎊 Confeti puro CSS */
+  .confetti-container {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 2;
+    pointer-events: none;
 
-    &:hover {
-      background: #b8923e;
-      transform: translateY(-2px);
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: hsl(calc(var(--i, 0) * 15), 80%, 60%);
+      top: -10px;
+      left: calc(5% * var(--i));
+      opacity: 0.9;
+      border-radius: 2px;
+      animation: fall 6s linear infinite;
+      animation-delay: calc(var(--i) * -0.3s);
     }
   }
 
-  .btn-experiencias {
-    border: 2px solid #caa246;
-    color: #caa246;
+  .confirmacion-card {
+    position: relative;
+    z-index: 3;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    padding: 45px 35px;
+    width: 100%;
+    max-width: 550px;
+    text-align: center;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+    animation: fadeInUp 1s ease;
 
-    &:hover {
-      background: #caa246;
-      color: #111;
-      transform: translateY(-2px);
+    .icono-exito {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #ff005c;
+      animation: pop 1.2s ease;
+    }
+
+    .titulo {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: #faf8f4;
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, #fff, #a2003c, #ff005c, #fff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 300% 100%;
+      animation: tituloBrillo 8s ease-in-out infinite;
+    }
+
+    .mensaje {
+      font-size: 1.1rem;
+      color: #eaeaea;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .detalles {
+      text-align: left;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 1rem;
+      margin: 1.5rem 0;
+      box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.05);
+
+      p {
+        margin: 0.3rem 0;
+        font-size: 0.95rem;
+        color: #fff;
+
+        strong {
+          color: #ffb3c6;
+        }
+      }
+    }
+
+    .mensaje-secundario {
+      color: #dcdcdc;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    /* 🔘 Botones */
+    .acciones {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+
+      .btn {
+        position: relative;
+        overflow: hidden;
+        padding: 0.8rem 1.8rem;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #faf8f4;
+        border: 1.8px solid #faf8f4;
+        transition: all 0.35s ease;
+        font-size: 0.95rem;
+        background: transparent;
+        z-index: 1;
+
+        /* 🔹 fondo animado */
+        &::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(90deg, #a2003c, #ff005c);
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 0.5s ease;
+          z-index: 0;
+        }
+
+        /* 🔹 cuando pasa el mouse */
+        &:hover::before {
+          transform: scaleX(1);
+        }
+
+        /* 🔹 el texto siempre arriba */
+        span,
+        & {
+          position: relative;
+          z-index: 2;
+        }
+
+        /* 🔹 el texto visible durante el efecto */
+        &:hover {
+          color: #fff;
+          text-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+        }
+
+        &.volver {
+          border-color: rgba(255, 255, 255, 0.6);
+        }
+      }
     }
   }
 }
 
+/* 🌟 Animaciones */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(25px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes tituloBrillo {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0.6;
+  }
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .confirmacion-card {
+    padding: 30px 25px;
   }
 }

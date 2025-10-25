@@ -20,28 +20,37 @@
 .reserva-card {
   position: relative;
   z-index: 2;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
   padding: 40px;
   max-width: 600px;
   width: 100%;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(8px);
-  animation: fadeInUp 0.8s ease-out;
+  box-shadow: 0 0 35px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  animation: fadeInUp 1s ease-out;
+  color: #fff;
 
   .reserva-title {
     font-family: 'Playfair Display', serif;
     font-size: 2rem;
     margin-bottom: 10px;
     text-align: center;
-    color: #c21807;
+    background: linear-gradient(90deg, #fff, #a2003c, #ff005c, #fff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 300% 100%;
+    animation: tituloBrillo 8s ease-in-out infinite;
   }
 
   .reserva-subtitle {
     text-align: center;
-    color: #444;
+    color: #ddd;
     margin-bottom: 30px;
     font-size: 1.05rem;
+    line-height: 1.5;
   }
 
   .reserva-form {
@@ -62,48 +71,103 @@
       label {
         font-weight: 600;
         margin-bottom: 6px;
-        color: #222;
+        color: #fff;
+        font-size: 0.95rem;
       }
 
       input,
-      select,
       textarea {
         padding: 10px 12px;
         border-radius: 8px;
-        border: 1px solid #ccc;
-        outline: none;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
         font-size: 1rem;
-        transition: border 0.2s ease, box-shadow 0.2s ease;
+        outline: none;
+        transition: all 0.25s ease;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.6);
+        }
+
+        &:hover {
+          border-color: rgba(255, 0, 92, 0.4);
+        }
 
         &:focus {
-          border-color: #c21807;
-          box-shadow: 0 0 4px rgba(194, 24, 7, 0.3);
+          border-color: rgba(255, 0, 92, 0.8);
+          box-shadow: 0 0 10px rgba(255, 0, 92, 0.5);
+          background: rgba(255, 255, 255, 0.12);
         }
+      }
+
+      input[type='date'],
+      input[type='time'],
+      input[type='number'] {
+        color-scheme: dark; /* para estilizar controles nativos */
+      }
+
+      textarea {
+        resize: none;
+      }
+
+      .error-msg {
+        color: #ff7b7b;
+        font-size: 0.85rem;
+        margin-top: 3px;
+        font-weight: 500;
       }
     }
 
+    /* ✨ Botón elegante */
     .btn-reserva {
-      background: #c21807;
+      background: linear-gradient(90deg, #a2003c, #ff005c);
       color: white;
       border: none;
       padding: 14px 20px;
       font-size: 1.1rem;
-      border-radius: 12px;
+      border-radius: 30px;
       cursor: pointer;
-      transition: all 0.3s ease;
       font-weight: 600;
       letter-spacing: 0.5px;
-      margin-top: 10px;
+      margin-top: 15px;
+      text-transform: uppercase;
+      transition: all 0.35s ease;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, #ff005c, #a2003c, #ff005c);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.5s ease;
+        z-index: 0;
+      }
+
+      &:hover::before {
+        transform: scaleX(1);
+      }
 
       &:hover {
-        background: #a51406;
         transform: translateY(-2px);
-        box-shadow: 0 6px 15px rgba(194, 24, 7, 0.4);
+        box-shadow: 0 0 18px rgba(255, 0, 92, 0.4);
+      }
+
+      span,
+      & {
+        position: relative;
+        z-index: 1;
       }
     }
   }
 }
 
+/* 🌟 Animaciones */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -112,5 +176,24 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes tituloBrillo {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .reserva-card {
+    padding: 30px 25px;
   }
 }

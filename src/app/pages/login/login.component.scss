@@ -1,48 +1,61 @@
-/* === Fondo general con imagen + overlay oscuro === */
+/* === Fondo general con estilo Maido === */
 .login-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
-
-  /* 🔥 Imagen de fondo */
-  background: 
-    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.75)),
-    url('/assets/img/login-bg.jpg') center/cover no-repeat;
-
-  background-attachment: fixed;
+  padding: 3rem 1.5rem;
+  background: radial-gradient(circle at top left, #1a1a1a, #0e0e10 70%);
   color: #fff;
   font-family: 'Segoe UI', sans-serif;
+  backdrop-filter: blur(10px);
+  animation: fadeIn 1s ease;
 }
 
-/* === Tarjeta del login con efecto vidrio === */
+/* === Tarjeta glass moderna === */
 .login-card {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(14px) saturate(180%);
   -webkit-backdrop-filter: blur(14px) saturate(180%);
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 2.5rem 2rem;
+  padding: 2.5rem 2rem 2rem;
   width: 100%;
-  max-width: 380px;
+  max-width: 420px;
   text-align: center;
-  color: #f2f2f2;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-  animation: fadeIn 0.8s ease;
+  animation: fadeInUp 0.8s ease;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255, 179, 0, 0.15), rgba(162, 0, 60, 0.15));
+    z-index: -1;
+  }
 }
 
-/* === Título y subtítulo === */
+/* === Título con degradado animado === */
 .login-card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 800;
   margin-bottom: 0.5rem;
-  font-weight: 700;
-  color: #fff;
+  background: linear-gradient(90deg, #e59b2f, #a2003c, #e59b2f);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  letter-spacing: 1px;
+  animation: gradientMove 4s ease infinite, fadeInDown 0.8s ease;
 }
 
 .login-card .subtitle {
-  font-size: 0.9rem;
-  color: #ddd;
-  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  color: #ccc;
+  margin-bottom: 1.8rem;
 }
 
 /* === Campos del formulario === */
@@ -54,72 +67,160 @@
     display: block;
     margin-bottom: 0.4rem;
     font-size: 0.9rem;
-    color: #f2f2f2;
+    color: #f5f5f5;
+    font-weight: 500;
   }
 
   input {
     width: 100%;
-    padding: 0.6rem 0.75rem;
+    padding: 0.65rem 0.8rem;
     border: 1px solid rgba(255, 255, 255, 0.25);
-    border-radius: 8px;
-    background: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
     color: #fff;
     font-size: 0.95rem;
-    transition: border-color 0.25s, background 0.25s;
+    transition: all 0.25s ease;
 
     &:focus {
       outline: none;
       border-color: #ffb300;
-      background: rgba(0, 0, 0, 0.55);
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 10px rgba(255, 179, 0, 0.4);
     }
   }
 }
 
-/* === Botón de entrar === */
+/* === Spinner dorado dentro del botón === */
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #ffb300;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+  animation: spin 0.8s linear infinite;
+}
+
+/* === Botón con degradado Maido === */
 .login-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
   width: 100%;
-  background: linear-gradient(90deg, #ffb300, #ff8c00);
-  color: #111;
+  background: linear-gradient(90deg, #ffb300, #a2003c);
+  color: #fff;
   border: none;
-  border-radius: 8px;
-  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
   margin-top: 0.5rem;
-  transition: transform 0.2s, box-shadow 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 12px rgba(255, 179, 0, 0.25);
 
-  &:hover {
+  &:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 0 15px rgba(255, 179, 0, 0.5);
+    box-shadow: 0 0 18px rgba(255, 179, 0, 0.45);
   }
 
   &:active {
     transform: translateY(0);
-    box-shadow: none;
+    box-shadow: 0 0 8px rgba(255, 179, 0, 0.3);
   }
 
   &:disabled {
-    background: #777;
+    background: linear-gradient(90deg, #555, #333);
     cursor: not-allowed;
+    opacity: 0.8;
   }
 }
 
 /* === Mensaje de error === */
 .error {
-  color: #ff5555;
+  color: #ff4e4e;
   font-size: 0.9rem;
-  margin-top: 1rem;
+  margin-top: 1.2rem;
+  text-align: center;
 }
 
-/* === Animación suave === */
+/* === Transición suave al salir === */
+body.fade-out {
+  animation: fadeOut 0.6s ease forwards;
+}
+
+/* === Animaciones === */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* === Degradado dinámico del título === */
+@keyframes gradientMove {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* === Spinner animation === */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* === Responsive === */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .login-card h2 {
+    font-size: 1.7rem;
+  }
+
+  .login-btn {
+    font-size: 0.95rem;
   }
 }

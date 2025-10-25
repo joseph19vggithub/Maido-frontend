@@ -12,7 +12,7 @@ export class FooterComponent {
   currentYear = new Date().getFullYear();
 
   abrirReserva() {
-    // 🔹 Abre la ruta /reserva en una nueva pestaña
+    // Abre la página de reservas en una nueva pestaña
     window.open('/reserva', '_blank');
   }
 }

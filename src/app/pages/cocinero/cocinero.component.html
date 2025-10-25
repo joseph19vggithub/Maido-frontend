@@ -7,15 +7,23 @@
   </div>
 
   <div class="pedidos-grid" *ngIf="pedidos.length > 0">
-    <div class="pedido-card" *ngFor="let pedido of pedidos" [style.borderColor]="getColorPorEstado(pedido.estado)">
+    <div
+      class="pedido-card"
+      *ngFor="let pedido of pedidos"
+      [ngClass]="{ animando: pedido.animando }"
+      [style.borderColor]="getColorPorEstado(pedido.estado)"
+    >
       <div class="pedido-header">
         <h2>Pedido #{{ pedido.id }}</h2>
-        <span class="estado" [ngStyle]="{'background-color': getColorPorEstado(pedido.estado)}">
+        <span
+          class="estado"
+          [ngStyle]="{ 'background-color': getColorPorEstado(pedido.estado) }"
+        >
           {{ pedido.estado | uppercase }}
         </span>
       </div>
 
-      <p class="fecha">🕒 {{ pedido.fecha | date:'short' }}</p>
+      <p class="fecha">🕒 {{ pedido.fecha | date: 'short' }}</p>
 
       <table class="detalle">
         <thead>

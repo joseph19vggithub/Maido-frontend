@@ -2,52 +2,40 @@
   min-height: 100vh;
   background: radial-gradient(circle at top left, #1a1a1a, #0e0e10 70%);
   color: #fff;
-  padding: 2rem;
+  padding: 4.5rem 2rem 2rem; /* 🔹 más espacio arriba */
   font-family: 'Segoe UI', sans-serif;
   backdrop-filter: blur(10px);
 
-  /* ===== Encabezado ===== */
-  .menu-header {
+  /* ===== Título principal ===== */
+  h1 {
     text-align: center;
-    margin-bottom: 2.5rem;
-    animation: fadeInDown 0.8s ease;
-
-    .logo {
-      width: 90px;
-      margin-bottom: 0.6rem;
-      filter: drop-shadow(0 0 8px rgba(255, 179, 0, 0.4));
-    }
-
-    h1 {
-      color: #ffb300;
-      font-weight: 700;
-      font-size: 2rem;
-      letter-spacing: 1px;
-    }
-
-    .subtext {
-      color: #ccc;
-      font-size: 1rem;
-      margin-top: 0.2rem;
-      font-weight: 300;
-      letter-spacing: 0.4px;
-    }
+    font-family: 'Playfair Display', serif;
+    font-weight: 800;
+    font-size: 2.2rem;
+    margin-bottom: 2.6rem;
+    background: linear-gradient(90deg, #e59b2f, #a2003c, #e59b2f);
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    letter-spacing: 1px;
+    animation: gradientMove 4s ease infinite, fadeInDown 0.8s ease;
   }
 
   /* ===== Filtros ===== */
   .filters {
     text-align: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2.3rem;
     animation: fadeIn 1s ease;
 
     .search-box {
       padding: 0.7rem 1rem;
       border-radius: 10px;
       border: 1px solid rgba(255, 255, 255, 0.2);
-      width: 260px;
+      width: 250px;
       background: rgba(255, 255, 255, 0.05);
       color: #fff;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1rem;
       font-size: 0.95rem;
       transition: all 0.3s ease;
 
@@ -70,21 +58,21 @@
         border: 1px solid rgba(255, 255, 255, 0.15);
         color: #fff;
         border-radius: 20px;
-        padding: 0.5rem 1.2rem;
+        padding: 0.45rem 1.1rem;
         cursor: pointer;
         transition: all 0.25s ease;
         font-weight: 500;
         backdrop-filter: blur(6px);
 
         &.active {
-          background: rgba(255, 179, 0, 0.9);
+          background: linear-gradient(90deg, #ffb300, #a2003c);
           color: #111;
           font-weight: 600;
           box-shadow: 0 0 8px rgba(255, 179, 0, 0.4);
         }
 
         &:hover {
-          background: rgba(255, 179, 0, 0.9);
+          background: linear-gradient(90deg, #ffb300, #a2003c);
           color: #111;
           transform: translateY(-2px);
         }
@@ -95,29 +83,29 @@
   /* ===== Tarjetas Glass ===== */
   .menu-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); /* 🔹 tamaño compacto */
+    gap: 1.5rem;
     animation: fadeInUp 0.8s ease;
 
     .card {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 16px;
+      border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
       transition: all 0.35s ease;
       backdrop-filter: blur(10px);
       position: relative;
 
       &:hover {
         transform: translateY(-6px);
-        box-shadow: 0 10px 30px rgba(255, 179, 0, 0.3);
+        box-shadow: 0 10px 25px rgba(255, 179, 0, 0.3);
         border-color: rgba(255, 179, 0, 0.5);
       }
 
       img {
         width: 100%;
-        height: 190px;
+        height: 160px; /* 🔹 más compacta */
         object-fit: cover;
         display: block;
         transition: transform 0.4s ease, filter 0.3s ease;
@@ -130,30 +118,30 @@
       }
 
       .info {
-        padding: 1rem 1.2rem;
+        padding: 0.9rem 1.1rem;
         text-align: left;
 
         h3 {
           margin: 0;
           color: #fff;
-          font-size: 1.1rem;
+          font-size: 1rem;
           font-weight: 600;
         }
 
         p {
-          font-size: 0.9rem;
+          font-size: 0.85rem;
           color: #ccc;
-          margin: 0.6rem 0 1rem;
-          line-height: 1.5;
+          margin: 0.5rem 0 0.9rem;
+          line-height: 1.45;
         }
 
         .precio {
           background: linear-gradient(90deg, #ffb300, #a2003c);
           color: #fff;
-          padding: 0.4rem 0.9rem;
+          padding: 0.35rem 0.85rem;
           border-radius: 8px;
           font-weight: 600;
-          font-size: 0.95rem;
+          font-size: 0.9rem;
           display: inline-block;
           box-shadow: 0 0 10px rgba(255, 179, 0, 0.3);
         }
@@ -163,10 +151,10 @@
 
   /* ===== Responsive ===== */
   @media (max-width: 768px) {
-    padding: 1.2rem;
+    padding: 3.5rem 1.2rem 1.5rem; /* 🔹 más aire arriba también en móvil */
 
-    .menu-header h1 {
-      font-size: 1.6rem;
+    h1 {
+      font-size: 1.8rem;
     }
 
     .filters .search-box {
@@ -174,7 +162,12 @@
     }
 
     .menu-grid {
-      gap: 1.2rem;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .card img {
+      height: 140px;
     }
   }
 
@@ -207,6 +200,16 @@
     }
     to {
       opacity: 1;
+    }
+  }
+
+  /* 🎨 Degradado dinámico */
+  @keyframes gradientMove {
+    0% {
+      background-position: 0% center;
+    }
+    100% {
+      background-position: 200% center;
     }
   }
 }

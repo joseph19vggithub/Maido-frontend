@@ -15,7 +15,7 @@ export class LoginComponent {
   email: string = '';
   password: string = '';
   errorMsg: string = '';
-  loading = false;
+  loading: boolean = false;
 
   constructor(private router: Router, private auth: AuthService) {}
 
@@ -37,8 +37,12 @@ export class LoginComponent {
           return;
         }
 
-        // Redirigir según el rol
-        this.router.navigate(['/' + res.role]);
+        // ✅ Transición visual antes de redirigir
+        document.body.classList.add('fade-out');
+
+        setTimeout(() => {
+          this.router.navigate(['/' + res.role]);
+        }, 600);
       },
       error: () => {
         this.loading = false;

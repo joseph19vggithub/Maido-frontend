@@ -20,8 +20,8 @@
     inset: 0;
     background: radial-gradient(
       circle at 50% 50%,
-      rgba(0, 0, 0, 0.25) 0%,
-      rgba(0, 0, 0, 0.6) 80%
+      rgba(0, 0, 0, 0.18) 0%,
+      rgba(0, 0, 0, 0.62) 80%
     );
     z-index: 1;
   }
@@ -29,76 +29,149 @@
   .hero-content {
     position: relative;
     z-index: 2;
-    max-width: 760px;
+    max-width: 880px;
     margin: 0 auto;
     opacity: 0;
     transform: translateY(20px);
     animation: fadeInUp 1.6s ease forwards 0.4s;
-    will-change: transform, opacity;
 
+    /* --- Título elegante --- */
     h1 {
-      font-family: 'Playfair Display', serif;
-      font-weight: 800;
-      font-size: clamp(2.5rem, 5vw, 3.8rem);
-      line-height: 1.1;
-      margin-bottom: 1rem;
-      text-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
-      letter-spacing: 0.02em;
+      margin: 0 0 1rem 0;
+
+      span {
+        display: inline-block;
+        font-family: 'Playfair Display', serif;
+        font-weight: 800;
+        font-size: clamp(2.6rem, 6vw, 4rem);
+        letter-spacing: 0.02em;
+        line-height: 1.1;
+        background: linear-gradient(90deg, #ffffff, #f6a3c0, #a2003c, #ffffff);
+        background-size: 300% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: tituloShimmer 7s ease-in-out infinite;
+        text-shadow: 0 3px 12px rgba(0, 0, 0, 0.45);
+        position: relative;
+      }
+
+      /* Subrayado animado */
+      span::after {
+        content: "";
+        display: block;
+        width: clamp(70px, 12vw, 110px);
+        height: 4px;
+        margin: 0.75rem auto 0;
+        border-radius: 4px;
+        background: linear-gradient(90deg, #a2003c, #f06c98, #a2003c);
+        animation: underlinePulse 3.2s ease-in-out infinite;
+        box-shadow: 0 2px 10px rgba(160, 0, 60, 0.25);
+      }
     }
 
+    /* --- Botones Hero --- */
     .hero-buttons {
-      margin-top: 1.8rem;
+      margin-top: 2rem;
       display: flex;
       justify-content: center;
       gap: 1rem;
       flex-wrap: wrap;
 
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        font-weight: 600;
-        border-radius: 10px;
-        padding: 0.8rem 1.5rem;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        text-decoration: none;
-        font-size: 0.95rem;
-        transition: all 0.3s ease;
-        border: 2px solid #fff;
-        background: transparent;
-        color: #fff;
-        opacity: 0;
-        transform: translateY(15px);
-        box-shadow: 0 0 0px rgba(229, 155, 47, 0); /* 🔹 inicial sin brillo */
+     .btn {
+  --outline: rgba(255, 255, 255, 0.65);
+  --brand1: #a2003c;
+  --brand2: #f06c98;
+  --glass: rgba(255, 255, 255, 0.08);
 
-        &:hover {
-          background: #fff;
-          color: #111;
-          transform: translateY(-2px);
-          box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
-        }
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  border-radius: 14px;
+  padding: 0.85rem 1.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  font-size: 0.95rem;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(15px);
+  backdrop-filter: blur(6px);
+  background: var(--glass);
+  border: 2px solid var(--outline);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+  z-index: 0; /* 🔹 nuevo contexto */
 
-        /* ✨ Aparición secuencial con resplandor */
-        &:nth-child(1) {
-          animation: buttonGlow 1.6s ease forwards 1.8s;
-        }
+  /* ✨ capa animada de llenado lateral */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, var(--brand1), var(--brand2));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s ease;
+    z-index: -1;
+  }
 
-        &:nth-child(2) {
-          animation: buttonGlow 1.6s ease forwards 2.2s;
-        }
+  .btn-ico {
+    width: 18px;
+    height: 18px;
+  }
+
+  span,
+  svg {
+    position: relative;
+    z-index: 2;
+    color: #fff;
+    transition: color 0.35s ease, text-shadow 0.35s ease;
+  }
+
+  /* 🌸 Texto brillante cálido al hacer hover */
+  &:hover span,
+  &:hover svg {
+    color: #fff2f7; /* tono blanco cálido */
+    text-shadow: 0 0 6px rgba(255, 230, 242, 0.85),
+                 0 0 12px rgba(255, 204, 230, 0.55);
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+  }
+
+  &:hover {
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(160, 0, 60, 0.35);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+
+      /* ✨ Aparición secuencial */
+      .btn:nth-child(1) {
+        animation: buttonAppear 0.9s ease forwards 1.2s;
+      }
+
+      .btn:nth-child(2) {
+        animation: buttonAppear 0.9s ease forwards 1.5s;
       }
     }
   }
 
   /* === Animaciones === */
-
-  /* 🎥 Aparición general del fondo */
   @keyframes heroReveal {
     0% {
       opacity: 0;
       background-size: 105%;
-      filter: brightness(0.8) blur(4px);
+      filter: brightness(0.85) blur(3px);
     }
     60% {
       opacity: 1;
@@ -107,18 +180,16 @@
     100% {
       opacity: 1;
       background-size: 100%;
-      filter: brightness(1);
     }
   }
 
-  /* ✨ Texto suave */
   @keyframes fadeInUp {
     0% {
       opacity: 0;
       transform: translateY(30px);
     }
     60% {
-      opacity: 0.7;
+      opacity: 0.8;
       transform: translateY(10px);
     }
     100% {
@@ -127,7 +198,6 @@
     }
   }
 
-  /* 🔹 Movimiento sutil del fondo */
   @keyframes bgZoom {
     0% {
       background-size: 100%;
@@ -139,29 +209,48 @@
     }
   }
 
-  /* 💫 Aparición y resplandor de botones */
-  @keyframes buttonGlow {
+  @keyframes buttonAppear {
     0% {
       opacity: 0;
       transform: translateY(15px);
-      box-shadow: 0 0 0px rgba(229, 155, 47, 0);
     }
-    60% {
-      opacity: 0.7;
-      transform: translateY(5px);
-      box-shadow: 0 0 6px rgba(229, 155, 47, 0.4);
+    70% {
+      opacity: 1;
+      transform: translateY(2px);
     }
     100% {
       opacity: 1;
       transform: translateY(0);
-      box-shadow: 0 0 10px rgba(229, 155, 47, 0.7); /* 🔹 resplandor dorado */
+    }
+  }
+
+  @keyframes tituloShimmer {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  @keyframes underlinePulse {
+    0%, 100% {
+      transform: scaleX(0.95);
+      opacity: 0.9;
+    }
+    50% {
+      transform: scaleX(1);
+      opacity: 1;
     }
   }
 
   /* === Responsive === */
   @media (max-width: 680px) {
-    h1 {
-      font-size: clamp(2rem, 8vw, 3rem);
+    .hero-content h1 span {
+      font-size: clamp(2.1rem, 8vw, 3.2rem);
     }
 
     .hero-buttons {
@@ -169,7 +258,7 @@
       align-items: center;
 
       .btn {
-        width: 80%;
+        width: 88%;
       }
     }
   }

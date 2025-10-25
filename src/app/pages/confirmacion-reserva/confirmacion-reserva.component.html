@@ -1,4 +1,8 @@
 <section class="confirmacion-container">
+  <div class="confetti-container">
+    <div class="confetti" *ngFor="let i of [].constructor(30)"></div>
+  </div>
+
   <div class="confirmacion-card">
     <div class="icono-exito">🎉</div>
 
@@ -20,12 +24,12 @@
 
     <p class="mensaje-secundario">
       Pronto recibirás un correo con los detalles de tu reserva.  
-      ¡Te esperamos en Maido!
+      ¡Te esperamos en <strong>Maido</strong>!
     </p>
 
     <div class="acciones">
-      <a routerLink="/" class="btn-volver">Volver al inicio</a>
-      <a routerLink="/experiencias" class="btn-experiencias">Ver experiencias</a>
+      <button class="btn volver" (click)="irInicio()">Volver al inicio</button>
+      <button class="btn experiencias" (click)="irExperiencias()">Ver experiencias</button>
     </div>
   </div>
 </section>

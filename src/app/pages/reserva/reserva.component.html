@@ -1,49 +1,62 @@
 <section class="reserva-container">
   <div class="reserva-card">
-    <h1 class="reserva-title">Reserva tu experiencia Maido 🍣</h1>
+    <h1 class="reserva-title">Reserva tu experiencia Maido</h1>
     <p class="reserva-subtitle">
       Completa los pasos para asegurar tu mesa y vivir la experiencia Nikkei.
     </p>
 
-    <form class="reserva-form">
+    <form class="reserva-form" novalidate>
+      <!-- 🧍 Nombre -->
       <div class="form-group">
         <label for="nombre">Nombre completo</label>
         <input type="text" id="nombre" placeholder="Ej. Javier Cruz" />
+        <p class="error-msg" *ngIf="errores['nombre']">{{ errores['nombre'] }}</p>
       </div>
 
+      <!-- 📧 Email -->
       <div class="form-group">
         <label for="email">Correo electrónico</label>
         <input type="email" id="email" placeholder="Ej. javier@mail.com" />
+        <p class="error-msg" *ngIf="errores['email']">{{ errores['email'] }}</p>
       </div>
 
+      <!-- 👥 Personas / 📅 Fecha / ⏰ Hora -->
       <div class="form-row">
+        <!-- 👥 Número de personas -->
         <div class="form-group">
           <label for="personas">Número de personas</label>
-          <select id="personas">
-            <option>1 persona</option>
-            <option>2 personas</option>
-            <option>3 personas</option>
-            <option>4 personas</option>
-            <option>5 o más</option>
-          </select>
+          <input
+            type="number"
+            id="personas"
+            min="1"
+            max="6"
+            placeholder="Entre 1 y 6"
+          />
+          <p class="error-msg" *ngIf="errores['personas']">{{ errores['personas'] }}</p>
         </div>
 
+        <!-- 📅 Fecha -->
         <div class="form-group">
           <label for="fecha">Fecha</label>
           <input type="date" id="fecha" />
+          <p class="error-msg" *ngIf="errores['fecha']">{{ errores['fecha'] }}</p>
         </div>
 
+        <!-- ⏰ Hora -->
         <div class="form-group">
-          <label for="hora">Hora</label>
-          <select id="hora">
-            <option>12:00 pm</option>
-            <option>1:00 pm</option>
-            <option>7:00 pm</option>
-            <option>8:00 pm</option>
-          </select>
+          <label for="hora">Hora (1 pm - 9 pm)</label>
+          <input
+            type="time"
+            id="hora"
+            min="13:00"
+            max="21:00"
+            step="1800"
+          />
+          <p class="error-msg" *ngIf="errores['hora']">{{ errores['hora'] }}</p>
         </div>
       </div>
 
+      <!-- 💬 Comentarios -->
       <div class="form-group">
         <label for="mensaje">Comentarios (opcional)</label>
         <textarea
@@ -52,8 +65,11 @@
           placeholder="Ej. Preferencia de asiento o alergias..."
         ></textarea>
       </div>
-<button class="btn-reserva" (click)="confirmarReserva($event)">Confirmar reserva</button>
 
+      <!-- 🔘 Botón de envío -->
+      <button class="btn-reserva" (click)="confirmarReserva($event)">
+        Confirmar reserva
+      </button>
     </form>
   </div>
 </section>
