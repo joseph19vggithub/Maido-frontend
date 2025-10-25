@@ -15,22 +15,42 @@ export class ExperienciasComponent {
   experiencias: Experiencia[] = [
     {
       id: 1,
-      nombre: 'Menú Degustación',
-      descripcion: 'Un recorrido completo por la esencia Nikkei.',
-      precio: 690,
+      nombre: 'Experiencia Maido sin Alcohol',
+      descripcion: 'Degustación completa con maridaje sin alcohol cuidadosamente diseñado.',
+      precio: 1650,
       disponible: true,
       idCategoria: 1,
-      categoria: { id: 1, nombre: 'Degustación' } as Categoria,
+      categoria: { id: 1, nombre: 'Sin Alcohol' } as Categoria,
       pedidoDetalles: []
     },
     {
       id: 2,
-      nombre: 'Experiencia Omakase',
-      descripcion: 'El chef selecciona lo mejor del día para ti.',
-      precio: 820,
+      nombre: 'Experiencia Maido sin Maridaje',
+      descripcion: 'Un recorrido completo por la esencia Nikkei sin maridaje.',
+      precio: 1850,
       disponible: true,
       idCategoria: 2,
-      categoria: { id: 2, nombre: 'Omakase' } as Categoria,
+      categoria: { id: 2, nombre: 'Degustación' } as Categoria,
+      pedidoDetalles: []
+    },
+    {
+      id: 3,
+      nombre: 'Experiencia Maido con Maridaje Maido',
+      descripcion: 'Degustación acompañada con el maridaje seleccionado por nuestros sommeliers.',
+      precio: 2050,
+      disponible: true,
+      idCategoria: 3,
+      categoria: { id: 3, nombre: 'Maridaje Maido' } as Categoria,
+      pedidoDetalles: []
+    },
+    {
+      id: 4,
+      nombre: 'Experiencia Maido con Maridaje Tokujuou',
+      descripcion: 'Una experiencia exclusiva con maridaje Tokujuou premium.',
+      precio: 2300,
+      disponible: true,
+      idCategoria: 4,
+      categoria: { id: 4, nombre: 'Tokujuou' } as Categoria,
       pedidoDetalles: []
     }
   ];

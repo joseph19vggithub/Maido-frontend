@@ -4,104 +4,173 @@
   background: url('/assets/img/PORTADAMAIDO.jpg') center/cover no-repeat;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  padding: 0 clamp(16px, 6vw, 80px);
-  color: #f5f5f5;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
   overflow: hidden;
-  isolation: isolate; // Asegura que el overlay no afecte otros elementos
+  isolation: isolate;
+  padding: 0 1.5rem;
+  opacity: 0;
+  animation: heroReveal 1.8s ease forwards, bgZoom 22s ease-in-out infinite alternate;
 
-  .hero-overlay {
+  /* 🔹 Overlay elegante */
+  &::before {
+    content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.6),
-      rgba(0, 0, 0, 0.35) 40%,
-      rgba(0, 0, 0, 0.6)
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgba(0, 0, 0, 0.25) 0%,
+      rgba(0, 0, 0, 0.6) 80%
     );
     z-index: 1;
-    animation: fadeIn 1.5s ease forwards;
   }
 
   .hero-content {
     position: relative;
     z-index: 2;
-    max-width: min(640px, 60vw);
-    font-family: 'Inter', sans-serif;
-    animation: fadeIn 1.2s ease-in-out;
+    max-width: 760px;
+    margin: 0 auto;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1.6s ease forwards 0.4s;
+    will-change: transform, opacity;
 
     h1 {
       font-family: 'Playfair Display', serif;
-      font-weight: 700;
-      font-size: clamp(28px, 4vw, 56px);
-      line-height: 1.05;
-      margin-bottom: 10px;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      font-weight: 800;
+      font-size: clamp(2.5rem, 5vw, 3.8rem);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      text-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
+      letter-spacing: 0.02em;
     }
 
-    p {
-      font-size: 1.1rem;
-      opacity: 0.9;
-      line-height: 1.6;
-      margin-bottom: 20px;
+    .hero-buttons {
+      margin-top: 1.8rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-weight: 600;
+        border-radius: 10px;
+        padding: 0.8rem 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        border: 2px solid #fff;
+        background: transparent;
+        color: #fff;
+        opacity: 0;
+        transform: translateY(15px);
+        box-shadow: 0 0 0px rgba(229, 155, 47, 0); /* 🔹 inicial sin brillo */
+
+        &:hover {
+          background: #fff;
+          color: #111;
+          transform: translateY(-2px);
+          box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
+        }
+
+        /* ✨ Aparición secuencial con resplandor */
+        &:nth-child(1) {
+          animation: buttonGlow 1.6s ease forwards 1.8s;
+        }
+
+        &:nth-child(2) {
+          animation: buttonGlow 1.6s ease forwards 2.2s;
+        }
+      }
     }
   }
 
-  .hero-buttons {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
+  /* === Animaciones === */
 
-    .btn {
-      display: inline-block;
-      padding: 10px 18px;
-      border-radius: 999px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-/* 🔹 Estilo unificado para ambos botones del Hero */
-.btn-primary,
-.btn-outline {
-  border: 2px solid #a2003c;
-  background: transparent;
-  color: #fff;
-  border-radius: 8px;
-  padding: 0.7rem 1.4rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  display: inline-block;
-
-  &:hover {
-    background: #a2003c;
-    color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 0 12px rgba(162, 0, 60, 0.5);
-  }
-}
-
-/* Espacio entre botones */
-.hero-buttons a {
-  margin: 0 0.6rem;
-}
-
-
-
-  }
-
-  @keyframes fadeIn {
-    from {
+  /* 🎥 Aparición general del fondo */
+  @keyframes heroReveal {
+    0% {
       opacity: 0;
-      transform: scale(1.05);
+      background-size: 105%;
+      filter: brightness(0.8) blur(4px);
     }
-    to {
+    60% {
       opacity: 1;
-      transform: scale(1);
+      filter: brightness(1) blur(0);
+    }
+    100% {
+      opacity: 1;
+      background-size: 100%;
+      filter: brightness(1);
+    }
+  }
+
+  /* ✨ Texto suave */
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    60% {
+      opacity: 0.7;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* 🔹 Movimiento sutil del fondo */
+  @keyframes bgZoom {
+    0% {
+      background-size: 100%;
+      background-position: center;
+    }
+    100% {
+      background-size: 110%;
+      background-position: center 45%;
+    }
+  }
+
+  /* 💫 Aparición y resplandor de botones */
+  @keyframes buttonGlow {
+    0% {
+      opacity: 0;
+      transform: translateY(15px);
+      box-shadow: 0 0 0px rgba(229, 155, 47, 0);
+    }
+    60% {
+      opacity: 0.7;
+      transform: translateY(5px);
+      box-shadow: 0 0 6px rgba(229, 155, 47, 0.4);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+      box-shadow: 0 0 10px rgba(229, 155, 47, 0.7); /* 🔹 resplandor dorado */
+    }
+  }
+
+  /* === Responsive === */
+  @media (max-width: 680px) {
+    h1 {
+      font-size: clamp(2rem, 8vw, 3rem);
+    }
+
+    .hero-buttons {
+      flex-direction: column;
+      align-items: center;
+
+      .btn {
+        width: 80%;
+      }
     }
   }
 }

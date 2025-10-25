@@ -1,27 +1,47 @@
 <section class="contacto section" id="contacto">
-  <div class="container">
-    <h2 class="section-title">Contáctanos</h2>
+  <div class="overlay"></div>
+
+  <div class="container fade-up">
+    <h2 class="section-title">Contacto</h2>
     <p class="section-lead">
-      ¿Tienes alguna consulta o deseas más información? Completa el formulario o visítanos.
+      ¿Deseas visitarnos o realizar una consulta? Encuéntranos o comunícate con nosotros a través de los siguientes medios.
     </p>
 
-    <form class="contact-form">
-      <div class="form-group">
-        <label for="nombre">Nombre</label>
-        <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required />
+    <div class="info-grid">
+      <!-- Columna izquierda -->
+      <div class="col datos">
+        <div class="info-item">
+          <h3>Teléfono</h3>
+          <p><a href="tel:+51013135100">+51 (01) 313-5100</a></p>
+        </div>
+
+        <div class="info-item">
+          <h3>Email</h3>
+          <p><a href="mailto:informes&#64;maido.pe">informes&#64;maido.pe</a></p>
+        </div>
+
+        <div class="info-item">
+          <h3>Ubicación</h3>
+          <p>
+            Calle San Martín 399<br />
+            (Esquina con Calle Colón)<br />
+            Miraflores - Lima, Perú
+          </p>
+          <a
+            href="https://maps.app.goo.gl/jkWNLkErJmQJq7tGA"
+            target="_blank"
+            class="btn-mapa"
+            >Ver en Google Maps</a
+          >
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="email">Correo electrónico</label>
-        <input type="email" id="email" name="email" placeholder="tu@correo.com" required />
+      <!-- Columna derecha -->
+      <div class="col horario">
+        <h3>Horario de Atención</h3>
+        <p>Lunes a sábado<br /><strong>1:00 p.m. a 10:00 p.m.</strong></p>
+        <p>Domingo<br /><strong>Cerrado</strong></p>
       </div>
-
-      <div class="form-group">
-        <label for="mensaje">Mensaje</label>
-        <textarea id="mensaje" name="mensaje" rows="5" placeholder="Escribe tu mensaje"></textarea>
-      </div>
-
-      <button type="submit" class="btn btn-primary">Enviar mensaje</button>
-    </form>
+    </div>
   </div>
 </section>

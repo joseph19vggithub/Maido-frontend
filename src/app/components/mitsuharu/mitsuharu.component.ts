@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,4 +8,21 @@ import { CommonModule } from '@angular/common';
   templateUrl: './mitsuharu.component.html',
   styleUrls: ['./mitsuharu.component.scss']
 })
-export class MitsuharuComponent {}
+export class MitsuharuComponent implements AfterViewInit {
+  ngAfterViewInit() {
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    document
+      .querySelectorAll('.mitsuharu .cols > *, .mitsuharu .photo')
+      .forEach(el => observer.observe(el));
+  }
+}

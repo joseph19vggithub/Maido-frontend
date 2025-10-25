@@ -1,23 +1,28 @@
 <article class="card experiencia" *ngIf="experiencia">
-  <h3>{{ experiencia.nombre }}</h3>
-  <p class="note">{{ experiencia.descripcion }}</p>
+  <header class="card-header">
+    <h3 class="titulo-experiencia">{{ experiencia.nombre }}</h3>
+  </header>
+
+  <p class="descripcion">{{ experiencia.descripcion }}</p>
 
   <p class="price">
     S/ {{ experiencia.precio }}
-    <span *ngIf="!experiencia.disponible">(No disponible)</span>
+    <span *ngIf="!experiencia.disponible" class="no-disponible">(No disponible)</span>
   </p>
 
   <p class="categoria" *ngIf="experiencia.categoria">
-    Categoría: {{ experiencia.categoria.nombre }}
+    Categoría: <span>{{ experiencia.categoria.nombre }}</span>
   </p>
 
-  <!-- ✅ Abre la página /reserva en una nueva pestaña -->
+  <!-- ✅ Enlace corregido con atributo accesible dinámico -->
   <a
     href="/reserva"
     target="_blank"
     rel="noopener noreferrer"
     class="btn"
+    [attr.aria-label]="'Reservar experiencia ' + experiencia.nombre"
   >
     Reservar
   </a>
 </article>
+

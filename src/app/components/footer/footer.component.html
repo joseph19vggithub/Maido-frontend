@@ -1,25 +1,43 @@
 <footer class="site-footer">
-  <div class="container footer-grid">
-    <div>
-      <p class="small print">
-        © {{ currentYear }} Maido. Todos los derechos reservados.
+  <div class="container footer-content">
+    <!-- Columna 1: Logo y descripción -->
+    <div class="footer-section brand">
+      <img src="assets/img/logo.png" alt="MAIDO Logo" class="footer-logo" />
+      <p>
+        La experiencia Maido combina la tradición japonesa y la innovación peruana en cada detalle.
       </p>
     </div>
 
-    <nav class="footer-nav">
-      <a href="#inicio">Inicio</a>
-      <a href="#mitsuharu">informacion personal</a>
-      <a href="#experiencias">Nuestras Experiencias</a>
-      <a href="#contacto">Contacto</a>
-    </nav>
-
-    <div class="socials">
-      <a href="https://www.instagram.com/maido/" target="_blank" rel="noopener">
-        <img src="assets/icons/instagram.svg" alt="Instagram" />
-      </a>
-      <a href="https://www.facebook.com/maido" target="_blank" rel="noopener">
-        <img src="assets/icons/facebook.svg" alt="Facebook" />
-      </a>
+    <!-- Columna 2: Navegación -->
+    <div class="footer-section nav">
+      <h4>Explora</h4>
+      <nav class="footer-nav">
+        <a href="#inicio">Inicio</a>
+        <a href="#mitsuharu">Información Personal</a>
+        <a href="#experiencias">Nuestras Experiencias</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
     </div>
+
+    <!-- Columna 3: Redes y reserva -->
+    <div class="footer-section social">
+      <h4>Conecta</h4>
+      <div class="socials">
+        <a href="https://www.instagram.com/maido/" target="_blank" rel="noopener">
+          <img src="assets/icons/instagram.svg" alt="Instagram" />
+        </a>
+        <a href="https://www.facebook.com/maido" target="_blank" rel="noopener">
+          <img src="assets/icons/facebook.svg" alt="Facebook" />
+        </a>
+      </div>
+
+      <!-- Botón de reserva -->
+      <button class="reserva-btn" (click)="abrirReserva()">Reserva aquí</button>
+    </div>
+  </div>
+
+  <!-- Línea inferior -->
+  <div class="footer-bottom">
+    <p>© {{ currentYear }} Maido. Todos los derechos reservados.</p>
   </div>
 </footer>

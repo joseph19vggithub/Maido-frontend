@@ -1,0 +1,21 @@
+<section class="testimonios" id="testimonios">
+  <div class="overlay"></div>
+  <h2 class="section-title">Opiniones de Nuestros Clientes</h2>
+
+  <div class="testimonios-grid">
+    <div class="testimonio-card" *ngFor="let t of testimonios">
+      <img [src]="t.imagen" [alt]="t.nombre" class="avatar" />
+
+      <h3>{{ t.nombre }}</h3>
+      <p class="pais">{{ t.pais }}</p>
+
+      <div class="estrellas">
+        <ng-container *ngFor="let _ of generarEstrellas(t.estrellas)">
+          ⭐
+        </ng-container>
+      </div>
+
+      <p class="comentario">“{{ t.comentario }}”</p>
+    </div>
+  </div>
+</section>

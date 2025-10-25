@@ -9,5 +9,10 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent {
-  currentYear = new Date().getFullYear(); // ✅ definimos la propiedad
+  currentYear = new Date().getFullYear();
+
+  abrirReserva() {
+    // 🔹 Abre la ruta /reserva en una nueva pestaña
+    window.open('/reserva', '_blank');
+  }
 }

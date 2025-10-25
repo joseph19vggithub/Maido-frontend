@@ -1,116 +1,244 @@
 .contacto {
-  background: linear-gradient(180deg, #0f0f0f 0%, #141414 100%);
-  padding: 100px 0;
+  position: relative;
+  padding: 4rem 1.5rem;
   color: #fff;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(10, 10, 10, 0.85), rgba(25, 10, 15, 0.9)),
+    url('/assets/img/maido3.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   text-align: center;
 
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 0;
+  }
+
+  /* 🩶 Contenedor principal con efecto cristal */
+  .container {
+    position: relative;
+    z-index: 2;
+    max-width: 850px;
+    margin: 0 auto;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.05) 100%
+    ); /* degradado suave */
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 18px;
+    padding: 2rem 1.8rem 2.5rem;
+    box-shadow: 0 0 35px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(15px) saturate(140%);
+    -webkit-backdrop-filter: blur(15px) saturate(140%);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease, visibility 0.8s ease;
+
+    /* ✨ Glow dinámico */
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 20px;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 0, 92, 0.35),
+        rgba(162, 0, 60, 0.25),
+        rgba(255, 0, 92, 0.35)
+      );
+      filter: blur(12px);
+      opacity: 0.25;
+      z-index: -1;
+      animation: glowAnim 6s linear infinite alternate;
+    }
+
+    &.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    /* 💫 Pulse elegante */
+    &:hover::before {
+      opacity: 0.5;
+      filter: blur(15px);
+      animation: pulseGlow 1s ease-out, glowAnim 5s linear infinite alternate;
+    }
+  }
+
+  /* 🌈 Animación del glow */
+  @keyframes glowAnim {
+    0% {
+      transform: rotate(0deg) scale(1);
+      filter: hue-rotate(0deg) blur(12px);
+    }
+    50% {
+      transform: rotate(1deg) scale(1.02);
+      filter: hue-rotate(40deg) blur(14px);
+    }
+    100% {
+      transform: rotate(-1deg) scale(1);
+      filter: hue-rotate(80deg) blur(12px);
+    }
+  }
+
+  /* ⚡ Pulso suave */
+  @keyframes pulseGlow {
+    0% {
+      box-shadow: 0 0 0 rgba(255, 0, 92, 0);
+    }
+    50% {
+      box-shadow: 0 0 45px rgba(255, 0, 92, 0.5);
+    }
+    100% {
+      box-shadow: 0 0 0 rgba(255, 0, 92, 0);
+    }
+  }
+
+  /* ✴️ Título y descripción */
   .section-title {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     font-weight: 700;
-    margin-bottom: 1rem;
-    color: #ffd86b; /* dorado elegante */
+    margin-bottom: 0.6rem;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #fff, #a2003c, #ff005c, #fff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 300% 100%;
+    animation: tituloBrillo 8s ease-in-out infinite;
   }
 
   .section-lead {
-    color: #ccc;
-    font-size: 1.1rem;
-    margin-bottom: 3rem;
+    color: #ddd;
+    font-size: 1rem;
+    margin-bottom: 2rem;
     max-width: 600px;
     margin-inline: auto;
+    line-height: 1.5;
   }
 
-  /* === TARJETA DEL FORMULARIO === */
-  .contact-form {
-    background: rgba(24, 24, 24, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 1.2rem;
-    padding: 2.5rem 2rem;
-    max-width: 600px;
-    margin-inline: auto;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(6px);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
-    }
-
+  /* 🧱 Distribución interna */
+  .info-grid {
     display: grid;
-    gap: 1.2rem;
+    grid-template-columns: 1.2fr 0.9fr;
+    gap: 1.5rem;
+    align-items: center;
+    text-align: left;
 
-    .form-group {
+    .col {
       display: flex;
       flex-direction: column;
-      text-align: left;
+      gap: 1.2rem;
+    }
 
-      label {
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        color: #ffd86b;
+    .info-item {
+      h3 {
+        color: #ff005c;
+        font-weight: 700;
+        margin-bottom: 0.2rem;
+        font-size: 1.05rem;
+      }
+
+      p {
+        color: #eee;
         font-size: 0.95rem;
+        line-height: 1.5;
       }
 
-      input,
-      textarea {
-        padding: 0.9rem 1rem;
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        background: #1b1b1b;
+      a {
         color: #fff;
-        font-size: 1rem;
-        outline: none;
-        transition: border 0.25s ease, background 0.25s ease;
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: 0.3s ease;
 
-        &::placeholder {
-          color: #888;
+        &:hover {
+          color: #ff005c;
+          border-bottom: 1px solid #ff005c;
         }
-
-        &:focus {
-          border-color: #ffd86b;
-          background: #222;
-        }
-      }
-
-      textarea {
-        resize: none;
       }
     }
 
-    /* === BOTÓN === */
-    .btn {
-      background: #ffd86b;
-      color: #000;
-      border: none;
-      border-radius: 10px;
+    .btn-mapa {
+      display: inline-block;
+      margin-top: 0.4rem;
+      padding: 0.5rem 1rem;
+      background: linear-gradient(90deg, #a2003c, #ff005c);
+      color: #fff;
       font-weight: 600;
-      padding: 0.9rem 1.8rem;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
-      width: 100%;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.3s ease;
 
       &:hover {
-        background: #ffe08c;
         transform: translateY(-2px);
+        background: linear-gradient(90deg, #ff005c, #a2003c);
+      }
+    }
+
+    .horario {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 1.5rem 1rem;
+      align-self: center;
+      min-width: 240px;
+
+      h3 {
+        color: #fff;
+        font-weight: 700;
+        margin-bottom: 0.6rem;
+        font-size: 1.05rem;
       }
 
-      &:active {
-        transform: translateY(0);
+      p {
+        color: #ccc;
+        margin: 0.4rem 0;
+        line-height: 1.4;
+
+        strong {
+          color: #fff;
+        }
       }
     }
   }
 
-  /* === RESPONSIVO === */
-  @media (max-width: 768px) {
-    padding: 70px 0;
-
-    .section-title {
-      font-size: 2rem;
+  @keyframes tituloBrillo {
+    0% {
+      background-position: 0% 50%;
     }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
 
-    .contact-form {
-      padding: 2rem 1.5rem;
+  /* 📱 Responsive */
+  @media (max-width: 850px) {
+    padding: 3.5rem 1rem;
+
+    .info-grid {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 1.8rem;
+
+      .col {
+        align-items: center;
+      }
+
+      .horario {
+        max-width: 360px;
+        margin: 0 auto;
+      }
     }
   }
 }
-

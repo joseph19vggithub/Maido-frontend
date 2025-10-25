@@ -1,42 +1,56 @@
-<header class="site-header">
+<header class="site-header" id="mainHeader">
   <div class="container header-inner">
-    <!-- Logo -->
+    <!-- 🔹 Logo -->
     <a [routerLink]="['/']" fragment="inicio" class="brand" (click)="toggleMenu()">
       <img src="assets/img/logo.png" alt="MAIDO Logo" class="brand-logo" />
       <span class="brand-text">MAIDO</span>
     </a>
 
-    <!-- Menú principal -->
+    <!-- 🔹 Menú principal -->
     <nav class="nav-menu">
       <ul class="nav-list" [class.open]="menuAbierto">
         <li>
-          <a [routerLink]="['/']" fragment="inicio" (click)="toggleMenu()">Inicio</a>
+          <a
+            [routerLink]="['/']"
+            fragment="inicio"
+            (click)="toggleMenu()"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >Inicio</a>
         </li>
         <li>
-          <a [routerLink]="['/']" fragment="mitsuharu" (click)="toggleMenu()">Información Personal</a>
+          <a
+            [routerLink]="['/']"
+            fragment="mitsuharu"
+            (click)="toggleMenu()"
+          >Información Personal</a>
         </li>
         <li>
-          <a [routerLink]="['/']" fragment="experiencias" (click)="toggleMenu()">Nuestras Experiencias</a>
+          <a
+            [routerLink]="['/']"
+            fragment="experiencias"
+            (click)="toggleMenu()"
+          >Nuestras Experiencias</a>
         </li>
         <li>
-          <a [routerLink]="['/']" fragment="contacto" (click)="toggleMenu()">Contacto</a>
+          <a
+            [routerLink]="['/']"
+            fragment="contacto"
+            (click)="toggleMenu()"
+          >Contacto</a>
         </li>
-
-        <!-- ✅ "Reservar" abre en nueva pestaña -->
         <li>
           <a
             href="/reserva"
             target="_blank"
             rel="noopener noreferrer"
             (click)="toggleMenu()"
-          >
-            Reservar
-          </a>
+          >Reservar</a>
         </li>
       </ul>
     </nav>
 
-    <!-- ✅ Botón Iniciar Sesión que abre en nueva pestaña -->
+    <!-- 🔹 Botón Iniciar Sesión -->
     <a
       href="/login"
       target="_blank"

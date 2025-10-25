@@ -1,23 +1,22 @@
 <section class="section experiencias" id="experiencias">
   <div class="container">
+    <h2 class="section-title">Conoce Nuestras Experiencias Maido</h2>
 
-    <h2 class="section-title">Nuestras Experiencias</h2>
-
-    <!-- Contenedor horizontal: imagen al lado del texto/cards -->
-    <div class="experiencias-horizontal">
-      <!-- Imagen -->
-      <div class="experiencias-img">
-        <img src="assets/img/mesa247.png" alt="Mesa247" />
-      </div>
-
-      <!-- Cards de experiencias -->
-      <div class="grid cards">
-        <app-experiencia
-          *ngFor="let exp of experiencias"
-          [experiencia]="exp"
-        ></app-experiencia>
-      </div>
+    <!-- === Fila superior (3 tarjetas) === -->
+    <div class="fila-superior fade-up">
+      <app-experiencia *ngFor="let exp of experiencias.slice(0, 3)" [experiencia]="exp"></app-experiencia>
     </div>
 
+    <!-- === Fila inferior (1 tarjeta + info box) === -->
+    <div class="fila-inferior fade-up">
+      <app-experiencia [experiencia]="experiencias[3]"></app-experiencia>
+
+      <div class="info-box">
+        <h3>Información Importante</h3>
+        <p>De acuerdo a disponibilidad de lunes a sábado de <strong>1:00 p.m. a 9:00 p.m.</strong></p>
+        <p>*Los precios incluyen impuestos y recargo al consumo.</p>
+        <p>*Precios sujetos a cambios sin previo aviso.</p>
+      </div>
+    </div>
   </div>
 </section>

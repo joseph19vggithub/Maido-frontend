@@ -1,57 +1,49 @@
 .site-header {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 50;
-  background: rgba(11, 11, 12, 0.7);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  width: 100%;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.5s ease;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
 
   .header-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 64px;
+    height: 80px;
+    padding: 0 clamp(1.5rem, 6vw, 4rem);
+    transition: height 0.4s ease;
   }
 
-  /* === LOGO + TEXTO === */
+  /* === LOGO === */
   .brand {
     display: flex;
     align-items: center;
+    gap: 0.7rem;
     text-decoration: none;
-    color: var(--text);
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    font-size: 1.2rem;
-
-    &:hover {
-      color: var(--primary);
-    }
+    color: #fff;
+    margin-right: 3.5rem;
 
     .brand-logo {
-      height: 50px;
-      width: auto;
-      display: block;
-      margin-right: 0.5rem;
-      transition: opacity 0.25s;
+      height: 46px;
+      transition: transform 0.3s ease, opacity 0.3s ease, height 0.4s ease;
 
       &:hover {
-        opacity: 0.85;
+        transform: scale(1.05);
+        opacity: 0.9;
       }
     }
 
     .brand-text {
-      display: inline-block;
-    }
-  }
-
-  /* Ajuste para móviles */
-  @media (max-width: 680px) {
-    .brand-logo {
-      height: 40px;
-    }
-
-    .brand-text {
-      font-size: 1rem;
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: font-size 0.4s ease, letter-spacing 0.3s ease;
     }
   }
 
@@ -60,132 +52,126 @@
     list-style: none;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 2.4rem;
     margin: 0;
     padding: 0;
+    white-space: nowrap;
 
     a {
-      color: var(--text);
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.9);
       text-decoration: none;
-      padding: 0.5rem 0.6rem;
-      border-radius: 8px;
-      transition: all 0.25s ease;
+      font-weight: 500;
+      font-size: 0.97rem;
+      letter-spacing: 0.02em;
+      transition: color 0.3s ease;
+      padding-bottom: 4px;
 
       &:hover {
-        background: rgba(255, 255, 255, 0.08);
-        color: var(--primary);
+        color: #e59b2f;
       }
 
-      /* Enlace activo (cuando se usa scroll o anclaje) */
+      /* Línea dorada animada */
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%) scaleX(0);
+        transform-origin: center;
+        width: 100%;
+        height: 2px;
+        background-color: #e59b2f;
+        transition: transform 0.3s ease;
+      }
+
+      &:hover::after {
+        transform: translateX(-50%) scaleX(1);
+      }
+
       &.active {
-        color: var(--primary);
-        border-bottom: 2px solid var(--primary);
+        color: #e59b2f;
+        font-weight: 600;
+
+        &::after {
+          transform: translateX(-50%) scaleX(1);
+        }
       }
     }
+  }
 
-    &.open {
+  /* === BOTÓN INICIAR SESIÓN === */
+  .login-btn {
+    margin-left: 1.5rem;
+    background: transparent;
+    color: #fff;
+    border: 1.8px solid rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    padding: 0.45rem 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    transition: all 0.3s ease;
+    text-decoration: none;
+
+    &:hover {
+      background: #e59b2f;
+      color: #111;
+      border-color: #e59b2f;
+      transform: translateY(-2px);
+      box-shadow: 0 0 10px rgba(229, 155, 47, 0.5);
+    }
+
+    &:active {
       transform: translateY(0);
     }
   }
-/* === BOTÓN "INICIAR SESIÓN" === */
-.login-btn {
-  margin-left: 1.5rem; /* 👈 separa el botón del menú */
-  background: var(--primary);
-  color: var(--white);
-  border: none;
-  border-radius: 8px;
-  padding: 0.5rem 1.2rem;
-  cursor: pointer;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  transition: background 0.3s ease, transform 0.2s ease;
-  white-space: nowrap; /* evita que el texto se parta */
 
-  &:hover {
-    background: var(--brandD);
-    transform: translateY(-2px);
-  }
+  /* === EFECTO SCROLL === */
+  &.scrolled {
+    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    height: 65px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+    transition: background 0.6s ease, backdrop-filter 0.6s ease, height 0.4s ease;
 
-  &:active {
-    transform: translateY(0);
-  }
-}
+    .header-inner {
+      height: 65px;
+    }
 
-/* En pantallas pequeñas */
-@media (max-width: 680px) {
-  .login-btn {
-    margin-left: 0;
-    margin-top: 0.5rem;
-    padding: 0.4rem 1rem;
-    font-size: 0.9rem;
-  }
-}
+    .brand-logo {
+      height: 38px;
+    }
 
-
-  /* === ICONOS SOCIALES === */
-  .socials img {
-    width: 24px;
-    height: 24px;
-    opacity: 0.85;
-    transition: opacity 0.25s;
-
-    &:hover {
-      opacity: 1;
+    .brand-text {
+      font-size: 1rem;
+      letter-spacing: 0.03em;
     }
   }
 
-  /* === BOTÓN HAMBURGUESA === (ya no lo usas, pero lo dejo por si lo mantienes en otra vista) */
-  .hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    background: transparent;
-    border: none;
-    padding: 0.5rem;
-    cursor: pointer;
-
-    span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--text);
-      margin: 4px 0;
-      transition: 0.25s;
+  /* === RESPONSIVE === */
+  @media (max-width: 1024px) {
+    .nav-list {
+      gap: 1.6rem;
     }
   }
-}
 
-/* === RESPONSIVE (móvil) === */
-@media (max-width: 680px) {
-  .nav-list {
-    position: fixed;
-    inset: 64px 0 auto 0;
-    background: rgba(11, 11, 12, 0.95);
-    backdrop-filter: blur(10px);
-    flex-direction: column;
-    padding: 1.5rem;
-    transform: translateY(-120%);
-    transition: transform 0.25s ease;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    gap: 1.25rem;
+  @media (max-width: 768px) {
+    .nav-list {
+      gap: 1rem;
+    }
+
+    .brand-text {
+      display: none;
+    }
+
+    .login-btn {
+      padding: 0.4rem 0.9rem;
+      font-size: 0.9rem;
+    }
   }
-
-  .hamburger {
-    display: flex;
-  }
-
-  .socials {
-    display: none;
-  }
-
-  /* Botón de inicio de sesión visible también en móvil */
-  .login-btn {
-    font-size: 0.9rem;
-    padding: 0.4rem 0.9rem;
-  }
-}
-
-/* === EFECTO DE DESPLAZAMIENTO SUAVE === */
-html {
-  scroll-behavior: smooth;
 }
