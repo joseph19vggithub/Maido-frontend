@@ -1,0 +1,16 @@
+<div class="layout" style="display:flex;min-height:100vh;gap:16px;">
+  <aside style="width:240px;padding:16px;background:#0f172a;color:white;">
+    <h3 style="margin:0 0 12px 0;">Restaurante • Admin</h3>
+    <nav style="display:flex;flex-direction:column;gap:8px;">
+      <a routerLink="dashboard">Dashboard</a>
+      <a routerLink="clientes">Clientes</a>
+      <a routerLink="reservas">Reservas</a>
+      <a routerLink="mesas">Mesas</a>
+      <a routerLink="experiencias">Experiencias</a>
+      <a routerLink="pedidos">Pedidos</a>
+    </nav>
+  </aside>
+  <main style="flex:1;padding:16px;background:#f8fafc;">
+    <router-outlet></router-outlet>
+  </main>
+</div>

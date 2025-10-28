@@ -21,8 +21,51 @@ export const routes: Routes = [
 
   // 🔒 Rutas protegidas con su respectivo rol
   { path: 'mesero', component: MeseroComponent, canActivate: [authGuard], data: { role: 'mesero' } },
-  { path: 'admin', component: AdminComponent, canActivate: [authGuard], data: { role: 'admin' } },
-  { path: 'cocinero', component: CocineroComponent, canActivate: [authGuard], data: { role: 'cocinero' } },
+  {
+  path: 'admin',
+  //canActivate: [authGuard],
+  //data: { role: 'admin' },
+  loadComponent: () =>
+    import('./pages/admin/layout/admin-layout.component').then(m => m.AdminLayoutComponent),
+  children: [
+    { path: 'usuarios', loadComponent: () => import('./pages/admin/usuarios/usuarios.component').then(m => m.UsuariosComponent) },
+{ path: 'roles',    loadComponent: () => import('./pages/admin/roles/roles.component').then(m => m.RolesComponent) },
+
+    {
+      path: 'dashboard',
+      loadComponent: () =>
+        import('./pages/admin/dashboard/dashboard.component').then(m => m.DashboardComponent),
+    },
+    {
+      path: 'clientes',
+      loadComponent: () =>
+        import('./pages/admin/clientes/clientes.component').then(m => m.ClientesComponent),
+    },
+    {
+      path: 'reservas',
+      loadComponent: () =>
+        import('./pages/admin/reservas/reservas.component').then(m => m.ReservasComponent),
+    },
+    {
+      path: 'pedidos',
+      loadComponent: () =>
+        import('./pages/admin/pedidos/pedidos.component').then(m => m.PedidosComponent),
+    },
+    {
+      path: 'experiencias',
+      loadComponent: () =>
+        import('./pages/admin/experiencias/experiencias.component').then(m => m.ExperienciasComponent),
+    },
+    {
+      path: 'mesas',
+      loadComponent: () =>
+        import('./pages/admin/mesas/mesas.component').then(m => m.MesasComponent),
+    },
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+  ]
+},
+
+  { path: 'cocinero', component: CocineroComponent}, //canActivate: [authGuard], data: { role: 'cocinero' } },
   { path: 'menu', component: MenuClientesComponent },
 
 
