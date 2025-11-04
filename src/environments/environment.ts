@@ -1,5 +1,5 @@
-// src/environments/environment.ts
 export const environment = {
   production: false,
-  apiUrl: 'https://localhost:7234/api' // <-- tu URL base del backend .NET
+  apiUrl: 'http://localhost:5198/api', // o el tuyo
+  mockApi: true                        // ← para probar sin backend
 };

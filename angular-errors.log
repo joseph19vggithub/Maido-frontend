@@ -1,0 +1,5 @@
+[error] Error: Configuration 'production' for target 'deploy' in project 'maido-frontend' is not set in the workspace.
+    at Object.getOptions (C:\Users\xavie\Downloads\Maido-frontend-main\Maido-frontend-main\node_modules\@angular-devkit\architect\node\node-modules-architect-host.js:95:31)
+    at WorkspaceNodeModulesArchitectHost.getOptionsForTarget (C:\Users\xavie\Downloads\Maido-frontend-main\Maido-frontend-main\node_modules\@angular-devkit\architect\node\node-modules-architect-host.js:215:50)
+    at async Promise.all (index 1)
+

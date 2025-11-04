@@ -1,7 +1,69 @@
 <div class="card">
-  <h3 style="margin:0 0 10px">Pedidos</h3>
-  <table>
-    <tr><th>ID</th><th>Fecha</th><th>Cliente</th><th>Total</th><th>Estado</th></tr>
-    <tr><td colspan="5" style="color:#94a3b8">Sin datos.</td></tr>
+  <div class="card-head" style="display:flex;align-items:center;gap:12px;justify-content:space-between">
+    <h3 style="margin:0">Pedidos</h3>
+    <button (click)="reload()">Recargar</button>
+  </div>
+
+  <!-- Estado de carga -->
+  <div *ngIf="cargando" style="padding:8px 0;color:#94a3b8">Cargando…</div>
+  <div *ngIf="error" style="padding:8px 0;color:#ef4444">{{ error }}</div>
+
+  <table *ngIf="!cargando" style="width:100%;border-collapse:collapse">
+    <thead>
+      <tr>
+        <th style="text-align:left;padding:6px 8px">ID</th>
+        <th style="text-align:left;padding:6px 8px">Fecha</th>
+        <th style="text-align:left;padding:6px 8px">Cliente</th>
+        <th style="text-align:right;padding:6px 8px">Total</th>
+        <th style="text-align:left;padding:6px 8px">Estado</th>
+      </tr>
+    </thead>
+
+    <!-- Sin datos -->
+    <tbody *ngIf="data.length === 0">
+      <tr>
+        <td colspan="5" style="color:#94a3b8;padding:8px">Sin datos.</td>
+      </tr>
+    </tbody>
+
+    <!-- Con datos -->
+    <tbody *ngIf="data.length > 0">
+      <tr *ngFor="let p of data; trackBy: trackById">
+        <td style="padding:6px 8px">{{ p.id }}</td>
+
+        <!-- creadoEn es string ISO en el mock; usa date pipe si existe -->
+        <td style="padding:6px 8px">
+          <ng-container *ngIf="p.creadoEn; else fechaVacia">
+            {{ p.creadoEn | date:'short' }}
+          </ng-container>
+          <ng-template #fechaVacia>—</ng-template>
+        </td>
+
+        <td style="padding:6px 8px">
+          {{ p.cliente?.nombre || '—' }}
+        </td>
+
+        <td style="padding:6px 8px; text-align:right">
+          {{ p.total || 0 | currency:'PEN':'symbol-narrow':'1.2-2' }}
+        </td>
+
+        <td style="padding:6px 8px">
+          <span
+            [ngStyle]="{
+              'padding': '2px 8px',
+              'border-radius': '999px',
+              'font-size': '12px',
+              'color': '#0b1220',
+              'background': p.estado==='pendiente' ? '#ffb300'
+                           : p.estado==='en_preparacion' ? '#60a5fa'
+                           : p.estado==='listo' ? '#34d399'
+                           : '#cbd5e1'
+            }"
+          >
+            {{ p.estado }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
   </table>
 </div>

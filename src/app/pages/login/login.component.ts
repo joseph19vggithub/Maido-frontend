@@ -1,8 +1,8 @@
+// src/app/pages/login/login.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,12 +12,12 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-  email: string = '';
-  password: string = '';
-  errorMsg: string = '';
-  loading: boolean = false;
+  email = '';
+  password = '';
+  errorMsg = '';
+  loading = false;
 
-  constructor(private router: Router, private auth: AuthService) {}
+  constructor(private router: Router) {}
 
   onSubmit() {
     if (!this.email || !this.password) {
@@ -28,26 +28,24 @@ export class LoginComponent {
     this.loading = true;
     this.errorMsg = '';
 
-    this.auth.loginWithCredentials(this.email, this.password).subscribe({
-      next: (res) => {
-        this.loading = false;
+    // 🔹 Simulación sin backend: determina el rol por el correo
+    const role = this.email.includes('cocinero')
+      ? 'cocinero'
+      : this.email.includes('admin')
+      ? 'admin'
+      : 'mesero';
 
-        if (!res.ok) {
-          this.errorMsg = 'Credenciales incorrectas.';
-          return;
-        }
+    // (opcional) guardar sesión dummy
+    localStorage.setItem('token', 'dev-token');
+    localStorage.setItem('user', JSON.stringify({ email: this.email, role }));
 
-        // ✅ Transición visual antes de redirigir
-        document.body.classList.add('fade-out');
+    // ✨ transición visual opcional
+    document.body.classList.add('fade-out');
 
-        setTimeout(() => {
-          this.router.navigate(['/' + res.role]);
-        }, 600);
-      },
-      error: () => {
-        this.loading = false;
-        this.errorMsg = 'Error de conexión con el servidor.';
-      },
-    });
+    setTimeout(() => {
+      this.loading = false;
+      // 🔹 Redirige según el rol
+      this.router.navigate([role === 'admin' ? '/admin' : `/${role}`]);
+    }, 400);
   }
 }
