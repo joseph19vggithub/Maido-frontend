@@ -1,0 +1,109 @@
+<div class="card bg-neutral-900 text-white p-6 rounded-2xl shadow">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-xl font-semibold">Usuarios</h2>
+    <button class="btn btn-primary" (click)="openCreate()">Nuevo</button>
+  </div>
+
+  <div *ngIf="loading">Cargando...</div>
+
+  <table class="w-full text-sm" *ngIf="!loading">
+    <thead>
+      <tr class="text-left border-b border-neutral-700">
+        <th class="py-2">Nombre</th>
+        <th class="py-2">Email</th>
+        <th class="py-2">Rol(es)</th>
+        <th class="py-2">Estado</th>
+        <th class="py-2">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of usuarios" class="border-b border-neutral-800">
+        <td class="py-2">{{ u.username }}</td>
+        <td class="py-2">{{ u.email }}</td>
+        <td class="py-2">{{ getRolesNames(u) }}</td>
+        <td class="py-2">{{ u.estado }}</td>
+        <td class="py-2 space-x-2">
+          <button class="btn btn-sm btn-outline" (click)="openEdit(u)">Editar</button>
+          <button class="btn btn-sm btn-danger" (click)="delete(u.id)">Eliminar</button>
+        </td>
+      </tr>
+
+      <tr *ngIf="usuarios.length === 0">
+        <td colspan="5" class="py-4 text-neutral-400">Sin datos.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal / Form -->
+<div *ngIf="modalOpen" class="modal-overlay">
+  <div class="modal-card">
+    <h3 class="modal-title">
+      {{ editMode ? 'Editar usuario' : 'Nuevo usuario' }}
+    </h3>
+
+    <form [formGroup]="form" (ngSubmit)="save()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm mb-1">Username</label>
+        <input
+          class="w-full px-3 py-2"
+          formControlName="username"
+          type="text"
+          placeholder="joseph" />
+      </div>
+
+      <div>
+        <label class="block text-sm mb-1">Email</label>
+        <input
+          class="w-full px-3 py-2"
+          formControlName="email"
+          type="email"
+          placeholder="correo@dominio.com" />
+      </div>
+
+      <div>
+        <label class="block text-sm mb-1">Contraseña</label>
+        <input
+          class="w-full px-3 py-2"
+          formControlName="password"
+          type="password"
+          placeholder="••••••" />
+        <small class="text-neutral-500" *ngIf="editMode">Déjala vacía si no deseas cambiarla.</small>
+      </div>
+
+      <div>
+        <label class="block text-sm mb-1">Estado</label>
+        <select class="w-full px-3 py-2" formControlName="estado">
+          <option value="ACTIVO">ACTIVO</option>
+          <option value="INACTIVO">INACTIVO</option>
+        </select>
+      </div>
+
+      <div class="md:col-span-2">
+        <label class="block text-sm mb-2">Asignar roles</label>
+
+        <!-- Aviso si no hay roles -->
+        <div *ngIf="(roles?.length ?? 0) === 0" class="text-neutral-500 text-sm">
+          No hay roles creados. Crea al menos uno en el módulo Roles.
+        </div>
+
+        <!-- Checkboxes -->
+        <div class="flex flex-wrap gap-3" *ngIf="(roles?.length ?? 0) > 0">
+          <label *ngFor="let r of roles || []; trackBy: trackByRolId" class="role-chip">
+            <input type="checkbox"
+                   [checked]="isSelectedRole(r.id)"
+                   (change)="toggleRole(r.id)" />
+            <span>{{ r.nombre }}</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="md:col-span-2 modal-actions">
+        <button type="button" class="btn btn-outline" (click)="closeModal()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+          {{ editMode ? 'Guardar cambios' : 'Crear' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

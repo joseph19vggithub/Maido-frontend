@@ -1,0 +1,112 @@
+/* ====== Roles (estilos aislados) ====== */
+:host {
+  display: block;
+}
+
+/* Card oscura (lista de roles) */
+.card {
+  background: #0f131a;         /* como neutral-900 pero un poco más suave */
+  color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.35);
+}
+
+/* Cabeceras de tabla y bordes */
+th {
+  color: #cbd5e1;               /* gris claro */
+  font-weight: 600;
+}
+tr + tr td {
+  border-top: 1px solid #1f2937; /* neutral-800 */
+}
+
+/* Botones “píldora” */
+.btn {
+  border-radius: 999px;
+  padding: .55rem 1.1rem;
+  font-weight: 600;
+}
+.btn-outline {
+  background: #e5e7eb;
+  color: #111827;
+  border: none;
+}
+.btn-danger {
+  background: #e11d48;          /* rose-600 */
+  color: #fff;
+  border: none;
+}
+.btn-primary {
+  background: linear-gradient(90deg, #2563eb, #1d4ed8);
+  color: #fff;
+  border: none;
+  box-shadow: 0 8px 22px rgba(29,78,216,.35);
+}
+
+/* ====== Modal / Formulario claro ====== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.modal-panel {
+  width: 100%;
+  max-width: 520px;
+  background: #ffffff;          /* panel claro */
+  color: #0f172a;               /* texto oscuro */
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 20px 50px rgba(0,0,0,.35);
+}
+
+/* Etiquetas e inputs con alto contraste */
+label {
+  display: block;
+  margin-bottom: .35rem;
+  font-size: .875rem;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: .65rem .85rem;
+  background: #ffffff;
+  color: #0f172a;
+  transition: box-shadow .2s ease, border-color .2s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #6b7280; /* gris medio */
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, .15);
+}
+
+/* Footer del modal */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: .5rem;
+  margin-top: .75rem;
+}
+
+/* Utilidades pequeñas */
+.text-muted { color: #64748b; }

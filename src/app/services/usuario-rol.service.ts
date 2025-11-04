@@ -8,7 +8,7 @@ import { UsuarioRol } from '../models/usuario-rol.model';
   providedIn: 'root'
 })
 export class UsuarioRolService {
-  private apiUrl = `${environment.apiUrl}/usuariorol`;
+  private apiUrl = `${environment.apiUrl}/usuario_rol`;
 
   constructor(private http: HttpClient) {}
 

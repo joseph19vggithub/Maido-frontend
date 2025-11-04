@@ -1,0 +1,53 @@
+<div class="card bg-neutral-900 text-white p-6 rounded-2xl shadow">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-xl font-semibold">Roles</h2>
+    <button class="btn btn-primary" (click)="openCreate()">Nuevo</button>
+  </div>
+
+  <div *ngIf="loading">Cargando...</div>
+  <table class="w-full text-sm" *ngIf="!loading">
+    <thead>
+      <tr class="text-left border-b border-neutral-700">
+        <th class="py-2">Rol</th>
+        <th class="py-2">Usuarios asignados</th>
+        <th class="py-2">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let r of roles" class="border-b border-neutral-800">
+        <td class="py-2">{{ r.nombre }}</td>
+        <!-- 👇 CAMBIO AQUÍ: ahora usamos r.asignados -->
+        <td class="py-2">{{ r.asignados }}</td>
+        <td class="py-2 space-x-2">
+          <button class="btn btn-sm btn-outline" (click)="openEdit(r)">Editar</button>
+          <button class="btn btn-sm btn-danger" (click)="delete(r.id)">Eliminar</button>
+        </td>
+      </tr>
+      <tr *ngIf="roles.length === 0">
+        <td colspan="3" class="py-4 text-neutral-400 text-center">Sin datos.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal -->
+<div *ngIf="modalOpen" class="modal-backdrop">
+  <div class="modal-panel">
+    <h3 class="text-lg font-semibold mb-4">{{ editMode ? 'Editar rol' : 'Nuevo rol' }}</h3>
+
+    <form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">
+      <div>
+        <label>Nombre</label>
+        <input type="text" formControlName="nombre" placeholder="Administrador, Mesero..." />
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" (click)="closeModal()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+          {{ editMode ? 'Guardar cambios' : 'Crear' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
