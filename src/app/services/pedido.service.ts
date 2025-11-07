@@ -1,4 +1,3 @@
-// src/app/services/pedido.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, delay, throwError } from 'rxjs';
@@ -7,30 +6,21 @@ import { Pedido, NewPedido, EstadoPedido } from '../models/pedido.model';
 
 @Injectable({ providedIn: 'root' })
 export class PedidoService {
-  // Cambia a /pedidos si tu API real usa plural
   private apiUrl = `${environment.apiUrl}/pedido`;
   private LS_KEY = 'pedidos_mock_v1';
 
   constructor(private http: HttpClient) {}
 
-  // ====================== MODO MOCK (localStorage) ======================
+  // ===== MOCK =====
   private read(): Pedido[] {
-    try {
-      return JSON.parse(localStorage.getItem(this.LS_KEY) || '[]');
-    } catch {
-      return [];
-    }
+    try { return JSON.parse(localStorage.getItem(this.LS_KEY) || '[]'); }
+    catch { return []; }
   }
+  private write(list: Pedido[]) { localStorage.setItem(this.LS_KEY, JSON.stringify(list)); }
 
-  private write(list: Pedido[]) {
-    localStorage.setItem(this.LS_KEY, JSON.stringify(list));
-  }
-
-  // ====================== API PÚBLICA ======================
+  // ===== API PÚBLICA =====
   getAll(): Observable<Pedido[]> {
-    if (environment.mockApi) {
-      return of(this.read()).pipe(delay(200));
-    }
+    if (environment.mockApi) return of(this.read()).pipe(delay(200));
     return this.http.get<Pedido[]>(this.apiUrl);
   }
 
@@ -76,7 +66,7 @@ export class PedidoService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  // Solo pedidos pendientes
+  /** Solo pedidos pendientes */
   getPendientes(): Observable<Pedido[]> {
     if (environment.mockApi) {
       const data = this.read().filter(p => p.estado === 'pendiente');
@@ -85,7 +75,16 @@ export class PedidoService {
     return this.http.get<Pedido[]>(`${this.apiUrl}/pendientes`);
   }
 
-  // Cambiar estado
+  /** 🔹 Pedidos para cocina (pendiente + en_preparacion) */
+  getParaCocina(): Observable<Pedido[]> {
+    if (environment.mockApi) {
+      const data = this.read().filter(p => p.estado === 'pendiente' || p.estado === 'en_preparacion');
+      return of(data).pipe(delay(150));
+    }
+    // Ajusta si tu backend usa endpoint/queries distinto
+    return this.http.get<Pedido[]>(`${this.apiUrl}/para-cocina`);
+  }
+
   actualizarEstado(id: number, nuevoEstado: EstadoPedido): Observable<any> {
     if (environment.mockApi) {
       return this.update(id, { estado: nuevoEstado }).pipe(delay(120));
@@ -93,7 +92,6 @@ export class PedidoService {
     return this.http.put<any>(`${this.apiUrl}/${id}/estado`, { nuevoEstado });
   }
 
-  // Utilidad para pruebas: limpia el mock
   clearMock(): void {
     if (environment.mockApi) localStorage.removeItem(this.LS_KEY);
   }

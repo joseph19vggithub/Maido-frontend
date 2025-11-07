@@ -9,6 +9,7 @@ import { Mesa } from '../../models/mesa.model';
 
 import { ExperienciaService } from '../../services/experiencia.service';
 import { Experiencia } from '../../models/experiencia.model';
+import { PedidoService } from '../../services/pedido.service'; // 👈 NUEVO
 
 /** ===== Tipos de la vista ===== */
 type MenuItem = { id: number; nombre: string; sub: string; precio: number };
@@ -112,32 +113,45 @@ export class MeseroComponent {
     this.toast('Agregado al pedido', 'success');
   }
 
-  removeLine(i: number) {
-    this.pedidoActual.splice(i, 1);
-  }
-  vaciarPedido() {
-    this.pedidosPorMesa[this.mesaKey] = [];
-  }
-  confirmarPedido() {
-    this.toast('Pedido confirmado (local, aún sin enviar)', 'info');
-  }
+  removeLine(i: number) { this.pedidoActual.splice(i, 1); }
+  vaciarPedido() { this.pedidosPorMesa[this.mesaKey] = []; }
+  confirmarPedido() { this.toast('Pedido confirmado (local, aún sin enviar)', 'info'); }
 
   /* ===== Acciones topbar (persisten en BD) ===== */
   enviar() {
     if (!this.mesaSeleccionadaObj) return;
-    const mesa = this.mesaSeleccionadaObj;
-    const payload = {
-      mesa: this.mesaKey,
-      estado: this.estadoMesa,
-      nota: this.notaRapida,
-      total: this.total,
-      items: this.pedidoActual.map(l => ({ id: l.id, qty: l.cantidad }))
-    };
-    console.log('ENVIAR A COCINA', payload);
 
-    // Persistir estado "Ocupada"
-    this.persistirEstado(mesa, 'Ocupada');
+    // Payload compatible con NewPedido (usado por pedido.service)
+    const pedidoData: any = {
+      mesa: this.mesaSeleccionadaObj.numero ?? null, // 👈 número de mesa
+      cliente: null,
+      detalles: this.pedidoActual.map(l => ({
+        id: l.id,
+        persona: 1,
+        cantidad: l.cantidad,
+        precio: l.precio,
+        nombre: l.nombre,
+        // comentarios?: '...'
+      })),
+      total: this.total,
+      nota: this.notaRapida || null,
+      estado: 'pendiente',
+      creadoEn: new Date().toISOString(),
+    };
+
+    this.pedidoSrv.create(pedidoData).subscribe({
+      next: () => {
+        // Persistir estado "Ocupada" y limpiar carrito/nota
+        this.persistirEstado(this.mesaSeleccionadaObj!, 'Ocupada', () => {
+          this.vaciarPedido();
+          this.notaRapida = '';
+          this.toast('Pedido enviado a cocina', 'success');
+        });
+      },
+      error: () => this.toast('No se pudo enviar el pedido', 'danger'),
+    });
   }
+
   marcarListo() { this.toast('Pedido marcado como listo', 'info'); }
 
   marcarReservada() {
@@ -153,9 +167,7 @@ export class MeseroComponent {
     });
   }
 
-  logout() {
-    this.toast('Sesión cerrada', 'danger');
-  }
+  logout() { this.toast('Sesión cerrada', 'danger'); }
 
   private persistirEstado(m: Mesa, estado: 'Libre'|'Ocupada'|'Reservada', onOk?: () => void) {
     const body: Mesa = { ...m, estado };
@@ -187,9 +199,10 @@ export class MeseroComponent {
   }
 
   constructor(
-    private http: HttpClient,            // si lo usas para otras cosas
+    private http: HttpClient,
     private mesaSrv: MesaService,
-    private expSvc: ExperienciaService   // 👈 cargamos experiencias del backend
+    private expSvc: ExperienciaService,
+    private pedidoSrv: PedidoService,           // 👈 NUEVO
   ) {
     this.ensureMesaContainers();
     this.cargarMesas();      // mesas
@@ -203,7 +216,7 @@ export class MeseroComponent {
       next: (xs) => {
         // Solo disponibles
         this.allExp = (xs ?? []).filter(e => e.disponible);
-        this.applyFilter();  // primera pintada
+        this.applyFilter();
         this.cargando = false;
       },
       error: _ => { this.allExp = []; this.menu = []; this.cargando = false; }
@@ -211,19 +224,17 @@ export class MeseroComponent {
   }
 
   private mapToMenuItem(x: Experiencia): MenuItem {
-  const cat: any = (x as any)?.categoria;
-  const sub = (cat && typeof cat === 'object' && 'nombre' in cat)
-    ? (cat.nombre as string)
-    : (x.descripcion || '');
-
-  return {
-    id: Number(x.id ?? 0), // ✅ convierte a número aunque venga undefined
-    nombre: x.nombre || '',
-    sub,
-    precio: Number(x.precio ?? 0)
-  };
-}
-
+    const cat: any = (x as any)?.categoria;
+    const sub = (cat && typeof cat === 'object' && 'nombre' in cat)
+      ? (cat.nombre as string)
+      : (x.descripcion || '');
+    return {
+      id: Number(x.id ?? 0),
+      nombre: x.nombre || '',
+      sub,
+      precio: Number(x.precio ?? 0)
+    };
+  }
 
   private applyFilter(): void {
     const t = this.q;
@@ -248,7 +259,6 @@ export class MeseroComponent {
           (acc[m.piso] ||= []).push(m);
           return acc;
         }, {} as Record<number, Mesa[]>);
-        // si no hay seleccionada, tomar la primera del piso actual
         if (!this.mesaSeleccionadaObj) {
           const arr = this.mesasPorPiso[this.pisoSeleccionado] ?? [];
           this.mesaSeleccionadaObj = arr[0] ?? null;
