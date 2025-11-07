@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
 import { MeseroComponent } from './pages/mesero/mesero.component';
-import { AdminComponent } from './pages/admin/admin.component';
+import { AdminComponent } from './pages/admin/admin.component'; // opcional
 import { CocineroComponent } from './pages/cocinero/cocinero.component';
 import { InicioComponent } from './pages/inicio/inicio.component';
 import { ReservaComponent } from './pages/reserva/reserva.component';
@@ -10,6 +10,7 @@ import { ConfirmacionReservaComponent } from './pages/confirmacion-reserva/confi
 import { MenuClientesComponent } from './pages/menu-clientes/menu-clientes.component';
 
 export const routes: Routes = [
+  // === PÁGINAS PÚBLICAS ===
   { path: '', component: InicioComponent, pathMatch: 'full' },
   { path: 'reserva', component: ReservaComponent },
   { path: 'informacion', component: InformacionComponent },
@@ -17,19 +18,37 @@ export const routes: Routes = [
   { path: 'confirmacion-reserva', component: ConfirmacionReservaComponent },
   { path: 'login', component: LoginComponent },
 
-  // ✅ PÚBLICAS
+  // === ROLES OPERATIVOS ===
   { path: 'mesero', component: MeseroComponent },
   { path: 'cocinero', component: CocineroComponent },
 
-  // ✅ ALIAS CÓMODOS
+  // Alias útiles
   { path: 'cocina', redirectTo: 'cocinero', pathMatch: 'full' },
   { path: 'mozo', redirectTo: 'mesero', pathMatch: 'full' },
 
-  // Admin sigue público (o protégelo más tarde si quieres)
+  // === NUEVO: Estado de pedidos (mesero / cocinero) ===
+  {
+  path: 'estado-pedidos/mesero',
+  loadComponent: () =>
+    import('./components/pedidos-estado/pedidos-estado.component')
+      .then(m => m.PedidosEstadoComponent),
+  data: { rol: 'mesero', noChrome: true }   // 👈
+},
+{
+  path: 'estado-pedidos/cocinero',
+  loadComponent: () =>
+    import('./components/pedidos-estado/pedidos-estado.component')
+      .then(m => m.PedidosEstadoComponent),
+  data: { rol: 'cocinero', noChrome: true } // 👈
+},
+
+
+  // === ADMIN (Lazy + Children) ===
   {
     path: 'admin',
     loadComponent: () =>
-      import('./pages/admin/layout/admin-layout.component').then(m => m.AdminLayoutComponent),
+      import('./pages/admin/layout/admin-layout.component')
+        .then(m => m.AdminLayoutComponent),
     children: [
       { path: 'usuarios', loadComponent: () => import('./pages/admin/usuarios/usuarios.component').then(m => m.UsuariosComponent) },
       { path: 'roles', loadComponent: () => import('./pages/admin/roles/roles.component').then(m => m.RolesComponent) },
@@ -43,7 +62,9 @@ export const routes: Routes = [
     ]
   },
 
+  // === OTROS ===
   { path: 'menu', component: MenuClientesComponent },
 
+  // === COMODÍN (al final siempre) ===
   { path: '**', redirectTo: '' },
 ];

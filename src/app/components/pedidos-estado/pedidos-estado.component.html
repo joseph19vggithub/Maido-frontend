@@ -1,0 +1,89 @@
+<section class="panel card">
+  <header class="panel-head">
+    <h2>Estado de pedidos</h2>
+    <div class="role" [class.cocinero]="rol==='cocinero'" [class.mesero]="rol==='mesero'">
+      {{ rol | uppercase }}
+    </div>
+  </header>
+
+  <!-- Filtros -->
+  <div class="filters">
+    <input
+      class="search"
+      placeholder="Buscar por mesa (ej. P1-M3)…"
+      [(ngModel)]="q"
+      (keyup.enter)="fetch()" />
+
+    <select class="pill select" [(ngModel)]="estadoSel" (change)="fetch()">
+      <option [ngValue]="''">Todos</option>
+      <option [ngValue]="'prep'">En preparación</option>
+      <option [ngValue]="'listo'">Listo para servir</option>
+      <option [ngValue]="'enviado'">Despachado</option>
+    </select>
+
+    <button class="pill ghost" (click)="fetch()">Actualizar</button>
+
+    <label class="auto">
+      <input type="checkbox" [(ngModel)]="autoRefresh" (change)="toggleAutoRefresh()" />
+      Auto–refresh
+    </label>
+  </div>
+
+  <!-- Estado de carga / error -->
+  <div class="statusline" *ngIf="cargando || errorMsg">
+    <span *ngIf="cargando">Cargando…</span>
+    <span *ngIf="!cargando && errorMsg" class="err">{{ errorMsg }}</span>
+  </div>
+
+  <!-- Tabla -->
+  <div class="table">
+    <div class="thead">
+      <div>#</div>
+      <div>Mesa</div>
+      <div>Items</div>
+      <div>Total</div>
+      <div>Estado</div>
+      <div>Tiempo</div>
+      <div class="right">Acciones</div>
+    </div>
+
+    <div class="trow" *ngFor="let p of pedidos">
+      <div class="muted">#{{ p.id }}</div>
+      <div class="mesa">{{ p.mesa }}</div>
+
+      <!-- Tooltip y resumen SIN funciones flecha -->
+      <div class="items" [title]="itemsTooltip(p.items)">
+        {{ itemsResumidos(p.items) }}
+      </div>
+
+      <!-- number pipe para evitar errores con undefined -->
+      <div class="total">S/ {{ (p.total ?? 0) | number:'1.2-2' }}</div>
+
+      <div>
+        <span [ngClass]="chipClass(p.estado)">
+          <ng-container [ngSwitch]="p.estado">
+            <span *ngSwitchCase="'prep'">En preparación</span>
+            <span *ngSwitchCase="'listo'">Listo</span>
+            <span *ngSwitchCase="'enviado'">Despachado</span>
+          </ng-container>
+        </span>
+      </div>
+
+      <div class="muted">{{ timeAgo(p.creadoEn) }}</div>
+
+      <div class="right actions">
+        <!-- Solo visible si rol=cocinero -->
+        <button class="btn small ok" *ngIf="puedeMarcarListo(p)" (click)="marcarListo(p)">
+          Marcar listo
+        </button>
+        <button class="btn small gold" *ngIf="puedeEnviar(p)" (click)="enviarPedido(p)">
+          Despachar
+        </button>
+      </div>
+    </div>
+
+    <div class="empty" *ngIf="!cargando && pedidos.length===0">
+      No hay pedidos para los filtros aplicados.
+    </div>
+  </div>
+</section>

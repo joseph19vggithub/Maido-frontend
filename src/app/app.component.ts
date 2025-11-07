@@ -23,8 +23,15 @@ export class AppComponent {
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
       .subscribe((e) => {
         const url = e.urlAfterRedirects ?? e.url;
-        // Se ocultan header/footer/chatbot si la ruta empieza con:
-        this.isPrivateLayout = ['/admin', '/mesero', '/cocinero'].some(p => url.startsWith(p));
+
+        // Se ocultan header/footer/chatbot si la ruta pertenece a alguna de estas:
+        this.isPrivateLayout = [
+          '/admin',
+          '/mesero',
+          '/cocinero',
+          '/roles',
+          '/estado-pedidos' // 👈 NUEVO: oculta también en pedidos-estado (mesero o cocinero)
+        ].some(p => url.startsWith(p));
       });
   }
 }

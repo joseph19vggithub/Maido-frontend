@@ -1,223 +1,177 @@
-// src/app/pages/mesero/mesero.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { PedidoService } from '../../services/pedido.service';
-import { Pedido, NewPedido, PedidoItem } from '../../models/pedido.model';
+import { RouterModule } from '@angular/router';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Subject, debounceTime, distinctUntilChanged, switchMap, of, catchError } from 'rxjs';
 
-type EstadoMesa = 'libre' | 'ocupada' | 'reservada';
-
-interface MenuItem {
-  id: number;
-  nombre: string;
-  sub: string;
-  precio: number;
-  categoria: string;
-}
+/** ===== Tipos ===== */
+type MenuItem = { id: number; nombre: string; sub: string; precio: number };
+type Linea    = { id: number; nombre: string; precio: number; cantidad: number };
+type Toast    = { msg: string; kind: 'success'|'info'|'warning'|'danger'; ms: number };
 
 @Component({
   selector: 'app-mesero',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './mesero.component.html',
   styleUrls: ['./mesero.component.scss'],
 })
 export class MeseroComponent {
-  // ---- UI / estado general
+  /* ===== Branding / header ===== */
   logoUrl = 'assets/img/logo.png';
-  modo: 'carta' = 'carta';
 
-  // ---- Mesas
+  /* ===== Mesas / pisos ===== */
   pisos = [1, 2];
   pisoSeleccionado = 1;
   mesasPorPiso: Record<number, number[]> = {
-    1: Array.from({ length: 12 }, (_, i) => i + 1),
-    2: Array.from({ length: 12 }, (_, i) => i + 1),
+    1: [1,2,3,4,5,6,7,8,9,10,11,12],
+    2: [1,2,3,4,5,6,7,8,9,10,11,12],
   };
-  mesaSeleccionada: number | null = 1;
-  estadoMesa: EstadoMesa = 'libre';
-  mesaEstados: Record<string, EstadoMesa> = {};
+  mesaSeleccionada = 1;
 
-  // ---- Pedido
-  personaActiva = 1;
-  personasSel = 2;
-  notaRapida = '';
+  // Estados de mesa: libre | ocupada | reservada
+  private estadosMesa: Record<string, 'libre'|'ocupada'|'reservada'> = {};
+  estadoMesa: 'libre'|'ocupada'|'reservada' = 'libre';
 
-  // ---- Filtros de carta
-  q = '';
-  categorias = ['nigiri', 'tiraditos', 'temaki / rolls', 'calientes', 'arroces', 'postres'];
-  catSel = 'nigiri';
-
-  // ---- Carta de ejemplo
-  menu: MenuItem[] = [
-    { id: 1, nombre: 'Guratan Nigiri (langostino panko, queso)', sub: 'Nigiri', precio: 35, categoria: 'nigiri' },
-    { id: 2, nombre: 'Nigiri de salmón y chili', sub: 'Nigiri', precio: 32, categoria: 'nigiri' },
-    { id: 3, nombre: 'Chu-toro en mesa (laminado)', sub: 'Nigiri', precio: 149, categoria: 'nigiri' },
-  ];
-  qty: Record<number, number> = { 1: 1, 2: 1, 3: 1 };
-
-  // ---- Getter (en HTML se usa SIN paréntesis)
-  get menuFiltrado(): MenuItem[] {
-    const q = this.q.trim().toLowerCase();
-    return this.menu.filter(
-      it =>
-        it.categoria.toLowerCase() === this.catSel.toLowerCase() &&
-        (q === '' || it.nombre.toLowerCase().includes(q))
-    );
-  }
-
-  // ---- Carrito
-  pedido: PedidoItem[] = [];
-  total = 0;
-
-  // ---- Toasts
-  toasts: Array<{ id: number; kind: 'success' | 'info' | 'warning' | 'danger'; msg: string; ms: number }> = [];
-  private tid = 0;
-
-  constructor(private pedidoService: PedidoService, private router: Router) {}
-
-  // ===== Sesión =====
-  logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    this.router.navigate(['/login']);
-  }
-
-  // ===== Mesas =====
-  get mesaKey(): string {
-    return this.mesaSeleccionada ? this.mesaKeyOf(this.pisoSeleccionado, this.mesaSeleccionada) : '';
-  }
-  mesaKeyOf(piso: number, mesa: number): string { return `P${piso}-M${mesa}`; }
-  mesaLabel(): string { return this.mesaSeleccionada ? `P${this.pisoSeleccionado}-M${this.mesaSeleccionada}` : '—'; }
-  getEstadoMesa(key: string): EstadoMesa { return this.mesaEstados[key] ?? 'libre'; }
-  private setEstadoMesa(key: string, estado: EstadoMesa) {
-    this.mesaEstados[key] = estado;
-    if (key === this.mesaKey) this.estadoMesa = estado;
-  }
+  mesaKeyOf(piso: number, n: number) { return `P${piso}-M${n}`; }
+  get mesaKey(): string { return this.mesaKeyOf(this.pisoSeleccionado, this.mesaSeleccionada); }
+  getEstadoMesa(key: string) { return this.estadosMesa[key] ?? 'libre'; }
+  mesaLabel() { return `P${this.pisoSeleccionado}-M${this.mesaSeleccionada}`; }
 
   seleccionarPiso(p: number) {
     this.pisoSeleccionado = p;
-    this.mesaSeleccionada = this.mesasPorPiso[p][0] ?? null;
+    const arr = this.mesasPorPiso[p] ?? [];
+    this.mesaSeleccionada = arr.length ? arr[0] : 1;
+    this.ensureMesaContainers();
     this.estadoMesa = this.getEstadoMesa(this.mesaKey);
   }
-  seleccionarMesa(piso: number, mesa: number) {
+  seleccionarMesa(piso: number, n: number) {
     this.pisoSeleccionado = piso;
-    this.mesaSeleccionada = mesa;
+    this.mesaSeleccionada = n;
+    this.ensureMesaContainers();
     this.estadoMesa = this.getEstadoMesa(this.mesaKey);
   }
 
-  setCategoria(c: string) { this.catSel = c; }
-  setPersonaActiva(n: number) { this.personaActiva = n; }
+  /* ===== Búsqueda / Menú (backend) ===== */
+  q = '';
+  menu: MenuItem[] = [];
+  cargando = false;
+  private search$ = new Subject<string>();
 
-  // ===== Carrito =====
-  inc(it: MenuItem) { this.qty[it.id] = (this.qty[it.id] ?? 1) + 1; }
-  dec(it: MenuItem) { this.qty[it.id] = Math.max(1, (this.qty[it.id] ?? 1) - 1); }
+  qty: Record<number, number> = {};
+
+  /* ===== Pedidos por mesa ===== */
+  pedidosPorMesa: Record<string, Linea[]> = {};
+  notaPorMesa:   Record<string, string>  = {};
+
+  get pedidoActual(): Linea[] {
+    return this.pedidosPorMesa[this.mesaKey] ?? [];
+  }
+  get total(): number {
+    return this.pedidoActual.reduce((s, l) => s + l.precio * l.cantidad, 0);
+  }
+  get notaRapida(): string { return this.notaPorMesa[this.mesaKey] ?? ''; }
+  set notaRapida(v: string) { this.notaPorMesa[this.mesaKey] = v; }
+
+  private ensureMesaContainers() {
+    const k = this.mesaKey;
+    if (!this.pedidosPorMesa[k]) this.pedidosPorMesa[k] = [];
+    if (!(k in this.notaPorMesa)) this.notaPorMesa[k] = '';
+  }
+
+  /* ===== Acciones menú ===== */
+  inc(it: MenuItem)  { this.qty[it.id] = Math.max(1, (this.qty[it.id] ?? 1) + 1); }
+  dec(it: MenuItem)  { this.qty[it.id] = Math.max(1, (this.qty[it.id] ?? 1) - 1); }
 
   addItem(it: MenuItem) {
-    const line: PedidoItem = {
-      id: Date.now(),
-      persona: this.personaActiva,
-      cantidad: this.qty[it.id] ?? 1,
-      precio: it.precio,
-      nombre: it.nombre,
-    };
-    this.pedido.push(line);
-    this.recalcularTotal();
-    this.syncEstadoConPedido();
-    this.toast('success', `Añadido: ${it.nombre}`);
+    if (this.getEstadoMesa(this.mesaKey) === 'reservada') {
+      this.toast('La mesa está reservada', 'warning'); return;
+    }
+    const arr = this.pedidosPorMesa[this.mesaKey] ?? (this.pedidosPorMesa[this.mesaKey] = []);
+    const q = Math.max(1, this.qty[it.id] ?? 1);
+    const idx = arr.findIndex(x => x.id === it.id);
+    if (idx >= 0) arr[idx].cantidad += q;
+    else arr.push({ id: it.id, nombre: it.nombre, precio: it.precio, cantidad: q });
+    this.qty[it.id] = 1;
+    this.toast('Agregado al pedido', 'success');
   }
 
   removeLine(i: number) {
-    this.pedido.splice(i, 1);
-    this.recalcularTotal();
-    this.syncEstadoConPedido();
+    const arr = this.pedidosPorMesa[this.mesaKey];
+    if (!arr) return;
+    arr.splice(i, 1);
   }
-
   vaciarPedido() {
-    this.pedido = [];
-    this.recalcularTotal();
-    this.syncEstadoConPedido();
+    this.pedidosPorMesa[this.mesaKey] = [];
   }
-
   confirmarPedido() {
-    if (!this.pedido.length) {
-      this.toast('info', 'No hay ítems para confirmar.');
-      return;
-    }
-    this.toast('success', `Pedido confirmado (${this.pedido.length} ítems). Total S/ ${this.total.toFixed(2)}`);
+    this.toast('Pedido confirmado (local, aún sin enviar)', 'info');
   }
 
-  marcarListo() {
-    if (!this.pedido.length) {
-      this.toast('info', 'No hay ítems en el pedido.');
-      return;
-    }
-    this.toast('success', 'Pedido marcado como listo.');
-  }
-
-  // ===== Envío a cocina =====
+  /* ===== Acciones topbar ===== */
   enviar() {
-    if (!this.pedido.length) {
-      this.toast('warning', 'No hay ítems para enviar.');
-      return;
-    }
-
-    const pedidoData: NewPedido = {
-      // FRONT
-      mesa: this.mesaSeleccionada ?? null,
-      cliente: null,
-      detalles: this.pedido,               // PedidoItem[]
+    const payload = {
+      mesa: this.mesaKey,
+      estado: this.getEstadoMesa(this.mesaKey),
+      nota: this.notaRapida,
       total: this.total,
-      nota: this.notaRapida || null,
-      estado: 'pendiente',
-      creadoEn: new Date().toISOString(),
-
-      // BACK opcional (si luego lo necesitas)
-      // fecha: new Date(),
-      // idReserva: 0,
-      // idCliente: undefined,
-      // pedidoDetalles: ...
+      items: this.pedidoActual.map(l => ({ id: l.id, qty: l.cantidad }))
     };
-
-    this.pedidoService.create(pedidoData).subscribe({
-      next: () => {
-        this.toast('success', 'Pedido enviado a cocina.');
-        this.vaciarPedido();
-      },
-      error: () => this.toast('danger', 'Error al enviar pedido.'),
-    });
+    console.log('ENVIAR A COCINA', payload);
+    this.estadosMesa[this.mesaKey] = 'ocupada';
+    this.estadoMesa = 'ocupada';
+    this.toast('Pedido enviado a cocina', 'success');
   }
-
+  marcarListo() { this.toast('Pedido marcado como listo', 'info'); }
   marcarReservada() {
-    if (!this.mesaKey) return;
-    this.setEstadoMesa(this.mesaKey, 'reservada');
-    this.toast('info', `Mesa ${this.mesaLabel()} marcada como reservada.`);
+    this.estadosMesa[this.mesaKey] = 'reservada';
+    this.estadoMesa = 'reservada';
+    this.toast('Mesa marcada como reservada', 'warning');
   }
-
   liberarMesa() {
-    if (!this.mesaKey) return;
-    this.vaciarPedido();
-    this.setEstadoMesa(this.mesaKey, 'libre');
-    this.toast('success', `Mesa ${this.mesaLabel()} liberada.`);
+    this.estadosMesa[this.mesaKey] = 'libre';
+    this.estadoMesa = 'libre';
+    this.pedidosPorMesa[this.mesaKey] = [];
+    this.notaPorMesa[this.mesaKey] = '';
+    this.toast('Mesa liberada', 'success');
+  }
+  logout() { this.toast('Sesión cerrada', 'danger'); }
+
+  /* ===== Toasts ===== */
+  toasts: Toast[] = [];
+  toast(msg: string, kind: Toast['kind'] = 'info', ms = 2400) {
+    const t: Toast = { msg, kind, ms };
+    this.toasts.push(t);
+    setTimeout(() => this.toasts.splice(this.toasts.indexOf(t), 1), ms);
   }
 
-  // ===== Helpers =====
-  private recalcularTotal() {
-    this.total = this.pedido.reduce((acc, l) => acc + l.precio * l.cantidad, 0);
+  /* ===== Búsqueda con backend ===== */
+  onSearchChange(value: string) {
+    this.search$.next((value ?? '').trim());
   }
-  private syncEstadoConPedido() {
-    const key = this.mesaKey;
-    if (!key) return;
-    if (this.pedido.length > 0) this.setEstadoMesa(key, 'ocupada');
-    else if (this.getEstadoMesa(key) !== 'reservada') this.setEstadoMesa(key, 'libre');
-  }
-  toast(kind: 'success' | 'info' | 'warning' | 'danger', msg: string, ms = 2800) {
-    const id = ++this.tid;
-    this.toasts.push({ id, kind, msg, ms });
-    setTimeout(() => {
-      const i = this.toasts.findIndex(t => t.id === id);
-      if (i >= 0) this.toasts.splice(i, 1);
-    }, ms);
+
+  constructor(private http: HttpClient) {
+    this.ensureMesaContainers();
+
+    this.search$
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(term => {
+          this.cargando = true;
+          const params = new HttpParams().set('q', term);
+          // Ajusta la URL a tu API real
+          return this.http.get<MenuItem[]>(`https://localhost:7234/api/menu/buscar`, { params })
+            .pipe(catchError(() => of([])));
+        })
+      )
+      .subscribe(data => {
+        this.menu = data ?? [];
+        this.cargando = false;
+      });
+
+    // primera carga (sin filtro)
+    this.onSearchChange('');
   }
 }

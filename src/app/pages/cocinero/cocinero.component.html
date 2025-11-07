@@ -1,15 +1,24 @@
 <div class="cocinero-container">
   <h1>📋 Pedidos en Cocina</h1>
 
+  <!-- Acción: abrir vista de gestión (lista completa con acciones) -->
+  <div class="toolbar">
+    <a class="pill ghost" routerLink="/estado-pedidos/cocinero">
+      Ver / Gestionar pedidos
+    </a>
+  </div>
+
+  <!-- Estados de carga / vacío -->
   <div *ngIf="cargando" class="loading">Cargando pedidos...</div>
   <div *ngIf="!cargando && pedidos.length === 0" class="no-pedidos">
     No hay pedidos pendientes.
   </div>
 
-  <div class="pedidos-grid" *ngIf="pedidos.length > 0">
+  <!-- Lista de pedidos -->
+  <div class="pedidos-grid" *ngIf="!cargando && pedidos.length > 0">
     <div
       class="pedido-card"
-      *ngFor="let pedido of pedidos"
+      *ngFor="let pedido of pedidos; trackBy: trackByPedidoId"
       [ngClass]="{ animando: pedido.animando }"
       [style.borderColor]="getColorPorEstado(pedido.estado)"
     >
@@ -23,20 +32,28 @@
         </span>
       </div>
 
-      <p class="fecha">🕒 {{ pedido.fecha | date: 'short' }}</p>
+      <p class="fecha">🕒 {{ pedido.fecha | date:'short' }}</p>
 
-      <table class="detalle">
+      <table class="detalle" *ngIf="pedido.pedidoDetalles?.length; else sinItemsTpl">
         <thead>
-          <tr><th>Plato</th><th>Cant.</th><th>Precio</th></tr>
+          <tr>
+            <th>Plato</th>
+            <th>Cant.</th>
+            <th>Precio</th>
+          </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let det of pedido.pedidoDetalles">
+          <tr *ngFor="let det of pedido.pedidoDetalles; trackBy: trackByDetalle">
             <td>{{ det.experiencia?.nombre || 'Sin nombre' }}</td>
             <td>{{ det.cantidad }}</td>
-            <td>S/ {{ det.precioUnitario }}</td>
+            <td>S/ {{ det.precioUnitario | number:'1.2-2' }}</td>
           </tr>
         </tbody>
       </table>
+
+      <ng-template #sinItemsTpl>
+        <div class="sin-items">Este pedido no tiene ítems.</div>
+      </ng-template>
 
       <div class="acciones">
         <button class="btn azul" (click)="cambiarEstado(pedido, 'en_preparacion')">

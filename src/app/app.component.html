@@ -1,9 +1,9 @@
-<!-- Header y Bot solo si NO estamos en /mesero ni /admin -->
+<!-- Header y Bot solo si NO estamos en /mesero, /admin o /estado-pedidos -->
 <app-header *ngIf="!isPrivateLayout"></app-header>
 
 <!-- Contenido de la app -->
 <router-outlet></router-outlet>
 
-<!-- Footer y Chatbot solo si NO estamos en /mesero ni /admin -->
+<!-- Footer y Chatbot solo si NO estamos en /mesero, /admin o /estado-pedidos -->
 <app-footer *ngIf="!isPrivateLayout"></app-footer>
 <app-chatbot *ngIf="!isPrivateLayout"></app-chatbot>
