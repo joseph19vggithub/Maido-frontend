@@ -52,6 +52,7 @@ export const routes: Routes = [
     children: [
       { path: 'usuarios', loadComponent: () => import('./pages/admin/usuarios/usuarios.component').then(m => m.UsuariosComponent) },
       { path: 'roles', loadComponent: () => import('./pages/admin/roles/roles.component').then(m => m.RolesComponent) },
+      { path: 'categoria', loadComponent: () => import('./pages/admin/categoria/categorias.component').then(m => m.CategoriasComponent) },
       { path: 'dashboard', loadComponent: () => import('./pages/admin/dashboard/dashboard.component').then(m => m.DashboardComponent) },
       { path: 'clientes', loadComponent: () => import('./pages/admin/clientes/clientes.component').then(m => m.ClientesComponent) },
       { path: 'reservas', loadComponent: () => import('./pages/admin/reservas/reservas.component').then(m => m.ReservasComponent) },

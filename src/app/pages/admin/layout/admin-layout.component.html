@@ -1,15 +1,18 @@
 <div class="layout" style="display:flex;min-height:100vh;gap:16px;">
   <aside style="width:240px;padding:16px;background:#0f172a;color:white;">
     <h3 style="margin:0 0 12px 0;">Restaurante • Admin</h3>
+
     <nav style="display:flex;flex-direction:column;gap:8px;">
-      <a routerLink="dashboard">Dashboard</a>
-      <a routerLink="clientes">Clientes</a>
-      <a routerLink="reservas">Reservas</a>
-      <a routerLink="mesas">Mesas</a>
-      <a routerLink="experiencias">Experiencias</a>
-      <a routerLink="pedidos">Pedidos</a>
+      <a routerLink="dashboard"   routerLinkActive="active" [routerLinkActiveOptions]="{ exact:true }">Dashboard</a>
+      <a routerLink="clientes"    routerLinkActive="active" [routerLinkActiveOptions]="{ exact:true }">Clientes</a>
+      <a routerLink="reservas"    routerLinkActive="active" [routerLinkActiveOptions]="{ exact:true }">Reservas</a>
+      <a routerLink="mesas"       routerLinkActive="active" [routerLinkActiveOptions]="{ exact:true }">Mesas</a>
+      <a routerLink="experiencias"routerLinkActive="active" [routerLinkActiveOptions]="{ exact:true }">Experiencias</a>
+      <a routerLink="pedidos"     routerLinkActive="active" [routerLinkActiveOptions]="{ exact:true }">Pedidos</a>
+      <a routerLink="categoria"   routerLinkActive="active" [routerLinkActiveOptions]="{ exact:true }">Categorías</a>
     </nav>
   </aside>
+
   <main style="flex:1;padding:16px;background:#f8fafc;">
     <router-outlet></router-outlet>
   </main>

@@ -1,12 +1,13 @@
+// src/app/services/experiencia.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Experiencia } from '../models/experiencia.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+type ExperienciaSave = Omit<Experiencia, 'id' | 'categoria' | 'pedidoDetalles'>;
+
+@Injectable({ providedIn: 'root' })
 export class ExperienciaService {
   private apiUrl = `${environment.apiUrl}/experiencia`;
 
@@ -15,18 +16,17 @@ export class ExperienciaService {
   getAll(): Observable<Experiencia[]> {
     return this.http.get<Experiencia[]>(this.apiUrl);
   }
-
   getById(id: number): Observable<Experiencia> {
     return this.http.get<Experiencia>(`${this.apiUrl}/${id}`);
   }
 
-  create(data: Experiencia): Observable<number> {
-    return this.http.post<number>(this.apiUrl, data);
-  }
+  create(data: Omit<Experiencia, 'id' | 'categoria' | 'pedidoDetalles'>): Observable<number> {
+  return this.http.post<number>(this.apiUrl, data);
+}
 
-  update(id: number, data: Experiencia): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}`, data);
-  }
+update(id: number, data: Omit<Experiencia, 'id' | 'categoria' | 'pedidoDetalles'>): Observable<void> {
+  return this.http.put<void>(`${this.apiUrl}/${id}`, data);
+}
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);

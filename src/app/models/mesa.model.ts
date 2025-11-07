@@ -6,6 +6,7 @@ export interface Mesa {
   capacidad: number;           // Capacidad de personas
   ubicacion: string;           // Ubicación dentro del restaurante
   estado: string;              // Estado actual (Libre, Reservada, Ocupada, etc.)
+  piso: number;
 
   reservaMesas?: ReservaMesa[]; // Relación con las reservas (opcional)
 }

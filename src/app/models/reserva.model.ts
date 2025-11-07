@@ -1,20 +1,28 @@
-import { Cliente } from './cliente.model';
-import { ReservaMesa } from './reserva-mesa.model';
-import { Pedido } from './pedido.model';
-
 export interface Reserva {
-  id: number;                     // Identificador único de la reserva
-  fecha: Date;                    // Fecha de la reserva
-  hora: string;                   // Hora de la reserva (TimeSpan → string)
-  cantidadPersonas: number;       // Número de personas
-  estado: string;                 // Estado (Pendiente, Confirmada, Cancelada, etc.)
-  notas?: string;                 // Observaciones o comentarios
-  createdAt: Date;                // Fecha de creación
-  updatedAt: Date;                // Última actualización
+  id: number;
+  fecha: string;              // Ej: '2025-11-07'
+  hora?: string;              // Ej: '20:00'
+  cantidadPersonas: number;
+  estado: string;
+  notas?: string;
+  idCliente: number;
+  idMesa?: number;
 
-  idCliente: number;              // Relación con el cliente
-  cliente?: Cliente;              // Objeto cliente (opcional)
+  // Relacionales opcionales (si tu backend los devuelve)
+  cliente?: Cliente;
+  mesa?: Mesa;
+}
 
-  reservaMesas?: ReservaMesa[];   // Mesas reservadas asociadas
-  pedidos?: Pedido[];             // Pedidos vinculados a la reserva
+export interface Cliente {
+  id: number;
+  nombreCompleto?: string;
+  nombres?: string;
+  apellidos?: string;
+  correoElectronico?: string;
+}
+
+export interface Mesa {
+  id: number;
+  piso: number;
+  numero: number;
 }

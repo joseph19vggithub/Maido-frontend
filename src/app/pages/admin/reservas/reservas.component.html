@@ -1,13 +1,53 @@
 <div class="card">
-  <h3 style="margin:0 0 10px">Reservas</h3>
-  <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-    <button class="btn">Hoy</button>
-    <button class="btn">Ayer</button>
-    <button class="btn primary">Esta semana</button>
-    <input type="date" />
+  <h3 style="margin:0 0 12px">Reservas</h3>
+
+  <!-- Filtros -->
+  <div class="filters">
+    <button class="chip" [class.active]="filtro==='hoy'"    (click)="setFiltro('hoy')">Hoy</button>
+    <button class="chip" [class.active]="filtro==='ayer'"   (click)="setFiltro('ayer')">Ayer</button>
+    <button class="chip" [class.active]="filtro==='semana'" (click)="setFiltro('semana')">Esta semana</button>
+
+    <input type="date" [(ngModel)]="fechaBase" (change)="setFiltro('fecha')" />
   </div>
+
+  <div *ngIf="error" class="error">{{ error }}</div>
+
   <table>
-    <tr><th>Fecha</th><th>Cliente</th><th>Mesa</th><th>Estado</th></tr>
-    <tr><td colspan="4" style="color:#94a3b8">Sin datos.</td></tr>
+    <thead>
+      <tr>
+        <th style="width:130px">Fecha</th>
+        <th>Cliente</th>
+        <th style="width:120px">Mesa</th>
+        <th style="width:140px">Estado</th>
+        <th style="width:220px">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="cargando"><td colspan="5">Cargando…</td></tr>
+      <tr *ngIf="!cargando && view.length===0"><td colspan="5" class="muted">Sin datos.</td></tr>
+
+      <tr *ngFor="let x of view">
+        <td>{{ x.fecha }} <small *ngIf="x.hora">{{ x.hora }}</small></td>
+        <td>{{ clienteNombre(x) }}</td>
+        <td>{{ mesaLabel(x) }}</td>
+
+        <td>
+          <span class="tag"
+            [class.pend]="x.estado==='Pendiente'"
+            [class.ok]="x.estado==='Confirmada'"
+            [class.warn]="x.estado==='Atendida'"
+            [class.bad]="x.estado==='Cancelada'">
+            {{ x.estado }}
+          </span>
+        </td>
+
+        <td class="actions">
+          <button class="btn sm"        (click)="changeEstado(x,'Pendiente')">Pendiente</button>
+          <button class="btn sm ok"     (click)="changeEstado(x,'Confirmada')">Confirmar</button>
+          <button class="btn sm warn"   (click)="changeEstado(x,'Atendida')">Atendida</button>
+          <button class="btn sm danger" (click)="changeEstado(x,'Cancelada')">Cancelar</button>
+        </td>
+      </tr>
+    </tbody>
   </table>
 </div>

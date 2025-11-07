@@ -11,7 +11,7 @@
       <strong>{{ mesaLabel() }}</strong>
     </span>
 
-    <!-- NUEVO: acceso a la página de estado de pedidos, filtrando por mesa actual -->
+    <!-- Botones superiores -->
     <button
       class="pill ghost"
       [routerLink]="['/estado-pedidos/mesero']"
@@ -29,7 +29,7 @@
 
 <!-- ===== Grid principal ===== -->
 <div class="grid">
-  <!-- Col Mesas -->
+  <!-- ===== Columna Mesas ===== -->
   <section class="card">
     <div class="card-head">
       <h2>Mesas</h2>
@@ -52,7 +52,7 @@
         *ngFor="let p of pisos"
         [class.active]="pisoSeleccionado===p"
         (click)="seleccionarPiso(p)">
-        Piso {{ p }}
+        Piso {{ p + 1 }}
       </button>
     </div>
 
@@ -61,13 +61,13 @@
       <div class="mesas">
         <button
           class="mesa"
-          *ngFor="let n of mesasPorPiso[pisoSeleccionado]"
-          [class.active]="mesaSeleccionada===n"
-          [class.ocupada]="getEstadoMesa(mesaKeyOf(pisoSeleccionado,n))==='ocupada'"
-          [class.reservada]="getEstadoMesa(mesaKeyOf(pisoSeleccionado,n))==='reservada'"
-          [class.libre]="getEstadoMesa(mesaKeyOf(pisoSeleccionado,n))==='libre'"
-          (click)="seleccionarMesa(pisoSeleccionado, n)">
-          {{ n }}
+          *ngFor="let m of (mesasPorPiso[pisoSeleccionado] || [])"
+          [class.active]="mesaSeleccionadaObj?.id===m.id"
+          [class.ocupada]="(m.estado || '').toLowerCase()==='ocupada'"
+          [class.reservada]="(m.estado || '').toLowerCase()==='reservada'"
+          [class.libre]="(m.estado || '').toLowerCase()!=='ocupada' && (m.estado || '').toLowerCase()!=='reservada'"
+          (click)="seleccionarMesa(m.piso, m.numero)">
+          {{ m.numero }}
         </button>
       </div>
 
@@ -79,7 +79,7 @@
     </div>
   </section>
 
-  <!-- Col Carta (solo buscador + resultados del backend) -->
+  <!-- ===== Columna Carta / Experiencias ===== -->
   <section class="card">
     <div class="filters">
       <input
@@ -104,7 +104,7 @@
           <button class="icon" (click)="inc(it)">+</button>
         </div>
 
-        <button class="add" (click)="addItem(it)" [disabled]="getEstadoMesa(mesaKey)==='reservada'">
+        <button class="add" (click)="addItem(it)" [disabled]="estadoMesa==='reservada'">
           Añadir
         </button>
       </div>
@@ -116,7 +116,7 @@
     </div>
   </section>
 
-  <!-- Col Pedidos por mesa -->
+  <!-- ===== Columna Pedidos ===== -->
   <section class="card">
     <h2>Pedidos <small class="muted">· {{ mesaLabel() }}</small></h2>
 

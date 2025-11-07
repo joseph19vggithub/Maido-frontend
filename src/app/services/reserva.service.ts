@@ -4,9 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Reserva } from '../models/reserva.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ReservaService {
   private apiUrl = `${environment.apiUrl}/reserva`;
 
@@ -24,7 +22,8 @@ export class ReservaService {
     return this.http.post<number>(this.apiUrl, data);
   }
 
-  update(id: number, data: Reserva): Observable<void> {
+  // 👇 Acepta un objeto parcial (por ejemplo solo { estado })
+  update(id: number, data: Partial<Reserva>): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${id}`, data);
   }
 

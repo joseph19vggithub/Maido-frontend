@@ -42,6 +42,19 @@ import { RouterModule } from '@angular/router';
         <span class="ico"><svg viewBox="0 0 24 24"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.6 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg></span>
         <span>Experiencias</span>
       </a>
+      <a class="item"
+   routerLink="categoria"
+   routerLinkActive="active"
+   [routerLinkActiveOptions]="{ exact: true }">
+  <span class="ico">
+    <!-- icono de etiqueta/categoría -->
+    <svg viewBox="0 0 24 24">
+      <path d="M3 5a2 2 0 0 1 2-2h6.59a2 2 0 0 1 1.41.59l6.41 6.41a2 2 0 0 1 0 2.83l-5.66 5.66a2 2 0 0 1-2.83 0L4.59 12.41A2 2 0 0 1 4 11V5Zm4 2a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/>
+    </svg>
+  </span>
+  <span>Categorías</span>
+</a>
+
       <a class="item" routerLink="pedidos" routerLinkActive="active">
         <span class="ico"><svg viewBox="0 0 24 24"><path d="M21 7H7l-1-2H3v2h2l3.6 7.59L7.25 17A2 2 0 0 0 9 20h10v-2H9.42a.25.25 0 0 1-.23-.36L10 16h8a2 2 0 0 0 1.8-1.1L22 9V7Z"/></svg></span>
         <span>Pedidos</span>
