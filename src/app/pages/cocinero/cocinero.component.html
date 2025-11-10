@@ -1,11 +1,17 @@
 <div class="cocinero-container">
   <h1>📋 Pedidos en Cocina</h1>
 
-  <div *ngIf="cargando" class="loading">Cargando pedidos...</div>
+  <!-- Estado de carga -->
+  <div *ngIf="cargando" class="loading">
+    Cargando pedidos...
+  </div>
+
+  <!-- Sin pedidos -->
   <div *ngIf="!cargando && pedidos.length === 0" class="no-pedidos">
     No hay pedidos pendientes.
   </div>
 
+  <!-- Grid de pedidos -->
   <div class="pedidos-grid" *ngIf="pedidos.length > 0">
     <div
       class="pedido-card"
@@ -13,8 +19,10 @@
       [ngClass]="{ animando: pedido.animando }"
       [style.borderColor]="getColorPorEstado(pedido.estado)"
     >
+      <!-- Cabecera del pedido -->
       <div class="pedido-header">
         <h2>Pedido mesa {{ displayMesa(pedido) }}</h2>
+
         <span
           class="estado"
           [ngStyle]="{ 'background-color': getColorPorEstado(pedido.estado) }"
@@ -23,8 +31,10 @@
         </span>
       </div>
 
-      <p class="fecha">🕒 {{ pedido.fecha || pedido.creadoEn | date: 'short' }}</p>
+      <!-- Fecha -->
+      <p class="fecha">🕒 {{ getFecha(pedido) | date: 'short' }}</p>
 
+      <!-- Detalle -->
       <table class="detalle">
         <colgroup>
           <col style="width: 60%" />
@@ -39,6 +49,7 @@
             <th class="col-obs">Observaciones</th>
           </tr>
         </thead>
+
         <tbody>
           <tr *ngFor="let det of lineas(pedido)">
             <td class="col-plato">{{ det.plato }}</td>
@@ -48,12 +59,21 @@
         </tbody>
       </table>
 
+      <!-- Acciones -->
       <div class="acciones">
-        <button class="btn azul" (click)="cambiarEstado(pedido, 'en_proceso')">
-  👨‍🍳 En preparación
-</button>
+        <button
+          class="btn azul"
+          (click)="cambiarEstado(pedido, 'en_proceso')"
+          [disabled]="pedido.estado === 'en_proceso'"
+        >
+          👨‍🍳 En preparación
+        </button>
 
-        <button class="btn verde" (click)="cambiarEstado(pedido, 'listo')">
+        <button
+          class="btn verde"
+          (click)="cambiarEstado(pedido, 'listo')"
+          [disabled]="pedido.estado === 'listo'"
+        >
           ✅ Listo
         </button>
       </div>

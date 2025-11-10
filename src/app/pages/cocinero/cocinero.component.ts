@@ -59,4 +59,24 @@ export class CocineroComponent implements OnInit, OnDestroy {
       default: return '#9e9e9e';
     }
   }
+
+   displayMesa(p: PedidoUI): string {
+    const mesa: any = (p as any).mesa;
+    if (mesa && typeof mesa === 'object' && 'numero' in mesa) return String(mesa.numero);
+    return String(mesa ?? '?');
+  }
+
+  /** Normaliza líneas/detalles del pedido sin romper tipos */
+  lineas(p: PedidoUI): Array<{ plato: string; cantidad: number; comentarios?: string }> {
+    const dets: any[] = (p as any).detalles ?? (p as any).items ?? [];
+    return dets.map(d => ({
+      plato: d.plato ?? d.nombre ?? '',
+      cantidad: Number(d.cantidad ?? 1),
+      comentarios: d.comentarios ?? d.observaciones ?? d.nota ?? ''
+    }));
+  }
+
+    getFecha(p: PedidoUI): string | Date {
+    return (p as any).fecha ?? (p as any).creadoEn ?? new Date();
+  }
 }

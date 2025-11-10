@@ -9,8 +9,6 @@ import { Mesa } from '../../models/mesa.model';
 import { ExperienciaService } from '../../services/experiencia.service';
 import { Experiencia } from '../../models/experiencia.model';
 import { PedidoService } from '../../services/pedido.service'; // 👈 NUEVO
-
-import { PedidoService } from '../../services/pedido.service';
 import { EstadoPedido } from '../../models/pedido.model';
 
 /** ===== Tipos de la vista ===== */
@@ -109,49 +107,6 @@ export class MeseroComponent {
     this.qty[it.id] = 1;
     this.toast('Agregado al pedido', 'success');
   }
-
-<<<<<<< HEAD
-  removeLine(i: number) { this.pedidoActual.splice(i, 1); }
-  vaciarPedido() { this.pedidosPorMesa[this.mesaKey] = []; }
-  confirmarPedido() { this.toast('Pedido confirmado (local, aún sin enviar)', 'info'); }
-
-  /* ===== Acciones topbar (persisten en BD) ===== */
-  enviar() {
-    if (!this.mesaSeleccionadaObj) return;
-
-    // Payload compatible con NewPedido (usado por pedido.service)
-    const pedidoData: any = {
-      mesa: this.mesaSeleccionadaObj.numero ?? null, // 👈 número de mesa
-      cliente: null,
-      detalles: this.pedidoActual.map(l => ({
-        id: l.id,
-        persona: 1,
-        cantidad: l.cantidad,
-        precio: l.precio,
-        nombre: l.nombre,
-        // comentarios?: '...'
-      })),
-      total: this.total,
-      nota: this.notaRapida || null,
-      estado: 'pendiente',
-      creadoEn: new Date().toISOString(),
-    };
-
-    this.pedidoSrv.create(pedidoData).subscribe({
-      next: () => {
-        // Persistir estado "Ocupada" y limpiar carrito/nota
-        this.persistirEstado(this.mesaSeleccionadaObj!, 'Ocupada', () => {
-          this.vaciarPedido();
-          this.notaRapida = '';
-          this.toast('Pedido enviado a cocina', 'success');
-        });
-      },
-      error: () => this.toast('No se pudo enviar el pedido', 'danger'),
-    });
-  }
-
-  marcarListo() { this.toast('Pedido marcado como listo', 'info'); }
-=======
   removeLine(i: number) {
     this.pedidoActual.splice(i, 1);
   }
@@ -201,7 +156,6 @@ export class MeseroComponent {
   marcarListo() {
     this.toast('Pedido marcado como listo', 'info');
   }
->>>>>>> 2abd38e (funciona todo falta dashboard, falta los botones de cocina)
 
   marcarReservada() {
     if (!this.mesaSeleccionadaObj) return;
@@ -253,11 +207,8 @@ export class MeseroComponent {
     private http: HttpClient,
     private mesaSrv: MesaService,
     private expSvc: ExperienciaService,
-<<<<<<< HEAD
-    private pedidoSrv: PedidoService,           // 👈 NUEVO
-=======
+
     private pedidoSrv: PedidoService   // 👈 agregado
->>>>>>> 2abd38e (funciona todo falta dashboard, falta los botones de cocina)
   ) {
     this.ensureMesaContainers();
     this.cargarMesas();
@@ -282,10 +233,7 @@ export class MeseroComponent {
     const sub = (cat && typeof cat === 'object' && 'nombre' in cat)
       ? (cat.nombre as string)
       : (x.descripcion || '');
-<<<<<<< HEAD
-=======
 
->>>>>>> 2abd38e (funciona todo falta dashboard, falta los botones de cocina)
     return {
       id: Number(x.id ?? 0),
       nombre: x.nombre || '',
