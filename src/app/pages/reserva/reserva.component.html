@@ -5,53 +5,53 @@
       Completa los pasos para asegurar tu mesa y vivir la experiencia Nikkei.
     </p>
 
-    <form class="reserva-form" novalidate>
+    <!-- Usa (submit) y quita (click) del botón -->
+    <form class="reserva-form" novalidate (submit)="confirmarReserva($event)">
       <!-- 🧍 Nombre -->
       <div class="form-group">
         <label for="nombre">Nombre completo</label>
-        <input type="text" id="nombre" placeholder="Ej. Javier Cruz" />
+        <input type="text" id="nombre" placeholder="Ej. Javier Cruz" required />
         <p class="error-msg" *ngIf="errores['nombre']">{{ errores['nombre'] }}</p>
       </div>
 
       <!-- 📧 Email -->
       <div class="form-group">
         <label for="email">Correo electrónico</label>
-        <input type="email" id="email" placeholder="Ej. javier@mail.com" />
+        <input type="email" id="email" placeholder="Ej. javier@mail.com" required />
         <p class="error-msg" *ngIf="errores['email']">{{ errores['email'] }}</p>
+      </div>
+
+      <!-- 📞 Teléfono -->
+      <div class="form-group">
+        <label for="telefono">Teléfono</label>
+        <input type="text" id="telefono" placeholder="Ej. 987654321" required />
+        <p class="error-msg" *ngIf="errores['telefono']">{{ errores['telefono'] }}</p>
+      </div>
+
+      <!-- 🆔 DNI -->
+      <div class="form-group">
+        <label for="dni">DNI</label>
+        <input type="text" id="dni" placeholder="Ej. 12345678" maxlength="8" required />
+        <p class="error-msg" *ngIf="errores['dni']">{{ errores['dni'] }}</p>
       </div>
 
       <!-- 👥 Personas / 📅 Fecha / ⏰ Hora -->
       <div class="form-row">
-        <!-- 👥 Número de personas -->
         <div class="form-group">
           <label for="personas">Número de personas</label>
-          <input
-            type="number"
-            id="personas"
-            min="1"
-            max="6"
-            placeholder="Entre 1 y 6"
-          />
+          <input type="number" id="personas" min="1" max="10" placeholder="Entre 1 y 10" required />
           <p class="error-msg" *ngIf="errores['personas']">{{ errores['personas'] }}</p>
         </div>
 
-        <!-- 📅 Fecha -->
         <div class="form-group">
           <label for="fecha">Fecha</label>
-          <input type="date" id="fecha" />
+          <input type="date" id="fecha" required />
           <p class="error-msg" *ngIf="errores['fecha']">{{ errores['fecha'] }}</p>
         </div>
 
-        <!-- ⏰ Hora -->
         <div class="form-group">
           <label for="hora">Hora (1 pm - 9 pm)</label>
-          <input
-            type="time"
-            id="hora"
-            min="13:00"
-            max="21:00"
-            step="1800"
-          />
+          <input type="time" id="hora" min="13:00" max="21:00" step="1800" required />
           <p class="error-msg" *ngIf="errores['hora']">{{ errores['hora'] }}</p>
         </div>
       </div>
@@ -59,17 +59,11 @@
       <!-- 💬 Comentarios -->
       <div class="form-group">
         <label for="mensaje">Comentarios</label>
-        <textarea
-          id="mensaje"
-          rows="3"
-          placeholder="Ej.alergias o indicaciones especiales"
-        ></textarea>
+        <textarea id="mensaje" rows="3" placeholder="Ej.alergias o indicaciones especiales"></textarea>
       </div>
 
       <!-- 🔘 Botón de envío -->
-      <button class="btn-reserva" (click)="confirmarReserva($event)">
-        Confirmar reserva
-      </button>
+      <button class="btn-reserva" type="submit">Confirmar reserva</button>
     </form>
   </div>
 </section>

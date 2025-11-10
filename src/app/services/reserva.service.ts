@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Reserva } from '../models/reserva.model';
+import { Reserva, ReservaCreate } from '../models/reserva.model';
 
 @Injectable({ providedIn: 'root' })
 export class ReservaService {
@@ -14,16 +14,11 @@ export class ReservaService {
     return this.http.get<Reserva[]>(this.apiUrl);
   }
 
-  getById(id: number): Observable<Reserva> {
-    return this.http.get<Reserva>(`${this.apiUrl}/${id}`);
-  }
-
-  create(data: Reserva): Observable<number> {
+  create(data: ReservaCreate): Observable<number> {
     return this.http.post<number>(this.apiUrl, data);
   }
 
-  // 👇 Acepta un objeto parcial (por ejemplo solo { estado })
-  update(id: number, data: Partial<Reserva>): Observable<void> {
+  update(id: number, data: ReservaCreate): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${id}`, data);
   }
 

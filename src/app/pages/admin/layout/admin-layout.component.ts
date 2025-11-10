@@ -26,10 +26,10 @@ import { RouterModule } from '@angular/router';
 
       <div class="section">GESTIÓN</div>
 
-      <a class="item" routerLink="clientes" routerLinkActive="active">
+      <!-- <a class="item" routerLink="clientes" routerLinkActive="active">
         <span class="ico"><svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-5 0-9 2.5-9 5.5V22h18v-2.5C21 16.5 17 14 12 14Z"/></svg></span>
         <span>Clientes</span>
-      </a>
+      </a> -->
       <a class="item" routerLink="reservas" routerLinkActive="active">
         <span class="ico"><svg viewBox="0 0 24 24"><path d="M7 2v2H5a2 2 0 0 0-2 2v2h18V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2Zm14 8H3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2Z"/></svg></span>
         <span>Reservas</span>
@@ -69,6 +69,10 @@ import { RouterModule } from '@angular/router';
       <a class="item" routerLink="roles" routerLinkActive="active">
         <span class="ico"><svg viewBox="0 0 24 24"><path d="M12 1 9.5 8H2l6 4.5L5.5 20 12 15.5 18.5 20 16 12.5 22 8h-7.5L12 1Z"/></svg></span>
         <span>Roles</span>
+      </a>
+      <a class="item" routerLink="usuario-rol" routerLinkActive="active">
+        <span class="ico"><svg viewBox="0 0 24 24"><path d="M12 1 9.5 8H2l6 4.5L5.5 20 12 15.5 18.5 20 16 12.5 22 8h-7.5L12 1Z"/></svg></span>
+        <span>usuario-rol</span>
       </a>
     </aside>
 

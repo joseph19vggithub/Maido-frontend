@@ -1,70 +1,79 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, delay, throwError } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Pedido, NewPedido, EstadoPedido } from '../models/pedido.model';
+import { Pedido, EstadoPedido } from '../models/pedido.model';
 
 @Injectable({ providedIn: 'root' })
 export class PedidoService {
   private apiUrl = `${environment.apiUrl}/pedido`;
-  private LS_KEY = 'pedidos_mock_v1';
 
   constructor(private http: HttpClient) {}
 
+<<<<<<< HEAD
   // ===== MOCK =====
   private read(): Pedido[] {
     try { return JSON.parse(localStorage.getItem(this.LS_KEY) || '[]'); }
     catch { return []; }
+=======
+  /** Normaliza 'Pendiente' | 'En Proceso' | 'Listo' | 'Entregado' -> 'pendiente' | 'en_proceso' | 'listo' | 'entregado' */
+  private normalizeEstado(v: unknown): EstadoPedido {
+    const s = String(v ?? '').toLowerCase().replace(/\s+/g, '_');
+    const ok = ['pendiente', 'en_proceso', 'listo', 'entregado'];
+    return (ok.includes(s) ? s : 'pendiente') as EstadoPedido;
+>>>>>>> 2abd38e (funciona todo falta dashboard, falta los botones de cocina)
   }
   private write(list: Pedido[]) { localStorage.setItem(this.LS_KEY, JSON.stringify(list)); }
 
+<<<<<<< HEAD
   // ===== API PÚBLICA =====
   getAll(): Observable<Pedido[]> {
     if (environment.mockApi) return of(this.read()).pipe(delay(200));
     return this.http.get<Pedido[]>(this.apiUrl);
+=======
+  /** Obtener todos los pedidos */
+  getAll(): Observable<Pedido[]> {
+    return this.http.get<Pedido[]>(this.apiUrl).pipe(
+      map(list =>
+        (list ?? []).map(p => ({
+          ...p,
+          estado: this.normalizeEstado((p as any).estado)
+        }))
+      )
+    );
+>>>>>>> 2abd38e (funciona todo falta dashboard, falta los botones de cocina)
   }
 
-  getById(id: number): Observable<Pedido> {
-    if (environment.mockApi) {
-      const item = this.read().find(p => p.id === id);
-      return item ? of(item).pipe(delay(150)) : throwError(() => new Error('No encontrado'));
-    }
-    return this.http.get<Pedido>(`${this.apiUrl}/${id}`);
+  /** Obtener solo los pedidos pendientes */
+  getPendientes(): Observable<Pedido[]> {
+    return this.getAll().pipe(
+      map(list => (list ?? []).filter(p => p.estado === 'pendiente'))
+    );
   }
 
-  create(data: NewPedido): Observable<{ ok: boolean; id: number } | any> {
-    if (environment.mockApi) {
-      const list = this.read();
-      const nuevo: Pedido = { id: Date.now(), ...data };
-      list.push(nuevo);
-      this.write(list);
-      return of({ ok: true, id: nuevo.id }).pipe(delay(250));
-    }
-    return this.http.post<any>(this.apiUrl, data);
+  /** Crear un pedido nuevo (para Mesero) */
+  crear(data: Partial<Pedido>): Observable<number> {
+    return this.http.post<number>(this.apiUrl, data);
   }
 
+  /** Actualizar pedido completo (PUT normal de tu backend) */
   update(id: number, data: Partial<Pedido>): Observable<void> {
-    if (environment.mockApi) {
-      const list = this.read();
-      const i = list.findIndex(p => p.id === id);
-      if (i >= 0) {
-        list[i] = { ...list[i], ...data };
-        this.write(list);
-        return of(void 0).pipe(delay(150));
-      }
-      return throwError(() => new Error('No encontrado'));
-    }
     return this.http.put<void>(`${this.apiUrl}/${id}`, data);
   }
 
+  /** Cambiar solo el estado (usa PUT porque tu backend no tiene PATCH) */
+  actualizarEstado(id: number, estado: EstadoPedido, pedidoBase?: Pedido): Observable<void> {
+    const body: any = pedidoBase
+      ? { ...pedidoBase, estado }
+      : { id, estado, fecha: new Date().toISOString(), total: 0, idReserva: 0 };
+    return this.http.put<void>(`${this.apiUrl}/${id}`, body);
+  }
+
+  /** Eliminar un pedido */
   delete(id: number): Observable<void> {
-    if (environment.mockApi) {
-      const list = this.read().filter(p => p.id !== id);
-      this.write(list);
-      return of(void 0).pipe(delay(120));
-    }
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+<<<<<<< HEAD
 
   /** Solo pedidos pendientes */
   getPendientes(): Observable<Pedido[]> {
@@ -95,4 +104,6 @@ export class PedidoService {
   clearMock(): void {
     if (environment.mockApi) localStorage.removeItem(this.LS_KEY);
   }
+=======
+>>>>>>> 2abd38e (funciona todo falta dashboard, falta los botones de cocina)
 }

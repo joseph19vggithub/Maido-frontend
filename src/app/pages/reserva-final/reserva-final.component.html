@@ -7,14 +7,18 @@
     <div class="icon">🎉</div>
     <h1>¡Reserva Confirmada!</h1>
     <p class="mensaje">
-      Gracias, <strong>{{ nombre || 'invitado' }}</strong>.  
+      Gracias, <strong>{{ nombreCompleto || 'invitado' }}</strong>.  
       Tu reserva fue procesada correctamente.
     </p>
 
     <div class="resumen">
-      <p><i class="fa-regular fa-calendar"></i> <strong>Fecha:</strong> {{ fecha }}</p>
-      <p><i class="fa-regular fa-clock"></i> <strong>Hora:</strong> {{ hora }}</p>
-      <p><i class="fa-solid fa-user-group"></i> <strong>Personas:</strong> {{ personasSeleccionadas }}</p>
+      <p><strong>Fecha:</strong> {{ fecha }}</p>
+      <p><strong>Hora:</strong> {{ hora }}</p>
+      <p><strong>Personas:</strong> {{ cantidadPersonas }}</p>
+      <p><strong>Correo:</strong> {{ correoElectronico }}</p>
+      <p *ngIf="dni"><strong>DNI:</strong> {{ dni }}</p>
+      <p *ngIf="telefono"><strong>Teléfono:</strong> {{ telefono }}</p>
+      <p *ngIf="notas"><strong>Notas:</strong> {{ notas }}</p>
     </div>
 
     <p class="info">

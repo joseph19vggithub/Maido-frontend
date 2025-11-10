@@ -9,6 +9,7 @@ import { InformacionComponent } from './pages/informacion/informacion.component'
 import { ConfirmacionReservaComponent } from './pages/confirmacion-reserva/confirmacion-reserva.component';
 import { MenuClientesComponent } from './pages/menu-clientes/menu-clientes.component';
 
+
 export const routes: Routes = [
   // === PÁGINAS PÚBLICAS ===
   { path: '', component: InicioComponent, pathMatch: 'full' },
@@ -59,6 +60,12 @@ export const routes: Routes = [
       { path: 'pedidos', loadComponent: () => import('./pages/admin/pedidos/pedidos.component').then(m => m.PedidosComponent) },
       { path: 'experiencias', loadComponent: () => import('./pages/admin/experiencias/experiencias.component').then(m => m.ExperienciasComponent) },
       { path: 'mesas', loadComponent: () => import('./pages/admin/mesas/mesas.component').then(m => m.MesasComponent) },
+      {
+      path: 'usuario-rol',
+      loadComponent: () =>
+        import('./pages/admin/usuario-rol/usuario-rol.component')
+          .then(m => m.UsuarioRolComponent)
+    },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

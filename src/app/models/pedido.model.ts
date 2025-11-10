@@ -1,44 +1,26 @@
 // src/app/models/pedido.model.ts
-import { Reserva } from './reserva.model';
-import { Cliente } from './cliente.model';
-import { PedidoDetalle } from './pedido-detalle.model';
+export type EstadoPedido =
+  | 'pendiente'
+  | 'en_proceso'
+  | 'listo'
+  | 'entregado';
 
-/** Estados válidos del pedido (frontend + backend) */
-export type EstadoPedido = 'pendiente' | 'en_preparacion' | 'listo' | 'entregado';
+export interface PedidoDetalle {
+  // 👇 estos dos deben ser opcionales cuando CREAS
+  id?: number;
+  idPedido?: number;
 
-/** Ítems que el mesero agrega al carrito (lo que enviamos como "detalles") */
-export interface PedidoItem {
-  id: number;            // id temporal (ej: Date.now())
-  persona: number;       // persona 1..n
+  experiencia?: { id: number; nombre?: string }; // nombre opcional
   cantidad: number;
-  precio: number;
-  nombre: string;        // nombre del plato
+  precioUnitario: number;
+  subtotal?: number;
 }
 
-/**
- * Modelo unificado de Pedido.
- * Incluye los campos que usa el frontend (mesa, detalles, total, nota, creadoEn)
- * y también los del backend (fecha, idReserva, idCliente, pedidoDetalles).
- */
 export interface Pedido {
   id: number;
-
-  // ---- Campos usados por el FRONT (mock y UI)
-  mesa: number | null;
-  cliente?: Cliente | any;
-  detalles: PedidoItem[];
-  total: number;
-  nota?: string | null;
+  fecha: string;
   estado: EstadoPedido;
-  creadoEn: string;            // ISO string
-
-  // ---- Campos para compatibilidad con BACKEND .NET (opcionales)
-  fecha?: Date;
-  idReserva?: number;
-  reserva?: Reserva;
-  idCliente?: number;
+  idReserva: number;
+  total: number;
   pedidoDetalles?: PedidoDetalle[];
 }
-
-/** Payload para crear (igual que Pedido pero sin id) */
-export type NewPedido = Omit<Pedido, 'id'>;

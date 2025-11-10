@@ -6,10 +6,12 @@ import { HttpClient } from '@angular/common/http';
 
 import { MesaService } from '../../services/mesa.service';
 import { Mesa } from '../../models/mesa.model';
-
 import { ExperienciaService } from '../../services/experiencia.service';
 import { Experiencia } from '../../models/experiencia.model';
 import { PedidoService } from '../../services/pedido.service'; // 👈 NUEVO
+
+import { PedidoService } from '../../services/pedido.service';
+import { EstadoPedido } from '../../models/pedido.model';
 
 /** ===== Tipos de la vista ===== */
 type MenuItem = { id: number; nombre: string; sub: string; precio: number };
@@ -27,16 +29,13 @@ export class MeseroComponent {
   /* ===== Branding / header ===== */
   logoUrl = 'assets/img/logo.png';
 
-  /* ===== Mesas (desde backend) ===== */
+  /* ===== Mesas ===== */
   mesas: Mesa[] = [];
   pisos: number[] = [1];
   pisoSeleccionado = 1;
-
-  // Map: piso -> lista de Mesas ordenadas por numero
   mesasPorPiso: Record<number, Mesa[]> = {};
   mesaSeleccionadaObj: Mesa | null = null;
 
-  // Estado de la mesa seleccionada (derivado del backend)
   get estadoMesa(): 'libre'|'ocupada'|'reservada' {
     const e = (this.mesaSeleccionadaObj?.estado || 'Libre').toLowerCase();
     return (e as any) === 'ocupada' ? 'ocupada' : (e as any) === 'reservada' ? 'reservada' : 'libre';
@@ -68,18 +67,16 @@ export class MeseroComponent {
     this.ensureMesaContainers();
   }
 
-  /* ===== Menú (Experiencias desde backend) ===== */
+  /* ===== Menú (Experiencias) ===== */
   q = '';
-  menu: MenuItem[] = [];           // lo que pinta la vista
-  allExp: Experiencia[] = [];      // cache completo de experiencias disponibles
+  menu: MenuItem[] = [];
+  allExp: Experiencia[] = [];
   cargando = false;
-
-  // cantidades seleccionadas por item
   qty: Record<number, number> = {};
 
-  /* ===== Pedidos por mesa (local) ===== */
+  /* ===== Pedidos por mesa ===== */
   pedidosPorMesa: Record<string, Linea[]> = {};
-  notaPorMesa:   Record<string, string>  = {};
+  notaPorMesa: Record<string, string> = {};
 
   get pedidoActual(): Linea[] {
     return this.pedidosPorMesa[this.mesaKey] ?? [];
@@ -113,6 +110,7 @@ export class MeseroComponent {
     this.toast('Agregado al pedido', 'success');
   }
 
+<<<<<<< HEAD
   removeLine(i: number) { this.pedidoActual.splice(i, 1); }
   vaciarPedido() { this.pedidosPorMesa[this.mesaKey] = []; }
   confirmarPedido() { this.toast('Pedido confirmado (local, aún sin enviar)', 'info'); }
@@ -153,6 +151,57 @@ export class MeseroComponent {
   }
 
   marcarListo() { this.toast('Pedido marcado como listo', 'info'); }
+=======
+  removeLine(i: number) {
+    this.pedidoActual.splice(i, 1);
+  }
+  vaciarPedido() {
+    this.pedidosPorMesa[this.mesaKey] = [];
+  }
+
+  /* ===== CONFIRMAR Y ENVIAR PEDIDO A COCINA ===== */
+  confirmarPedido() {
+    if (!this.mesaSeleccionadaObj) {
+      this.toast('Selecciona una mesa primero', 'warning');
+      return;
+    }
+    if (this.pedidoActual.length === 0) {
+      this.toast('No hay ítems en el pedido', 'warning');
+      return;
+    }
+
+    const pedido = {
+      fecha: new Date().toISOString(),
+      estado: 'pendiente' as EstadoPedido,
+      total: this.total,
+      idReserva: this.mesaSeleccionadaObj.id, // puedes ajustar según tu BD
+      pedidoDetalles: this.pedidoActual.map(it => ({
+        idPedido: 0,
+        experiencia: { id: it.id, nombre: it.nombre },
+        cantidad: it.cantidad,
+        precioUnitario: it.precio
+      }))
+    };
+
+    this.pedidoSrv.crear(pedido).subscribe({
+      next: () => {
+        this.toast('Pedido enviado a cocina', 'success');
+        this.vaciarPedido();
+        this.persistirEstado(this.mesaSeleccionadaObj!, 'Ocupada');
+      },
+      error: () => this.toast('Error al enviar el pedido', 'danger')
+    });
+  }
+
+  /* ===== Acciones topbar ===== */
+  enviar() {
+    this.confirmarPedido();
+  }
+
+  marcarListo() {
+    this.toast('Pedido marcado como listo', 'info');
+  }
+>>>>>>> 2abd38e (funciona todo falta dashboard, falta los botones de cocina)
 
   marcarReservada() {
     if (!this.mesaSeleccionadaObj) return;
@@ -169,6 +218,7 @@ export class MeseroComponent {
 
   logout() { this.toast('Sesión cerrada', 'danger'); }
 
+  /* ===== Actualizar estado de mesa ===== */
   private persistirEstado(m: Mesa, estado: 'Libre'|'Ocupada'|'Reservada', onOk?: () => void) {
     const body: Mesa = { ...m, estado };
     this.mesaSrv.update(m.id, body).subscribe({
@@ -192,21 +242,26 @@ export class MeseroComponent {
     setTimeout(() => this.toasts.splice(this.toasts.indexOf(t), 1), ms);
   }
 
-  /* ===== Búsqueda local sobre experiencias ===== */
+  /* ===== Filtro de búsqueda ===== */
   onSearchChange(term: string) {
     this.q = (term ?? '').trim().toLowerCase();
     this.applyFilter();
   }
 
+  /* ===== Constructor ===== */
   constructor(
     private http: HttpClient,
     private mesaSrv: MesaService,
     private expSvc: ExperienciaService,
+<<<<<<< HEAD
     private pedidoSrv: PedidoService,           // 👈 NUEVO
+=======
+    private pedidoSrv: PedidoService   // 👈 agregado
+>>>>>>> 2abd38e (funciona todo falta dashboard, falta los botones de cocina)
   ) {
     this.ensureMesaContainers();
-    this.cargarMesas();      // mesas
-    this.loadExperiencias(); // menú (experiencias)
+    this.cargarMesas();
+    this.loadExperiencias();
   }
 
   /* ===== Experiencias ===== */
@@ -214,7 +269,6 @@ export class MeseroComponent {
     this.cargando = true;
     this.expSvc.getAll().subscribe({
       next: (xs) => {
-        // Solo disponibles
         this.allExp = (xs ?? []).filter(e => e.disponible);
         this.applyFilter();
         this.cargando = false;
@@ -228,6 +282,10 @@ export class MeseroComponent {
     const sub = (cat && typeof cat === 'object' && 'nombre' in cat)
       ? (cat.nombre as string)
       : (x.descripcion || '');
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2abd38e (funciona todo falta dashboard, falta los botones de cocina)
     return {
       id: Number(x.id ?? 0),
       nombre: x.nombre || '',
@@ -252,7 +310,6 @@ export class MeseroComponent {
     this.mesaSrv.getAll().subscribe({
       next: (res) => {
         this.mesas = (res ?? []).sort((a, b) => (a.piso - b.piso) || (a.numero - b.numero));
-        // construir pisos y map
         const set = new Set(this.mesas.map(m => m.piso));
         this.pisos = Array.from(set).sort((a, b) => a - b);
         this.mesasPorPiso = this.mesas.reduce((acc, m) => {

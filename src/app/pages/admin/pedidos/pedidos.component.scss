@@ -1,110 +1,97 @@
+/* ---------- Card y tabla ---------- */
 .card {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0f1115;
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 14px;
-  padding: 1.5rem;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 0 18px rgba(0, 0, 0, 0.1);
-  color: #f1f5f9;
-  font-family: 'Inter', sans-serif;
-  overflow-x: auto;
-  transition: all 0.3s ease;
+  padding: 1.2rem;
+  color: #e5e7eb;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
-.card-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.8rem;
-
-  h3 {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: #f8fafc;
-    letter-spacing: 0.4px;
-  }
-
-  button {
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #f8fafc;
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: 0.25s ease;
-    &:hover {
-      background: rgba(255, 255, 255, 0.15);
-      transform: scale(1.05);
-    }
-  }
+.card-header { gap: .5rem; }
+.date-input {
+  background: #0b1324; color: #e5e7eb; border: 1px solid rgba(255,255,255,.18);
+  padding: 6px 10px; border-radius: 8px;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.93rem;
+.table {
+  width: 100%; border-collapse: collapse; font-size: .95rem;
+}
+.table th, .table td {
+  padding: .6rem .8rem; border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.table th { color: #cbd5e1; text-transform: uppercase; font-size: .78rem; }
+.table tr:hover td { background: rgba(255,255,255,.04); }
 
-  th {
-    text-align: left;
-    padding: 0.6rem 0.8rem;
-    color: #cbd5e1;
-    font-weight: 600;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-  }
+/* Chips superiores */
+.chip {
+  background: rgba(255,255,255,0.08);
+  color: #e2e8f0;
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 6px 12px; border-radius: 999px; cursor: pointer; transition: .2s;
+}
+.chip.active, .chip:hover { background: rgba(255,255,255,0.18); }
 
-  td {
-    padding: 0.6rem 0.8rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    vertical-align: middle;
-    color: #e2e8f0;
-  }
+/* Estado */
+.tag { display:inline-block; padding:4px 10px; border-radius:999px; font-weight:600; text-transform:capitalize; font-size:.82rem; }
+.tag.pendiente  { background:#ffb300; color:#1e1e1e; }
+.tag.en_proceso { background:#60a5fa; color:#0b1220; }
+.tag.listo      { background:#34d399; color:#0b1220; }
+.tag.entregado  { background:#cbd5e1; color:#0b1220; }
 
-  tr:hover td {
-    background: rgba(255, 255, 255, 0.05);
-    transition: background 0.25s;
-  }
+.acciones-td .btn { margin-right: 6px; }
 
-  tbody tr:last-child td {
-    border-bottom: none;
-  }
+/* ---------- MODAL ---------- */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  display: grid;
+  place-items: center;
+  z-index: 9999;            /* clave para ir encima de todo */
+  animation: fadeIn .18s ease-out;
 }
 
-/* Chips de estado */
-span[ngStyle] {
-  text-transform: capitalize;
-  font-weight: 600;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.12);
-  transition: all 0.25s ease;
+.dialog {
+  width: 520px;
+  max-width: 92vw;
+  background: #0f172a;
+  color: #e2e8f0;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 18px 48px rgba(0,0,0,.4);
+  animation: pop .18s ease-out;
 }
 
-/* Estados visuales */
-span[ngStyle][style*="#ffb300"] { background: #ffb300; color: #1e1e1e; }   /* Pendiente */
-span[ngStyle][style*="#60a5fa"] { background: #60a5fa; color: #0b1220; }   /* En preparación */
-span[ngStyle][style*="#34d399"] { background: #34d399; color: #0b1220; }   /* Listo */
-span[ngStyle][style*="#cbd5e1"] { background: #cbd5e1; color: #0b1220; }   /* Entregado */
+.dialog-head {
+  display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;
+}
+.dialog-head .title { margin:0; font-size:1.05rem; font-weight:700; }
+.icon-close { background:transparent; border:0; color:#94a3b8; font-size:20px; cursor:pointer; }
+.icon-close:hover { color:#e2e8f0; }
 
-/* Mensajes de estado */
-div[ngIf="cargando"], div[ngIf="error"] {
-  font-size: 0.95rem;
-  margin: 8px 0;
+/* Form */
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.field { display:flex; flex-direction:column; gap:6px; }
+.field span { font-size:.85rem; color:#cbd5e1; }
+
+input[type="date"], input[type="number"], select {
+  background:#0b1324; color:#e5e7eb;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:10px; padding:8px 10px; outline:none;
 }
 
-div[ngIf="error"] {
-  color: #ef4444;
-}
+.actions { display:flex; justify-content:flex-end; gap:10px; margin-top:14px; }
+.btn { padding:8px 14px; border-radius:999px; border:1px solid transparent; cursor:pointer; }
+.btn.primary { background:#2563eb; color:#fff; }
+.btn.ghost { background:transparent; color:#e2e8f0; border-color:rgba(255,255,255,.2); }
+.btn:hover { filter:brightness(1.05); }
 
-/* Scroll en pantallas pequeñas */
-@media (max-width: 768px) {
-  .card {
-    padding: 1rem;
-  }
-  table {
-    font-size: 0.85rem;
-  }
-  .card-head h3 {
-    font-size: 1.1rem;
-  }
+/* Animaciones */
+@keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+@keyframes pop { from { opacity:0; transform:scale(.98) } to { opacity:1; transform:scale(1) } }
+
+@media (max-width: 600px) {
+  .grid { grid-template-columns:1fr; }
 }

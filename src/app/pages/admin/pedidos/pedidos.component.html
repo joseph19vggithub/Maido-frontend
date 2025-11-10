@@ -1,69 +1,104 @@
 <div class="card">
-  <div class="card-head" style="display:flex;align-items:center;gap:12px;justify-content:space-between">
-    <h3 style="margin:0">Pedidos</h3>
-    <button (click)="reload()">Recargar</button>
+  <div class="card-header d-flex align-items-center gap-2">
+    <h5 class="m-0">Pedidos</h5>
+
+    <button class="chip" [class.active]="filtro==='hoy'" (click)="setFiltro('hoy')">Hoy</button>
+    <button class="chip" [class.active]="filtro==='ayer'" (click)="setFiltro('ayer')">Ayer</button>
+    <button class="chip" [class.active]="filtro==='semana'" (click)="setFiltro('semana')">Esta semana</button>
+
+    <input
+      type="date"
+      #fecha
+      [value]="fechaBase"
+      (change)="onFechaChange(fecha.value)"
+      class="ms-auto date-input"
+    />
   </div>
 
-  <!-- Estado de carga -->
-  <div *ngIf="cargando" style="padding:8px 0;color:#94a3b8">Cargando…</div>
-  <div *ngIf="error" style="padding:8px 0;color:#ef4444">{{ error }}</div>
+  <div class="card-body p-0">
+    <div *ngIf="error" class="p-3 text-danger">{{ error }}</div>
 
-  <table *ngIf="!cargando" style="width:100%;border-collapse:collapse">
-    <thead>
-      <tr>
-        <th style="text-align:left;padding:6px 8px">ID</th>
-        <th style="text-align:left;padding:6px 8px">Fecha</th>
-        <th style="text-align:left;padding:6px 8px">Cliente</th>
-        <th style="text-align:right;padding:6px 8px">Total</th>
-        <th style="text-align:left;padding:6px 8px">Estado</th>
-      </tr>
-    </thead>
+    <div class="table-responsive" *ngIf="!error">
+      <table class="table table-darkish mb-0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Reserva</th>
+            <th>Total (S/)</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="cargando"><td colspan="6">Cargando...</td></tr>
+          <tr *ngIf="!cargando && view.length === 0"><td colspan="6" class="muted">Sin pedidos.</td></tr>
 
-    <!-- Sin datos -->
-    <tbody *ngIf="data.length === 0">
-      <tr>
-        <td colspan="5" style="color:#94a3b8;padding:8px">Sin datos.</td>
-      </tr>
-    </tbody>
+          <tr *ngFor="let p of view">
+            <td>{{ p.id }}</td>
+            <td>{{ p.fecha | date:'yyyy-MM-dd' }}</td>
+            <td>
+              <span class="tag"
+                    [class.pendiente]="p.estado==='pendiente'"
+                    [class.en_proceso]="p.estado==='en_proceso'"
+                    [class.listo]="p.estado==='listo'"
+                    [class.entregado]="p.estado==='entregado'">
+                {{ p.estado.replace('_',' ') }}
+              </span>
+            </td>
+            <td>{{ p.idReserva }}</td>
+            <td>{{ p.total | number:'1.2-2' }}</td>
+            <td class="acciones-td">
+              <button class="btn btn-xs" (click)="abrirModal(p)">Editar</button>
+              <button class="btn btn-xs danger" (click)="eliminarPedido(p.id)">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
-    <!-- Con datos -->
-    <tbody *ngIf="data.length > 0">
-      <tr *ngFor="let p of data; trackBy: trackById">
-        <td style="padding:6px 8px">{{ p.id }}</td>
+<!-- ========================= MODAL ========================= -->
+<div class="backdrop" *ngIf="mostrarModal" (click)="onBackdrop($event)">
+  <div class="dialog" role="dialog" aria-modal="true">
+    <div class="dialog-head">
+      <h5 class="title">Editar pedido #{{ pedidoSeleccionado?.id }}</h5>
+      <button class="icon-close" (click)="cerrarModal()">✕</button>
+    </div>
 
-        <!-- creadoEn es string ISO en el mock; usa date pipe si existe -->
-        <td style="padding:6px 8px">
-          <ng-container *ngIf="p.creadoEn; else fechaVacia">
-            {{ p.creadoEn | date:'short' }}
-          </ng-container>
-          <ng-template #fechaVacia>—</ng-template>
-        </td>
+    <form (submit)="guardarCambios(); $event.preventDefault()">
+      <div class="grid">
+        <label class="field">
+          <span>Fecha</span>
+          <input type="date" [(ngModel)]="fechaModal" name="fecha" required />
+        </label>
 
-        <td style="padding:6px 8px">
-          {{ p.cliente?.nombre || '—' }}
-        </td>
+        <label class="field">
+          <span>Estado</span>
+          <select [(ngModel)]="pedidoSeleccionado!.estado" name="estado" required>
+            <option [ngValue]="'pendiente'">Pendiente</option>
+            <option [ngValue]="'en_proceso'">En proceso</option>
+            <option [ngValue]="'listo'">Listo</option>
+            <option [ngValue]="'entregado'">Entregado</option>
+          </select>
+        </label>
 
-        <td style="padding:6px 8px; text-align:right">
-          {{ p.total || 0 | currency:'PEN':'symbol-narrow':'1.2-2' }}
-        </td>
+        <label class="field">
+          <span>Id Reserva</span>
+          <input type="number" [(ngModel)]="pedidoSeleccionado!.idReserva" name="idReserva" required />
+        </label>
 
-        <td style="padding:6px 8px">
-          <span
-            [ngStyle]="{
-              'padding': '2px 8px',
-              'border-radius': '999px',
-              'font-size': '12px',
-              'color': '#0b1220',
-              'background': p.estado==='pendiente' ? '#ffb300'
-                           : p.estado==='en_preparacion' ? '#60a5fa'
-                           : p.estado==='listo' ? '#34d399'
-                           : '#cbd5e1'
-            }"
-          >
-            {{ p.estado }}
-          </span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+        <label class="field">
+          <span>Total (S/)</span>
+          <input type="number" step="0.01" [(ngModel)]="pedidoSeleccionado!.total" name="total" required />
+        </label>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn primary">Guardar</button>
+        <button type="button" class="btn ghost" (click)="cerrarModal()">Cancelar</button>
+      </div>
+    </form>
+  </div>
 </div>

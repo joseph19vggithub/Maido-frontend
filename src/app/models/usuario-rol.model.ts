@@ -2,10 +2,11 @@ import { Usuario } from '../models/usuario.model';
 import { Rol } from './rol.model';
 
 export interface UsuarioRol {
-  id: number;           // Identificador único de la relación
-  idUsuario: number;    // Relación con el usuario
-  usuario?: Usuario;    // Objeto usuario (opcional)
+  id: number;
+  idUsuario: number;
+  idRol: number;
 
-  idRol: number;        // Relación con el rol
-  rol?: Rol;            // Objeto rol (opcional)
+  // si el backend incluye relaciones (Include), vendrán aquí
+  usuario?: Usuario | null;
+  rol?: Rol | null;
 }

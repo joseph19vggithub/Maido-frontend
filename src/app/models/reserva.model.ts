@@ -1,28 +1,13 @@
 export interface Reserva {
   id: number;
-  fecha: string;              // Ej: '2025-11-07'
-  hora?: string;              // Ej: '20:00'
+  nombreCompleto: string;
+  correoElectronico: string;
+  telefono: string;
+  dni: string;
   cantidadPersonas: number;
-  estado: string;
-  notas?: string;
-  idCliente: number;
-  idMesa?: number;
-
-  // Relacionales opcionales (si tu backend los devuelve)
-  cliente?: Cliente;
-  mesa?: Mesa;
+  notas?: string | null;
+  fecha: string; // ISO yyyy-MM-dd
+  hora: string;  // HH:mm:ss
 }
 
-export interface Cliente {
-  id: number;
-  nombreCompleto?: string;
-  nombres?: string;
-  apellidos?: string;
-  correoElectronico?: string;
-}
-
-export interface Mesa {
-  id: number;
-  piso: number;
-  numero: number;
-}
+export type ReservaCreate = Omit<Reserva, 'id'>;
