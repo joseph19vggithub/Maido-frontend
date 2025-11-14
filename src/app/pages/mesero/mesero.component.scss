@@ -334,3 +334,56 @@ textarea {
   .topbar .right { width:100%; justify-content:flex-end; flex-wrap: wrap; gap: 8px; }
   .pill.logout { margin-top: 6px; align-self: flex-end; }
 }
+
+/* ===== MODAL: Asignar reserva ===== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modal {
+  background: #141a23;
+  border: 1px solid #243044;
+  border-radius: 14px;
+  padding: 20px;
+  width: 380px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+}
+
+.rlist {
+  list-style: none;
+  margin: 12px 0;
+  padding: 0;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.ritem {
+  padding: 10px 12px;
+  background: #1a2332;
+  border: 1px solid #2e3d57;
+  margin-bottom: 6px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ritem strong {
+  font-weight: 700;
+}
+
+.ritem small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.ritem:hover {
+  border-color: var(--brand-red);
+}

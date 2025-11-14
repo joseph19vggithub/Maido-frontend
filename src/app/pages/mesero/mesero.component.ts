@@ -8,8 +8,14 @@ import { MesaService } from '../../services/mesa.service';
 import { Mesa } from '../../models/mesa.model';
 import { ExperienciaService } from '../../services/experiencia.service';
 import { Experiencia } from '../../models/experiencia.model';
-import { PedidoService } from '../../services/pedido.service'; // 👈 NUEVO
+import { PedidoService } from '../../services/pedido.service';
 import { EstadoPedido } from '../../models/pedido.model';
+
+// 👇 NUEVO: servicios / modelos para reservas
+import { ReservaService } from '../../services/reserva.service';
+import { Reserva } from '../../models/reserva.model';
+import { ReservaMesaService } from '../../services/reserva-mesa.service';
+import { ReservaMesa } from '../../models/reserva-mesa.model';
 
 /** ===== Tipos de la vista ===== */
 type MenuItem = { id: number; nombre: string; sub: string; precio: number };
@@ -36,7 +42,11 @@ export class MeseroComponent {
 
   get estadoMesa(): 'libre'|'ocupada'|'reservada' {
     const e = (this.mesaSeleccionadaObj?.estado || 'Libre').toLowerCase();
-    return (e as any) === 'ocupada' ? 'ocupada' : (e as any) === 'reservada' ? 'reservada' : 'libre';
+    return (e as any) === 'ocupada'
+      ? 'ocupada'
+      : (e as any) === 'reservada'
+      ? 'reservada'
+      : 'libre';
   }
 
   mesaKeyOf(piso: number, n: number) { return `P${piso}-M${n}`; }
@@ -129,7 +139,7 @@ export class MeseroComponent {
       fecha: new Date().toISOString(),
       estado: 'pendiente' as EstadoPedido,
       total: this.total,
-      idReserva: this.mesaSeleccionadaObj.id, // puedes ajustar según tu BD
+      idReserva: this.mesaSeleccionadaObj.id, // ajusta si tu BD usa otra relación
       pedidoDetalles: this.pedidoActual.map(it => ({
         idPedido: 0,
         experiencia: { id: it.id, nombre: it.nombre },
@@ -177,7 +187,10 @@ export class MeseroComponent {
     const body: Mesa = { ...m, estado };
     this.mesaSrv.update(m.id, body).subscribe({
       next: () => {
-        this.toast(`Mesa ${estado.toLowerCase()}`, estado==='Libre' ? 'success' : (estado==='Reservada' ? 'warning' : 'info'));
+        this.toast(
+          `Mesa ${estado.toLowerCase()}`,
+          estado==='Libre' ? 'success' : (estado==='Reservada' ? 'warning' : 'info')
+        );
         this.cargarMesas(() => {
           const nueva = this.mesas.find(x => x.id === m.id) || null;
           this.mesaSeleccionadaObj = nueva;
@@ -202,13 +215,71 @@ export class MeseroComponent {
     this.applyFilter();
   }
 
+  /* ===== MODAL: Asignar reserva a mesa ===== */
+  panelReserva = false;
+  reservasDisponibles: Reserva[] = [];
+
+  abrirAsignarReserva(): void {
+    if (!this.mesaSeleccionadaObj) {
+      this.toast('Selecciona una mesa primero', 'warning');
+      return;
+    }
+
+    const hoy = new Date();
+    const hoyStr = hoy.toISOString().substring(0, 10); // yyyy-MM-dd
+
+    this.reservaSrv.getAll().subscribe({
+      next: (xs) => {
+        // filtra reservas de hoy (ajusta si tu campo se llama distinto)
+        this.reservasDisponibles = (xs ?? []).filter(r => {
+          const f = (r.fecha as any)?.toString().substring(0, 10) ?? '';
+          return f === hoyStr;
+        });
+        this.panelReserva = true;
+      },
+      error: () => {
+        this.reservasDisponibles = [];
+        this.panelReserva = true;
+      }
+    });
+  }
+
+  cerrarAsignarReserva(): void {
+    this.panelReserva = false;
+  }
+
+  asignarReserva(r: Reserva): void {
+    if (!this.mesaSeleccionadaObj) {
+      this.toast('Selecciona una mesa primero', 'warning');
+      return;
+    }
+
+    const payload: ReservaMesa = {
+      id: 0,
+      idReserva: r.id,
+      idMesa: this.mesaSeleccionadaObj.id,
+      reserva: undefined,
+      mesa: undefined
+    };
+
+    this.reservaMesaSrv.create(payload).subscribe({
+      next: () => {
+        this.toast('Reserva asignada a la mesa', 'success');
+        this.persistirEstado(this.mesaSeleccionadaObj!, 'Reservada');
+        this.panelReserva = false;
+      },
+      error: () => this.toast('No se pudo asignar la reserva', 'danger')
+    });
+  }
+
   /* ===== Constructor ===== */
   constructor(
     private http: HttpClient,
     private mesaSrv: MesaService,
     private expSvc: ExperienciaService,
-
-    private pedidoSrv: PedidoService   // 👈 agregado
+    private pedidoSrv: PedidoService,
+    private reservaSrv: ReservaService,          // 👈 nuevo
+    private reservaMesaSrv: ReservaMesaService   // 👈 nuevo
   ) {
     this.ensureMesaContainers();
     this.cargarMesas();
@@ -220,7 +291,7 @@ export class MeseroComponent {
     this.cargando = true;
     this.expSvc.getAll().subscribe({
       next: (xs) => {
-        this.allExp = (xs ?? []).filter(e => e.disponible);
+        this.allExp = (xs ?? []).filter(e => (e as any).disponible);
         this.applyFilter();
         this.cargando = false;
       },
@@ -257,7 +328,9 @@ export class MeseroComponent {
   private cargarMesas(cb?: () => void) {
     this.mesaSrv.getAll().subscribe({
       next: (res) => {
-        this.mesas = (res ?? []).sort((a, b) => (a.piso - b.piso) || (a.numero - b.numero));
+        this.mesas = (res ?? []).sort(
+          (a, b) => (a.piso - b.piso) || (a.numero - b.numero)
+        );
         const set = new Set(this.mesas.map(m => m.piso));
         this.pisos = Array.from(set).sort((a, b) => a - b);
         this.mesasPorPiso = this.mesas.reduce((acc, m) => {

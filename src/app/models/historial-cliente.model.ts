@@ -1,10 +1,10 @@
-import { Cliente } from './cliente.model';
-
 export interface HistorialCliente {
-  id: number;             // Identificador único del historial
-  fechaVisita: Date;      // Fecha de la visita del cliente
+  id: number;             // Id del historial
+  fechaVisita: string;      // Fecha de visita
   observaciones: string;  // Comentarios u observaciones
 
-  idCliente: number;      // Relación con el cliente
-  cliente?: Cliente;      // Objeto cliente (opcional)
+  idReserva: number;      // Relación con la reserva
+
+  // Campo "plano" que el backend puede mandar para mostrar el nombre
+  nombreCliente?: string; // Nombre completo del cliente (opcional)
 }

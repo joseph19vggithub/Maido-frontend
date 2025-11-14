@@ -22,6 +22,9 @@
     <button class="pill ok" (click)="enviar()">Enviar a cocina</button>
     <button class="pill warn" (click)="marcarListo()">Marcar listo</button>
     <button class="pill gold" (click)="marcarReservada()">Marcar reservada</button>
+    <!-- 👇 NUEVO: asignar reserva -->
+    <button class="pill ghost" (click)="abrirAsignarReserva()">Asignar reserva</button>
+    <!-- -------------- -->
     <button class="pill clear" (click)="liberarMesa()">Liberar mesa</button>
     <button class="pill logout" (click)="logout()">Cerrar sesión</button>
   </div>
@@ -169,5 +172,31 @@
     <div class="icon">●</div>
     <div class="msg">{{ t.msg }}</div>
     <div class="bar" [style.animation-duration.ms]="t.ms"></div>
+  </div>
+</div>
+
+<!-- ===== MODAL: Asignar reserva a mesa ===== -->
+<div class="modal-backdrop" *ngIf="panelReserva">
+  <div class="modal">
+    <h3>Asignar reserva a {{ mesaLabel() }}</h3>
+
+    <p class="muted" style="margin-bottom:8px;">
+      Selecciona una reserva para asignarla a esta mesa.
+    </p>
+
+    <div *ngIf="reservasDisponibles.length === 0" class="empty">
+      No hay reservas disponibles para hoy.
+    </div>
+
+    <ul class="rlist" *ngIf="reservasDisponibles.length > 0">
+      <li class="ritem" *ngFor="let r of reservasDisponibles" (click)="asignarReserva(r)">
+        <strong>{{ r.nombreCompleto }}</strong>
+        <small>{{ r.fecha }} · {{ r.hora }}</small>
+      </li>
+    </ul>
+
+    <div style="text-align:right;margin-top:10px;">
+      <button class="pill clear" (click)="cerrarAsignarReserva()">Cerrar</button>
+    </div>
   </div>
 </div>

@@ -1,0 +1,247 @@
+// src/app/pages/historial-cliente/historial-cliente.component.scss
+
+:host {
+  display: block;
+  padding: 1.5rem 2rem;
+  background: #f3f4f6;
+  min-height: 100vh;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
+}
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+  }
+}
+
+.header-right {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.search {
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  min-width: 260px;
+  font-size: 0.9rem;
+  outline: none;
+
+  &:focus {
+    border-color: #10b981;
+    box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.25);
+  }
+}
+
+.alert.error {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr;
+  gap: 1rem;
+}
+
+.panel {
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+
+  h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+  }
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.table-wrapper {
+  overflow: auto;
+  max-height: 460px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+
+  thead {
+    position: sticky;
+    top: 0;
+    background: #f9fafb;
+    z-index: 1;
+  }
+
+  th,
+  td {
+    padding: 0.55rem 0.6rem;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+  }
+
+  th {
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: #6b7280;
+    text-transform: uppercase;
+  }
+
+  tbody tr:hover {
+    background: #f3f4f6;
+  }
+}
+
+.col-observaciones {
+  max-width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.col-actions {
+  width: 150px;
+  text-align: right;
+}
+
+td.empty {
+  text-align: center;
+  padding: 1rem 0.5rem;
+  color: #6b7280;
+}
+
+.form-panel {
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+
+  label {
+    font-weight: 500;
+    color: #374151;
+  }
+
+  input,
+  textarea {
+    border-radius: 0.7rem;
+    border: 1px solid #d1d5db;
+    padding: 0.45rem 0.7rem;
+    font-size: 0.9rem;
+    outline: none;
+    resize: vertical;
+
+    &:focus {
+      border-color: #10b981;
+      box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.25);
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  background: #e5e7eb;
+  color: #111827;
+  transition: transform 0.05s ease, box-shadow 0.05s ease, opacity 0.1s ease;
+
+  &.primary {
+    background: #10b981;
+    color: #ffffff;
+  }
+
+  &.danger {
+    background: #ef4444;
+    color: #ffffff;
+  }
+
+  &.ghost {
+    background: transparent;
+    border: 1px solid #d1d5db;
+  }
+
+  &.small {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  &:hover {
+    opacity: 0.9;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+    box-shadow: none;
+    transform: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}

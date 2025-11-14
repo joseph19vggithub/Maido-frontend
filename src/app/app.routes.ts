@@ -61,6 +61,21 @@ export const routes: Routes = [
       { path: 'experiencias', loadComponent: () => import('./pages/admin/experiencias/experiencias.component').then(m => m.ExperienciasComponent) },
       { path: 'mesas', loadComponent: () => import('./pages/admin/mesas/mesas.component').then(m => m.MesasComponent) },
       {
+  path: 'reserva-mesa',
+  loadComponent: () =>
+    import('./pages/admin/reserva-mesa/reserva-mesa.component')
+      .then(m => m.ReservaMesaComponent)
+},
+{
+  path: 'historial-cliente',
+  loadComponent: () =>
+    import('./pages/admin/historial-cliente/historial-cliente.component')
+      .then(m => m.HistorialClienteComponent),
+},
+
+
+
+      {
       path: 'usuario-rol',
       loadComponent: () =>
         import('./pages/admin/usuario-rol/usuario-rol.component')

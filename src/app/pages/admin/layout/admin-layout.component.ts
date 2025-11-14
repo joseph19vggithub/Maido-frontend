@@ -38,6 +38,14 @@ import { RouterModule } from '@angular/router';
         <span class="ico"><svg viewBox="0 0 24 24"><path d="M3 10h18v2H3v-2Zm2 4h2v6H5v-6Zm12 0h2v6h-2v-6ZM6 4h12l2 6H4l2-6Z"/></svg></span>
         <span>Mesas</span>
       </a>
+      <a class="item" routerLink="reserva-mesa" routerLinkActive="active">
+        <span class="ico"><svg viewBox="0 0 24 24"><path d="M7 2v2H5a2 2 0 0 0-2 2v2h18V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2Zm14 8H3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2Z"/></svg></span>
+        <span>reserva-mesa</span>
+      </a>
+      <a class="item" routerLink="historial-cliente" routerLinkActive="active">
+        <span class="ico"><svg viewBox="0 0 24 24"><path d="M7 2v2H5a2 2 0 0 0-2 2v2h18V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2Zm14 8H3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2Z"/></svg></span>
+        <span>historial-cliente</span>
+      </a>
       <a class="item" routerLink="experiencias" routerLinkActive="active">
         <span class="ico"><svg viewBox="0 0 24 24"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.6 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg></span>
         <span>Experiencias</span>
@@ -58,6 +66,10 @@ import { RouterModule } from '@angular/router';
       <a class="item" routerLink="pedidos" routerLinkActive="active">
         <span class="ico"><svg viewBox="0 0 24 24"><path d="M21 7H7l-1-2H3v2h2l3.6 7.59L7.25 17A2 2 0 0 0 9 20h10v-2H9.42a.25.25 0 0 1-.23-.36L10 16h8a2 2 0 0 0 1.8-1.1L22 9V7Z"/></svg></span>
         <span>Pedidos</span>
+      </a>
+      <a class="item" routerLink="pedido-detalle" routerLinkActive="active">
+        <span class="ico"><svg viewBox="0 0 24 24"><path d="M7 2v2H5a2 2 0 0 0-2 2v2h18V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2Zm14 8H3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2Z"/></svg></span>
+        <span>pedido-detalle</span>
       </a>
 
       <div class="section">SEGURIDAD</div>

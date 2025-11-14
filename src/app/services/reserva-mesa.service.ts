@@ -8,7 +8,8 @@ import { ReservaMesa } from '../models/reserva-mesa.model';
   providedIn: 'root'
 })
 export class ReservaMesaService {
-  private apiUrl = `${environment.apiUrl}/reservamesa`;
+  // ⚠️ mismo path que tu controller [Route("api/reserva_mesa")]
+  private apiUrl = `${environment.apiUrl}/reserva_mesa`;
 
   constructor(private http: HttpClient) {}
 
