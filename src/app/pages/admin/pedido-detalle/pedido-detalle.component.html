@@ -1,0 +1,150 @@
+<div class="page">
+
+  <!-- FORMULARIO -->
+  <section class="card form-card">
+    <h2>{{ editando ? 'Editar detalle' : 'Nuevo detalle' }}</h2>
+
+    <form (ngSubmit)="guardar()" #f="ngForm">
+      <div class="form-grid">
+
+        <!-- PEDIDO -->
+        <div class="form-control">
+          <label>Pedido</label>
+          <select
+            name="idPedido"
+            [(ngModel)]="form.idPedido"
+            required
+          >
+            <option value="0" disabled>Seleccione un pedido</option>
+            <option *ngFor="let p of pedidos" [value]="p.id">
+              Pedido {{ p.id }}
+            </option>
+          </select>
+        </div>
+
+        <!-- EXPERIENCIA -->
+        <div class="form-control">
+          <label>Experiencia</label>
+          <select
+            name="idExperiencia"
+            [(ngModel)]="form.idExperiencia"
+            required
+            (ngModelChange)="onExperienciaChange()"
+          >
+            <option value="0" disabled>Seleccione una experiencia</option>
+            <option *ngFor="let e of experiencias" [value]="e.id">
+              {{ e.nombre }} - S/ {{ e.precio | number:'1.2-2' }}
+            </option>
+          </select>
+        </div>
+
+        <!-- CANTIDAD -->
+        <div class="form-control">
+          <label>Cantidad</label>
+          <input
+            type="number"
+            name="cantidad"
+            min="1"
+            [(ngModel)]="form.cantidad"
+            required
+          />
+        </div>
+
+        <!-- PRECIO UNITARIO (solo lectura) -->
+        <div class="form-control">
+          <label>Precio unitario (desde experiencia)</label>
+          <input
+            type="number"
+            name="precioUnitario"
+            [(ngModel)]="form.precioUnitario"
+            readonly
+          />
+        </div>
+
+        <!-- COMENTARIOS / DESCRIPCIÓN (solo lectura) -->
+        <div class="form-control full">
+          <label>Comentarios (descripción de la experiencia)</label>
+          <textarea
+            name="comentarios"
+            rows="2"
+            [(ngModel)]="form.comentarios"
+            readonly
+          ></textarea>
+        </div>
+
+      </div>
+
+      <!-- BOTONES -->
+      <div class="form-actions">
+        <button class="btn primary" type="submit" [disabled]="f.invalid">
+          {{ editando ? 'Guardar cambios' : 'Registrar detalle' }}
+        </button>
+        <button class="btn ghost" type="button" (click)="cancelar()">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- LISTADO -->
+  <section class="card table-card">
+    <div class="table-header">
+      <h2>Listado de detalles</h2>
+
+      <div class="search">
+        <input
+          type="text"
+          placeholder="Buscar por pedido, experiencia o comentario..."
+          [(ngModel)]="q"
+          (ngModelChange)="applyFilter()"
+        />
+      </div>
+
+      <span *ngIf="cargando" class="badge">Cargando...</span>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Pedido</th>
+          <th>Experiencia</th>
+          <th>Cantidad</th>
+          <th>Precio Unitario</th>
+          <th>Subtotal</th>
+          <th>Comentarios</th>
+          <th class="col-actions">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let d of filtrados">
+          <td>{{ d.id }}</td>
+          <td>{{ d.pedido?.id || d.idPedido }}</td>
+          <td>{{ d.experiencia?.nombre || d.idExperiencia }}</td>
+          <td>{{ d.cantidad }}</td>
+
+          <td>
+            {{ d.precioUnitario | number:'1.2-2' }}
+          </td>
+
+          <td>
+            {{ (d.cantidad || 0) * (d.precioUnitario || 0) | number:'1.2-2' }}
+          </td>
+
+          <td>{{ d.comentarios }}</td>
+
+          <td class="col-actions">
+            <button class="btn-link edit" (click)="editar(d)">Editar</button>
+            <button class="btn-link delete" (click)="eliminar(d)">Eliminar</button>
+          </td>
+        </tr>
+
+        <tr *ngIf="!cargando && filtrados.length === 0">
+          <td colspan="8" class="empty">No hay registros.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>

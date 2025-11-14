@@ -8,6 +8,8 @@ import { ReservaComponent } from './pages/reserva/reserva.component';
 import { InformacionComponent } from './pages/informacion/informacion.component';
 import { ConfirmacionReservaComponent } from './pages/confirmacion-reserva/confirmacion-reserva.component';
 import { MenuClientesComponent } from './pages/menu-clientes/menu-clientes.component';
+import { PedidoDetalleComponent } from './pages/admin/pedido-detalle/pedido-detalle.component';
+
 
 
 export const routes: Routes = [
@@ -72,6 +74,15 @@ export const routes: Routes = [
     import('./pages/admin/historial-cliente/historial-cliente.component')
       .then(m => m.HistorialClienteComponent),
 },
+{
+  path: 'pedido-detalle',
+  loadComponent: () =>
+    import('./pages/admin/pedido-detalle/pedido-detalle.component')
+      .then(m => m.PedidoDetalleComponent)
+},
+
+
+
 
 
 

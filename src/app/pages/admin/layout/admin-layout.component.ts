@@ -39,13 +39,23 @@ import { RouterModule } from '@angular/router';
         <span>Mesas</span>
       </a>
       <a class="item" routerLink="reserva-mesa" routerLinkActive="active">
-        <span class="ico"><svg viewBox="0 0 24 24"><path d="M7 2v2H5a2 2 0 0 0-2 2v2h18V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2Zm14 8H3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2Z"/></svg></span>
-        <span>reserva-mesa</span>
-      </a>
+  <span class="ico">
+    <svg viewBox="0 0 24 24">
+      <path d="M19 3h-1V1h-2v2H8V1H6v2H5a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Zm0 17H5V8h14v12Zm-7-6 5-5-1.41-1.42L12 11.17l-2.59-2.6L8 10l4 4Z"/>
+    </svg>
+  </span>
+  <span>reserva-mesa</span>
+</a>
+
       <a class="item" routerLink="historial-cliente" routerLinkActive="active">
-        <span class="ico"><svg viewBox="0 0 24 24"><path d="M7 2v2H5a2 2 0 0 0-2 2v2h18V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2Zm14 8H3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2Z"/></svg></span>
-        <span>historial-cliente</span>
-      </a>
+  <span class="ico">
+    <svg viewBox="0 0 24 24">
+      <path d="M6 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V3H6Zm9 16H6V5h9v14ZM18 3h-1v18h1a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Zm-9 4h5v2H9V7Zm0 4h5v2H9v-2Zm0 4h3v2H9v-2Z"/>
+    </svg>
+  </span>
+  <span>historial-cliente</span>
+</a>
+
       <a class="item" routerLink="experiencias" routerLinkActive="active">
         <span class="ico"><svg viewBox="0 0 24 24"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.6 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg></span>
         <span>Experiencias</span>
@@ -68,9 +78,14 @@ import { RouterModule } from '@angular/router';
         <span>Pedidos</span>
       </a>
       <a class="item" routerLink="pedido-detalle" routerLinkActive="active">
-        <span class="ico"><svg viewBox="0 0 24 24"><path d="M7 2v2H5a2 2 0 0 0-2 2v2h18V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2Zm14 8H3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2Z"/></svg></span>
-        <span>pedido-detalle</span>
-      </a>
+  <span class="ico">
+    <svg viewBox="0 0 24 24">
+      <path d="M6 2 4 4v18l4-2 4 2 4-2 4 2V4l-2-2H6Zm12 18-2-.95-2 .95-2-.95-2 .95V4h8v16ZM8 8h8v2H8V8Zm0 4h8v2H8v-2Z"/>
+    </svg>
+  </span>
+  <span>pedido-detalle</span>
+</a>
+
 
       <div class="section">SEGURIDAD</div>
 
@@ -83,9 +98,14 @@ import { RouterModule } from '@angular/router';
         <span>Roles</span>
       </a>
       <a class="item" routerLink="usuario-rol" routerLinkActive="active">
-        <span class="ico"><svg viewBox="0 0 24 24"><path d="M12 1 9.5 8H2l6 4.5L5.5 20 12 15.5 18.5 20 16 12.5 22 8h-7.5L12 1Z"/></svg></span>
-        <span>usuario-rol</span>
-      </a>
+  <span class="ico">
+    <svg viewBox="0 0 24 24">
+      <path d="M16 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm-1 2h2a5 5 0 0 1 5 5v3h-2v-3a3 3 0 0 0-3-3h-2a3 3 0 0 0-3 3v3h-2v-3a5 5 0 0 1 5-5ZM8 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm1 2H7a5 5 0 0 0-5 5v3h2v-3a3 3 0 0 1 3-3h2a3 3 0 0 1 3 3v3h2v-3a5 5 0 0 0-5-5Z"/>
+    </svg>
+  </span>
+  <span>usuario-rol</span>
+</a>
+
     </aside>
 
     <main class="main">
