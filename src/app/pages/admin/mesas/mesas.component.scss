@@ -1,0 +1,286 @@
+/* ============================
+   MESAS – ESTILO MAIDO GLASS
+   ============================ */
+
+:host {
+  --primary:       #C81D25;
+  --primary-dark:  #8B0F1A;
+  --chip-text:     #e5e7eb;
+  --muted:         #94a3b8;
+  --border:        rgba(255,255,255,0.08);
+}
+
+/* ========= ENCABEZADO DE PÁGINA (como Reservas) ========= */
+
+.page-header {
+  margin-bottom: 0.9rem;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #f9fafb;
+  letter-spacing: 0.4px;
+  position: relative;
+  text-shadow: 0 0 14px rgba(0,0,0,0.7);
+}
+
+/* línea roja bajo el título de la página */
+.page-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 90px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #C81D25, transparent);
+  opacity: 0.85;
+}
+
+.page-subtitle {
+  margin: 0.8rem 0 0;
+  font-size: 0.95rem;
+  color: #e5e7eb;
+  opacity: 0.9;
+}
+
+/* ---------- CARD MAIDO GLASS ---------- */
+
+.card {
+  position: relative;
+  background: rgba(15,18,25,0.78);
+  border-radius: 18px;
+  padding: 1.4rem 1.5rem 1.5rem;
+  border: 1px solid var(--border);
+  color: #e5e7eb;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    0 22px 50px rgba(0,0,0,0.55),
+    0 6px 14px rgba(0,0,0,0.3);
+  margin-bottom: 18px;
+}
+
+/* separa un poco las dos cards (lista / formulario) */
+.card + .card {
+  margin-top: 8px;
+}
+
+.card::before {
+  content:"";
+  position:absolute;
+  inset:-1px -1px auto -1px;
+  height:3px;
+  background:linear-gradient(90deg,#C81D25,#E23E36 55%,transparent);
+  opacity:0.9;
+}
+
+/* Títulos internos de las cards (Listado, Nueva mesa) */
+.card .card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 12px;
+  color: #fff;
+  letter-spacing: .3px;
+  text-shadow: 0 0 10px rgba(0,0,0,0.7);
+  position: relative;
+}
+
+/* subrayado elegante bajo los títulos de card */
+.card .card-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 80px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #C81D25, transparent);
+  opacity: 0.8;
+}
+
+/* ---------------- TABLA ---------------- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.94rem;
+  margin-top: 8px;
+}
+
+th {
+  color: #cfd8e3;
+  font-weight: 700;
+  padding: 10px;
+  border-bottom: 1px dashed rgba(255,255,255,0.08);
+}
+
+/* animación suave de aparición de filas */
+tbody tr {
+  animation: mesaRowIn 0.22s ease-out;
+  animation-fill-mode: both;
+}
+
+tbody tr:nth-child(1)  { animation-delay: .02s; }
+tbody tr:nth-child(2)  { animation-delay: .04s; }
+tbody tr:nth-child(3)  { animation-delay: .06s; }
+tbody tr:nth-child(4)  { animation-delay: .08s; }
+tbody tr:nth-child(5)  { animation-delay: .10s; }
+
+@keyframes mesaRowIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  color: #e5e7eb;
+}
+
+tbody tr:hover td {
+  background: rgba(255,255,255,0.05);
+}
+
+/* fila "Sin datos." un poco más aireada */
+td[colspan] {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+/* ---------- BOTONES ACCIONES (tabla) ---------- */
+
+.btn-link {
+  background: transparent;
+  border: none;
+  color: #60a5fa;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+
+.btn-link:hover {
+  background: rgba(96,165,250,0.12);
+}
+
+.btn-danger {
+  background: #C81D25;
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: filter 0.15s, transform 0.05s, box-shadow 0.15s;
+  box-shadow: 0 8px 18px rgba(200,29,37,0.4);
+}
+
+.btn-danger:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(200,29,37,0.55);
+}
+
+/* ---------- FORMULARIO "NUEVA MESA" ---------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 14px;
+  margin-top: 10px;
+}
+
+label {
+  font-size: 13px;
+  color: #cbd5e1;
+  margin-bottom: 4px;
+  display: block;
+}
+
+input,
+select {
+  width: 100%;
+  background: rgba(15,23,42,0.9);
+  color: var(--chip-text);
+  border: 1px solid rgba(148,163,184,0.45);
+  border-radius: 12px;
+  padding: .55rem .7rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(200,29,37,0.35);
+  background: rgba(15,23,42,1);
+}
+
+/* Texto error */
+.err {
+  color: #f87171;
+  margin-top: 4px;
+  font-size: 12px;
+}
+
+/* ---------- BOTONES DEL FORMULARIO ---------- */
+
+.form-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.btn-success {
+  background: #22c55e;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.05s, filter 0.15s, box-shadow 0.15s;
+  box-shadow: 0 8px 18px rgba(34,197,94,0.4);
+}
+
+.btn-success:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(34,197,94,0.55);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #e5e7eb;
+  border-radius: 999px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.05s;
+}
+
+.btn-outline:hover {
+  background: rgba(255,255,255,0.06);
+  transform: translateY(-1px);
+}
+
+/* Responsivo */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 1.2rem 1rem 1.3rem;
+  }
+}

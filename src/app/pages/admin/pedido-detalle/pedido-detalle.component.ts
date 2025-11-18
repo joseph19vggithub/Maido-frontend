@@ -137,30 +137,31 @@ export class PedidoDetalleComponent implements OnInit {
   }
 
   guardar(): void {
-    if (!this.form.id || this.form.id === 0) {
-      // Crear nuevo detalle
-      this.pedidoDetalleService.create(this.form).subscribe({
-        next: (_resp: PedidoDetalle) => {
-          this.nuevo();
-          this.cargarDatos();
-        },
-        error: (err: any) => {
-          console.error('Error al crear pedido-detalle', err);
-        },
-      });
-    } else {
-      // Actualizar existente
-      this.pedidoDetalleService.update(this.form.id, this.form).subscribe({
-        next: () => {
-          this.nuevo();
-          this.cargarDatos();
-        },
-        error: (err: any) => {
-          console.error('Error al actualizar pedido-detalle', err);
-        },
-      });
-    }
+  console.log('Enviando detalle', this.form); // 👈 prueba rápida
+
+  if (!this.form.id || this.form.id === 0) {
+    this.pedidoDetalleService.create(this.form).subscribe({
+      next: (_resp: PedidoDetalle) => {
+        this.nuevo();
+        this.cargarDatos();
+      },
+      error: (err: any) => {
+        console.error('Error al crear pedido-detalle', err); // 👈 importante
+      },
+    });
+  } else {
+    this.pedidoDetalleService.update(this.form.id, this.form).subscribe({
+      next: () => {
+        this.nuevo();
+        this.cargarDatos();
+      },
+      error: (err: any) => {
+        console.error('Error al actualizar pedido-detalle', err);
+      },
+    });
   }
+}
+
 
   eliminar(detalle: PedidoDetalle): void {
     if (!confirm('¿Seguro que deseas eliminar este detalle?')) return;

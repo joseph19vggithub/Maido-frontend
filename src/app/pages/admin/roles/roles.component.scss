@@ -1,103 +1,351 @@
-/* ====== Roles (estilos aislados) ====== */
+/* ===============================
+   ROLES – ESTILO MAIDO UNIFICADO
+   =============================== */
+
 :host {
   display: block;
+  color: #e5e7eb;
 }
 
-/* Card oscura (lista de roles) */
-.card {
-  background: #0f131a;         /* como neutral-900 pero un poco más suave */
-  color: #fff;
-  border-radius: 16px;
-  box-shadow: 0 10px 24px rgba(0,0,0,.35);
+/* ===== Encabezado de página (fuera de la card) ===== */
+
+.page-header {
+  margin: 0 0 0.9rem;
 }
 
-/* Cabeceras de tabla y bordes */
-th {
-  color: #cbd5e1;               /* gris claro */
-  font-weight: 600;
-}
-tr + tr td {
-  border-top: 1px solid #1f2937; /* neutral-800 */
+.page-title {
+  margin: 0;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #f9fafb;
+  letter-spacing: 0.4px;
+  position: relative;
+  text-shadow: 0 0 14px rgba(0, 0, 0, 0.7);
 }
 
-/* Botones “píldora” */
+.page-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 110px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #C81D25, transparent);
+  opacity: 0.85;
+}
+
+.page-subtitle {
+  margin: 0.7rem 0 0;
+  font-size: 0.95rem;
+  color: #e5e7eb;
+  opacity: 0.9;
+}
+
+/* ---------- CARD LISTA DE ROLES ---------- */
+
+.card.roles-card {
+  background: rgba(15, 18, 25, 0.78);
+  border-radius: 18px;
+  padding: 1.25rem 1.3rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    0 22px 50px rgba(0, 0, 0, 0.55),
+    0 6px 14px rgba(0, 0, 0, 0.30);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Línea roja superior tipo Maido */
+.card.roles-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px -1px auto -1px;
+  height: 3px;
+  background: linear-gradient(90deg, #C81D25, #E23E36 60%, transparent);
+  opacity: .9;
+}
+
+/* ---------- HEADER ---------- */
+
+.roles-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  margin-bottom: .7rem;
+  flex-wrap: wrap;
+}
+
+.roles-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: .15rem;
+}
+
+.card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0;
+  color: #f9fafb;
+}
+
+.card-subtitle {
+  margin: 0;
+  font-size: .82rem;
+  color: #9ca3af;
+}
+
+/* ---------- TABLA ---------- */
+
+.table-wrapper {
+  margin-top: .3rem;
+}
+
+.roles-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .9rem;
+}
+
+.roles-table thead {
+  background: rgba(15, 23, 42, 0.97);
+}
+
+.roles-table th {
+  color: #cbd5e1;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: .75rem;
+  padding: .55rem .6rem;
+}
+
+.roles-table td {
+  padding: .55rem .6rem;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+/* hover filas */
+.roles-table tbody tr {
+  transition: background .12s ease, transform .05s ease;
+}
+
+.roles-table tbody tr:hover td {
+  background: rgba(255,255,255,0.05);
+  transform: translateY(-1px);
+}
+
+/* columna acciones */
+.col-actions {
+  width: 160px;
+  white-space: nowrap;
+}
+
+/* estado vacío / cargando */
+.state-row {
+  padding: .7rem .4rem;
+  font-size: .88rem;
+  color: #9ca3af;
+}
+
+.empty-row {
+  text-align: center;
+  padding: .9rem .5rem;
+  color: #9ca3af;
+}
+
+/* ---------- PÍLDORA DE USUARIOS ASIGNADOS ---------- */
+
+.assigned-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  padding: .18rem .6rem;
+  border-radius: 999px;
+  font-size: .8rem;
+  font-weight: 700;
+  background: rgba(59,130,246,0.18);
+  color: #bfdbfe;
+  border: 1px solid rgba(59,130,246,0.6);
+}
+
+/* ---------- BOTONES PÍLDORA MAIDO ---------- */
+
 .btn {
   border-radius: 999px;
   padding: .55rem 1.1rem;
   font-weight: 600;
-}
-.btn-outline {
-  background: #e5e7eb;
-  color: #111827;
-  border: none;
-}
-.btn-danger {
-  background: #e11d48;          /* rose-600 */
-  color: #fff;
-  border: none;
-}
-.btn-primary {
-  background: linear-gradient(90deg, #2563eb, #1d4ed8);
-  color: #fff;
-  border: none;
-  box-shadow: 0 8px 22px rgba(29,78,216,.35);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform .05s ease, filter .15s ease, box-shadow .15s ease;
+  font-size: .85rem;
 }
 
-/* ====== Modal / Formulario claro ====== */
+.btn-sm {
+  padding: .35rem .8rem;
+  font-size: .78rem;
+}
+
+.btn:active {
+  transform: scale(.97);
+}
+
+/* Principal (Nuevo, Guardar) */
+.btn-primary {
+  background: linear-gradient(90deg, #C81D25, #8B0F1A);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(200, 29, 37, 0.45);
+}
+
+.btn-primary:hover {
+  filter: brightness(1.05);
+}
+
+/* Editar */
+.btn-outline {
+  background: transparent;
+  border-color: rgba(255,255,255,0.25);
+  color: #e5e7eb;
+}
+
+.btn-outline:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+/* Eliminar */
+.btn-danger {
+  background: #b91c1c;
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(185, 28, 28, 0.4);
+}
+
+.btn-danger:hover {
+  filter: brightness(1.07);
+}
+
+/* ==========================
+   MODAL – OSCURO TIPO MAIDO
+   ========================== */
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.5);
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 50;
+  z-index: 9999;
 }
 
+/* Panel del modal */
 .modal-panel {
   width: 100%;
   max-width: 520px;
-  background: #ffffff;          /* panel claro */
-  color: #0f172a;               /* texto oscuro */
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0 20px 50px rgba(0,0,0,.35);
+  background: rgba(15,18,25,0.9);
+  color: #e5e7eb;
+  border-radius: 18px;
+  padding: 1.4rem 1.5rem 1.1rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.55),
+    0 12px 26px rgba(0,0,0,0.35);
+  position: relative;
+  overflow: hidden;
 }
 
-/* Etiquetas e inputs con alto contraste */
-label {
+/* Línea roja en el modal */
+.modal-panel::before {
+  content: "";
+  position: absolute;
+  inset: -1px -1px auto -1px;
+  height: 3px;
+  background: linear-gradient(90deg, #C81D25, #8B0F1A 60%, transparent);
+}
+
+/* header modal */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  margin-bottom: .7rem;
+}
+
+.modal-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* botón cerrar */
+.modal-close {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: .15rem .25rem;
+  border-radius: 999px;
+}
+
+.modal-close:hover {
+  background: rgba(148,163,184,0.2);
+  color: #e5e7eb;
+}
+
+/* formulario dentro del modal */
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+
+.modal-panel label {
   display: block;
-  margin-bottom: .35rem;
-  font-size: .875rem;
-  color: #0f172a;
+  font-size: .85rem;
   font-weight: 600;
+  color: #e5e7eb;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
-select,
-textarea {
+/* Inputs dentro del modal */
+.modal-panel input[type="text"],
+.modal-panel select,
+.modal-panel textarea {
   width: 100%;
-  border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  padding: .65rem .85rem;
-  background: #ffffff;
-  color: #0f172a;
-  transition: box-shadow .2s ease, border-color .2s ease;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: #6b7280; /* gris medio */
-}
-
-input:focus,
-select:focus,
-textarea:focus {
+  border-radius: 12px;
+  border: 1px solid rgba(148,163,184,0.45);
+  padding: .6rem .85rem;
+  background: rgba(15,23,42,0.95);
+  color: #e5e7eb;
+  font-size: .9rem;
   outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, .15);
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.modal-panel input::placeholder,
+.modal-panel textarea::placeholder {
+  color: #94a3b8;
+}
+
+.modal-panel input:focus,
+.modal-panel select:focus,
+.modal-panel textarea:focus {
+  border-color: #C81D25;
+  box-shadow: 0 0 0 3px rgba(200,29,37,0.35);
 }
 
 /* Footer del modal */
@@ -105,8 +353,11 @@ textarea:focus {
   display: flex;
   justify-content: flex-end;
   gap: .5rem;
-  margin-top: .75rem;
+  margin-top: .9rem;
 }
 
-/* Utilidades pequeñas */
-.text-muted { color: #64748b; }
+/* Texto suave opcional */
+.text-muted {
+  color: #9ca3af;
+  font-size: .8rem;
+}

@@ -1,4 +1,5 @@
 <div class="page">
+  <!-- HEADER PRINCIPAL -->
   <header class="header">
     <h1>Historial de clientes</h1>
 
@@ -8,19 +9,41 @@
         class="search"
         type="text"
         placeholder="Buscar por observación, reserva o cliente..."
-        [(ngModel)]="q" />
+        [(ngModel)]="q"
+        aria-label="Buscar en el historial de clientes" />
 
       <!-- BOTONES DE FILTRO -->
-      <button class="pill ghost" (click)="setFiltroFecha('hoy')">Hoy</button>
-      <button class="pill ghost" (click)="setFiltroFecha('ayer')">Ayer</button>
-      <button class="pill ghost" (click)="setFiltroFecha('semana')">Esta semana</button>
+      <button
+        type="button"
+        class="pill ghost"
+        [class.active]="filtroFecha === 'hoy'"
+        (click)="setFiltroFecha('hoy')">
+        Hoy
+      </button>
+
+      <button
+        type="button"
+        class="pill ghost"
+        [class.active]="filtroFecha === 'ayer'"
+        (click)="setFiltroFecha('ayer')">
+        Ayer
+      </button>
+
+      <button
+        type="button"
+        class="pill ghost"
+        [class.active]="filtroFecha === 'semana'"
+        (click)="setFiltroFecha('semana')">
+        Esta semana
+      </button>
 
       <!-- Calendario -->
       <input
         type="date"
+        class="pill"
         [(ngModel)]="fechaSeleccionada"
         (change)="onFechaChange()"
-        class="pill" />
+        aria-label="Filtrar por fecha específica" />
     </div>
   </header>
 
@@ -29,12 +52,13 @@
     {{ error }}
   </section>
 
+  <!-- LAYOUT PRINCIPAL -->
   <section class="layout">
     <!-- LISTA -->
     <div class="panel list-panel">
       <div class="panel-header">
         <h2>Registros</h2>
-        <span *ngIf="cargando" class="badge">Cargando...</span>
+        <span *ngIf="cargando" class="badge">Cargando…</span>
       </div>
 
       <div class="table-wrapper">
@@ -42,40 +66,48 @@
           <thead>
             <tr>
               <th>ID</th>
-              <th>FECHA REGISTRO</th>
-              <th>OBSERVACIONES</th>
-              <th>CLIENTE</th>
-              <th class="col-actions">ACCIONES</th>
+              <th>Fecha registro</th>
+              <th class="col-observaciones">Observaciones</th>
+              <th>Cliente</th>
+              <th class="col-actions">Acciones</th>
             </tr>
           </thead>
 
           <tbody>
             <tr *ngFor="let h of listaFiltrada">
               <td>{{ h.id }}</td>
-              <td>{{ h.fechaVisita | date : 'yyyy-MM-dd' }}</td>
-              <td>{{ h.observaciones || '-' }}</td>
+              <td>{{ h.fechaVisita | date:'yyyy-MM-dd' }}</td>
+              <td class="col-observaciones">{{ h.observaciones || '-' }}</td>
               <td>{{ getNombreReserva(h) }}</td>
 
               <td class="col-actions">
-                <button type="button" class="btn small" (click)="editar(h)">
+                <button
+                  type="button"
+                  class="btn small"
+                  (click)="editar(h)">
                   Editar
                 </button>
 
-                <button type="button" class="btn small danger" (click)="eliminar(h)">
+                <button
+                  type="button"
+                  class="btn small danger"
+                  (click)="eliminar(h)">
                   Eliminar
                 </button>
               </td>
             </tr>
 
             <tr *ngIf="!cargando && listaFiltrada.length === 0">
-              <td colspan="5" class="empty">No hay registros para mostrar.</td>
+              <td colspan="5" class="empty">
+                No hay registros para mostrar.
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- FORMULARIO -->
+    <!-- FORMULARIO LATERAL -->
     <div class="panel form-panel">
       <div class="panel-header">
         <h2>{{ editId ? 'Editar historial' : 'Nuevo historial' }}</h2>
@@ -84,7 +116,7 @@
       <form #f="ngForm" (ngSubmit)="guardarHistorial()">
         <!-- FECHA -->
         <div class="form-group">
-          <label for="fechaVisita">Fecha de Registro</label>
+          <label for="fechaVisita">Fecha de registro</label>
           <input
             id="fechaVisita"
             name="fechaVisita"
@@ -103,7 +135,7 @@
             required>
             <option value="">-- Selecciona una reserva --</option>
             <option *ngFor="let r of reservas" [value]="r.id">
-              {{ r.nombreCompleto }} 
+              {{ r.nombreCompleto }}
             </option>
           </select>
         </div>
@@ -129,14 +161,17 @@
             {{ editId ? 'Actualizar' : 'Registrar' }}
           </button>
 
-          <button type="button" class="btn ghost" (click)="limpiarForm()">
+          <button
+            type="button"
+            class="btn ghost"
+            (click)="limpiarForm()">
             Limpiar
           </button>
 
           <button
             *ngIf="editId"
             type="button"
-            class="btn warn"
+            class="btn danger small"
             (click)="cancelarEdicion()">
             Cancelar edición
           </button>

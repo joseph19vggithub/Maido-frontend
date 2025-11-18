@@ -1,97 +1,402 @@
-/* ---------- Card y tabla ---------- */
-.card {
-  background: #0f1115;
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 14px;
-  padding: 1.2rem;
-  color: #e5e7eb;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+/* ============================
+   PEDIDOS – ESTILO MAIDO
+   ============================ */
+
+:host {
+  --primary:       #C81D25;
+  --primary-dark:  #8B0F1A;
+  --accent:        #FFB703;
+  --panel:         #0f1115;
+  --panel-soft:    rgba(15, 18, 25, 0.78);
+  --stroke-soft:   rgba(255,255,255,0.08);
+  --text-main:     #e5e7eb;
+  --muted:         #94a3b8;
 }
 
-.card-header { gap: .5rem; }
+/* ===== Encabezado de página (fuera de la card) ===== */
+
+.page-header {
+  margin-bottom: 0.9rem;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #f9fafb;
+  letter-spacing: 0.4px;
+  position: relative;
+  text-shadow: 0 0 14px rgba(0,0,0,0.7);
+}
+
+.page-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 90px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #C81D25, transparent);
+  opacity: 0.85;
+}
+
+.page-subtitle {
+  margin: 0.7rem 0 0;
+  font-size: 0.95rem;
+  color: #e5e7eb;
+  opacity: 0.9;
+}
+
+/* ---------- Card ---------- */
+
+.card {
+  background: var(--panel-soft);
+  border: 1px solid var(--stroke-soft);
+  border-radius: 18px;
+  padding: 1.25rem 1.35rem 1.3rem;
+  color: var(--text-main);
+  box-shadow:
+    0 22px 50px rgba(0,0,0,0.55),
+    0 6px 14px rgba(0,0,0,0.30);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* línea roja superior tipo Maido */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: -1px -1px auto -1px;
+  height: 3px;
+  background: linear-gradient(90deg, #C81D25, #E23E36 55%, transparent);
+  opacity: 0.9;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+}
+
+.card-body {
+  padding-top: 0.35rem;
+}
+
+/* contenedor de chips */
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* empujar fecha al extremo derecho */
 .date-input {
-  background: #0b1324; color: #e5e7eb; border: 1px solid rgba(255,255,255,.18);
-  padding: 6px 10px; border-radius: 8px;
+  margin-left: auto;
+}
+
+/* Input de fecha tipo pill */
+.date-input {
+  background: rgba(15, 23, 42, 0.95);
+  color: var(--text-main);
+  border: 1px solid rgba(148,163,184,0.45);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: .9rem;
+  outline: none;
+  min-width: 145px;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.date-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255,183,3,0.25);
+}
+
+/* ---------- Tabla ---------- */
+
+.table-responsive {
+  margin-top: 0.1rem;
 }
 
 .table {
-  width: 100%; border-collapse: collapse; font-size: .95rem;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .93rem;
 }
-.table th, .table td {
-  padding: .6rem .8rem; border-bottom: 1px solid rgba(255,255,255,.06);
-}
-.table th { color: #cbd5e1; text-transform: uppercase; font-size: .78rem; }
-.table tr:hover td { background: rgba(255,255,255,.04); }
 
-/* Chips superiores */
+.table-darkish thead {
+  background: radial-gradient(circle at top left,
+              rgba(200, 29, 37, 0.22),
+              rgba(15, 23, 42, 0.98));
+}
+
+.table th,
+.table td {
+  padding: .6rem .8rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.table th {
+  color: #cfd8e3;
+  text-transform: none;
+  font-size: .80rem;
+  font-weight: 700;
+}
+
+/* hover + pequeña animación filas */
+.table tbody tr {
+  transition: background 0.12s ease, transform 0.05s ease;
+}
+
+.table tbody tr:hover td {
+  background: rgba(255,255,255,0.06);
+  transform: translateY(-1px);
+}
+
+/* filas de estado (cargando / sin pedidos) */
+.state-row td {
+  text-align: center;
+  color: var(--muted);
+}
+
+/* columna acciones un poco más angosta */
+.col-acciones {
+  width: 150px;
+}
+
+/* ---------- Chips superiores (filtros) ---------- */
+
 .chip {
-  background: rgba(255,255,255,0.08);
-  color: #e2e8f0;
-  border: 1px solid rgba(255,255,255,0.15);
-  padding: 6px 12px; border-radius: 999px; cursor: pointer; transition: .2s;
+  border-radius: 999px;
+  border: 1px solid rgba(148,163,184,0.5);
+  background: rgba(15, 23, 42, 0.95);
+  color: #e5e7eb;
+  padding: 6px 14px;
+  font-size: .9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.05s ease,
+    color 0.15s ease;
 }
-.chip.active, .chip:hover { background: rgba(255,255,255,0.18); }
 
-/* Estado */
-.tag { display:inline-block; padding:4px 10px; border-radius:999px; font-weight:600; text-transform:capitalize; font-size:.82rem; }
+.chip:hover {
+  background: rgba(30, 64, 175, 0.9);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.9);
+  transform: translateY(-1px);
+}
+
+/* Chip seleccionado */
+.chip.active {
+  border-color: transparent;
+  background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(200,29,37,0.45);
+}
+
+/* ---------- Estado ---------- */
+
+.tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  text-transform: capitalize;
+  font-size: .82rem;
+}
+
 .tag.pendiente  { background:#ffb300; color:#1e1e1e; }
 .tag.en_proceso { background:#60a5fa; color:#0b1220; }
 .tag.listo      { background:#34d399; color:#0b1220; }
 .tag.entregado  { background:#cbd5e1; color:#0b1220; }
 
-.acciones-td .btn { margin-right: 6px; }
+/* ---------- Botones de acciones en la tabla ---------- */
 
-/* ---------- MODAL ---------- */
+.acciones-td {
+  white-space: nowrap;
+}
+
+.acciones-td .btn {
+  margin-right: 6px;
+}
+
+/* pill chiquito */
+.btn.btn-xs {
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.78rem;
+  border: 1px solid rgba(148,163,184,0.45);
+  background: rgba(15,23,42,0.9);
+  color: #e5e7eb;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.05s, box-shadow 0.15s, filter 0.1s;
+}
+
+.btn.btn-xs:hover {
+  background: rgba(30, 64, 175, 0.9);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.9);
+  transform: translateY(-1px);
+}
+
+.btn.btn-xs.danger {
+  border-color: transparent;
+  background: linear-gradient(90deg, #ef4444, #b91c1c);
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(239, 68, 68, 0.45);
+}
+
+/* ============================
+   MODAL MAIDO
+   ============================ */
+
 .backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.55);
+  background: rgba(15, 23, 42, 0.78);
   display: grid;
   place-items: center;
-  z-index: 9999;            /* clave para ir encima de todo */
+  z-index: 9999;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   animation: fadeIn .18s ease-out;
 }
 
 .dialog {
   width: 520px;
   max-width: 92vw;
-  background: #0f172a;
+  background: rgba(15, 23, 42, 0.92);
   color: #e2e8f0;
   border: 1px solid rgba(255,255,255,.12);
-  border-radius: 14px;
-  padding: 16px;
-  box-shadow: 0 18px 48px rgba(0,0,0,.4);
+  border-radius: 16px;
+  padding: 18px 18px 16px;
+  box-shadow: 0 24px 60px rgba(0,0,0,.55);
   animation: pop .18s ease-out;
 }
 
 .dialog-head {
-  display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
 }
-.dialog-head .title { margin:0; font-size:1.05rem; font-weight:700; }
-.icon-close { background:transparent; border:0; color:#94a3b8; font-size:20px; cursor:pointer; }
+
+.dialog-head .title {
+  margin:0;
+  font-size:1.05rem;
+  font-weight:700;
+}
+
+.icon-close {
+  background:transparent;
+  border:0;
+  color:#94a3b8;
+  font-size:20px;
+  cursor:pointer;
+}
 .icon-close:hover { color:#e2e8f0; }
 
-/* Form */
-.grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.field { display:flex; flex-direction:column; gap:6px; }
-.field span { font-size:.85rem; color:#cbd5e1; }
+/* ---------- Formulario dentro del modal ---------- */
 
-input[type="date"], input[type="number"], select {
-  background:#0b1324; color:#e5e7eb;
-  border:1px solid rgba(255,255,255,.18);
-  border-radius:10px; padding:8px 10px; outline:none;
+.grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
 }
 
-.actions { display:flex; justify-content:flex-end; gap:10px; margin-top:14px; }
-.btn { padding:8px 14px; border-radius:999px; border:1px solid transparent; cursor:pointer; }
-.btn.primary { background:#2563eb; color:#fff; }
-.btn.ghost { background:transparent; color:#e2e8f0; border-color:rgba(255,255,255,.2); }
-.btn:hover { filter:brightness(1.05); }
+.field {
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.field span {
+  font-size:.85rem;
+  color:#cbd5e1;
+}
+
+input[type="date"],
+input[type="number"],
+select {
+  background:rgba(15,23,42,.95);
+  color:#e5e7eb;
+  border:1px solid rgba(148,163,184,.45);
+  border-radius:12px;
+  padding:8px 10px;
+  outline:none;
+  transition:border-color .2s, box-shadow .2s;
+}
+
+input[type="date"]:focus,
+input[type="number"]:focus,
+select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(200,29,37,.30);
+}
+
+/* Botones del modal */
+.actions {
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:14px;
+}
+
+.btn {
+  padding:8px 14px;
+  border-radius:999px;
+  border:1px solid rgba(148,163,184,.35);
+  cursor:pointer;
+  background:rgba(15,23,42,.8);
+  color:#e5e7eb;
+  font-weight:600;
+  transition:background .15s, transform .05s, box-shadow .15s, filter .15s;
+}
+
+.btn.primary {
+  border-color: transparent;
+  background: linear-gradient(90deg,var(--primary),var(--primary-dark));
+  color:#fff;
+  box-shadow: 0 10px 24px rgba(200,29,37,.45);
+}
+
+.btn.ghost {
+  background: transparent;
+  border-color: rgba(148,163,184,.45);
+}
+
+.btn:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
 
 /* Animaciones */
-@keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
-@keyframes pop { from { opacity:0; transform:scale(.98) } to { opacity:1; transform:scale(1) } }
+@keyframes fadeIn {
+  from { opacity:0; }
+  to   { opacity:1; }
+}
+
+@keyframes pop {
+  from { opacity:0; transform:scale(.98); }
+  to   { opacity:1; transform:scale(1); }
+}
 
 @media (max-width: 600px) {
   .grid { grid-template-columns:1fr; }
+
+  .card-header {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .date-input {
+    margin-left: 0;
+    margin-top: 0.4rem;
+  }
 }

@@ -1,8 +1,13 @@
+<!-- ✅ Encabezado de página (como Reserva Mesa) -->
+<div class="page-header">
+  <h2 class="page-title">Reservas</h2>
+  <p class="page-subtitle">Gestión de las reservas del restaurante</p>
+</div>
+
+<!-- ✅ Card de filtros + tabla -->
 <div class="card">
   <div class="card-header d-flex align-items-center gap-2">
-    <h5 class="m-0">Reservas</h5>
-
-    <div class="ms-3 d-flex gap-2">
+    <div class="d-flex gap-2">
       <button class="chip" [class.active]="filtro==='hoy'" (click)="setFiltro('hoy')">Hoy</button>
       <button class="chip" [class.active]="filtro==='ayer'" (click)="setFiltro('ayer')">Ayer</button>
       <button class="chip" [class.active]="filtro==='semana'" (click)="setFiltro('semana')">Esta semana</button>
@@ -13,7 +18,7 @@
       type="date"
       [value]="fechaBase"
       (change)="fechaBase = $any($event.target).value; setFechaBase()"
-      class="ms-auto"
+      class="ms-auto date-input"
     />
   </div>
 
@@ -64,6 +69,7 @@
     </div>
   </div>
 </div>
+
 <!-- Modal para editar reserva -->
 <div class="modal-backdrop" *ngIf="mostrarModal">
   <div class="modal">

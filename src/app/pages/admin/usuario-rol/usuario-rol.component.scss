@@ -1,11 +1,228 @@
-.card {
-  background: #0f172a;
-  color: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+/* ==========================================
+   USUARIO – ROL  |  ESTILO MAIDO OFICIAL
+   ========================================== */
+
+:host {
+  display: block;
+  color: #e5e7eb;
 }
-h2 {
-  margin-bottom: 12px;
-  color: #f43f5e;
+
+/* ======================
+   HEADER DE PÁGINA
+   ====================== */
+
+.page-header {
+  margin: 0 0 0.9rem;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #f9fafb;
+  letter-spacing: 0.4px;
+  position: relative;
+  text-shadow: 0 0 14px rgba(0, 0, 0, 0.7);
+}
+
+.page-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 130px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #C81D25, transparent);
+  opacity: 0.85;
+}
+
+.page-subtitle {
+  margin: 0.7rem 0 0;
+  font-size: 0.95rem;
+  color: #e5e7eb;
+  opacity: 0.9;
+}
+
+/* ======================
+   CARDS PRINCIPALES
+   ====================== */
+
+.card.usuario-rol-card {
+  background: rgba(15, 18, 25, 0.78);  /* vidrio oscuro */
+  border-radius: 18px;
+  padding: 1.25rem 1.3rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    0 22px 50px rgba(0,0,0,.55),
+    0 6px 14px rgba(0,0,0,.30);
+  position: relative;
+  overflow: hidden;
+  margin: 0 0 12px;
+}
+
+/* separa un poco entre la primera y la segunda card */
+.card.usuario-rol-card + .card.usuario-rol-card {
+  margin-top: 6px;
+}
+
+/* Línea roja MAIDO superior */
+.card.usuario-rol-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px -1px auto -1px;
+  height: 3px;
+  background: linear-gradient(90deg, #C81D25, #E23E36 60%, transparent);
+}
+
+/* separa un poquito el contenido del borde superior */
+.form-row {
+  row-gap: .75rem;
+}
+
+/* ======================
+   FORMULARIO
+   ====================== */
+
+label,
+.form-label {
+  color: #cbd5e1;
+  font-size: .85rem;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.form-control,
+input.form-control {
+  background: rgba(15,23,42,0.88);
+  color: #e5e7eb;
+  border: 1px solid rgba(148,163,184,0.45);
+  border-radius: 12px;
+  padding: .55rem .85rem;
+  outline: none;
+  font-size: .9rem;
+}
+
+.form-control::placeholder {
+  color: #94a3b8;
+}
+
+.form-control:focus,
+input.form-control:focus {
+  border-color: #C81D25;
+  box-shadow: 0 0 0 3px rgba(200,29,37,.35);
+}
+
+/* Grupo de botones */
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: .2rem;
+}
+
+/* ======================
+   TABLA
+   ====================== */
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #e5e7eb;
+  font-size: .92rem;
+}
+
+/* quitar el blanco de .table-light de bootstrap */
+.table thead.table-light th {
+  background: rgba(15,23,42,0.98);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.table th {
+  padding: .6rem .65rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  text-transform: uppercase;
+  font-size: .75rem;
+}
+
+.table td {
+  padding: .55rem .65rem;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.table tbody tr {
+  transition: background .12s ease, transform .05s ease;
+}
+
+.table tr:hover td {
+  background: rgba(255,255,255,0.05);
+  transform: translateY(-1px);
+}
+
+/* No datos */
+.text-center {
+  padding: .8rem;
+  color: #94a3b8;
+}
+
+/* ======================
+   BOTONES MAIDO
+   ====================== */
+
+.btn {
+  border-radius: 999px;
+  padding: .48rem 1rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform .05s ease, filter .15s ease, box-shadow .15s ease;
+  font-size: .86rem;
+}
+
+.btn:active {
+  transform: scale(.97);
+}
+
+/* Registrar / Guardar */
+.btn-primary {
+  background: linear-gradient(90deg, #2563eb, #1d4ed8);
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(29,78,216,.35);
+}
+
+/* Actualizar */
+.btn-success {
+  background: #16a34a;
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(22,163,74,.35);
+}
+
+/* Eliminar */
+.btn-danger {
+  background: #b91c1c;
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(185,28,28,.35);
+}
+
+/* Limpiar */
+.btn-secondary {
+  background: rgba(255,255,255,0.08);
+  color: #e5e7eb;
+  border: 1px solid rgba(255,255,255,.15);
+}
+
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.16);
+}
+
+/* responsive: que los botones bajen en pantallas chicas */
+@media (max-width: 768px) {
+  .form-actions {
+    justify-content: flex-start;
+  }
 }

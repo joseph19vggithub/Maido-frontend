@@ -14,9 +14,15 @@ import { ReservaCreate } from '../../models/reserva.model';
 export class ReservaComponent implements AfterViewInit {
   errores: { [key: string]: string } = {};
 
+  // 🤖 IA
+  iaSugerenciaExperiencia: string = '';
+  iaAlertaAlergia: string = '';
+
   constructor(private router: Router, private reservaSvc: ReservaService) {}
 
-  ngAfterViewInit() { this.setMinDate(); }
+  ngAfterViewInit() {
+    this.setMinDate();
+  }
 
   private setMinDate() {
     const inputFecha = document.querySelector('#fecha') as HTMLInputElement;
@@ -29,6 +35,125 @@ export class ReservaComponent implements AfterViewInit {
     }
   }
 
+  // 🔹 Se ejecuta cuando cambia número de personas o comentarios
+  onCambioContextoIA(): void {
+    const personasStr = (document.querySelector('#personas') as HTMLInputElement)?.value || '0';
+    const personas = Number(personasStr);
+    const comentarioRaw =
+      (document.querySelector('#mensaje') as HTMLTextAreaElement)?.value || '';
+    const comentario = comentarioRaw.toLowerCase();
+
+    // IA 1: sugerencia de experiencia
+    this.iaSugerenciaExperiencia = this.calcularSugerenciaExperiencia(personas, comentario);
+
+    // IA 2: detección de alergias
+    const alergiasDetectadas = this.detectarAlergias(comentario);
+    if (alergiasDetectadas.length > 0) {
+      this.iaAlertaAlergia =
+        'Detectamos posible(s) alergia(s): ' +
+        alergiasDetectadas.join(', ') +
+        '. Nuestro equipo tomará precauciones especiales.';
+    } else {
+      this.iaAlertaAlergia = '';
+    }
+  }
+
+  // 🤖 Regla simple para sugerir experiencia según personas + ocasión
+  private calcularSugerenciaExperiencia(personas: number, comentario: string): string {
+    if (!personas || personas <= 0) return '';
+
+    const esCumple =
+      comentario.includes('cumple') || comentario.includes('birthday');
+    const esAniversario =
+      comentario.includes('aniversario') || comentario.includes('aniver');
+    const esRomantico =
+      comentario.includes('románt') ||
+      comentario.includes('romant') ||
+      comentario.includes('pareja') ||
+      comentario.includes('novios');
+    const esNegocios =
+      comentario.includes('negocio') ||
+      comentario.includes('empresa') ||
+      comentario.includes('reunión') ||
+      comentario.includes('reunion') ||
+      comentario.includes('trabajo');
+
+    // 1-2 personas
+    if (personas <= 2) {
+      if (esRomantico || esAniversario) {
+        return 'Para una ocasión especial en pareja te recomendamos una experiencia de maridaje Nikkei para 2 personas.';
+      }
+      return 'Para 1 o 2 personas te sugerimos una experiencia de maridaje Nikkei en barra o en mesa, ideal para disfrutar del chef.';
+    }
+
+    // 3 a 5 personas
+    if (personas >= 3 && personas <= 5) {
+      if (esCumple) {
+        return 'Para un cumpleaños en grupo pequeño te recomendamos una experiencia de degustación Nikkei con varios tiempos para compartir.';
+      }
+      if (esNegocios) {
+        return 'Para reuniones de negocios te sugerimos una experiencia de degustación formal, con tiempos equilibrados y maridaje ligero.';
+      }
+      return 'Para grupos de 3 a 5 personas te recomendamos una experiencia de degustación Nikkei para compartir diferentes platos.';
+    }
+
+    // 6 o más personas
+    if (personas >= 6) {
+      if (esCumple || esAniversario) {
+        return 'Para celebraciones con grupos grandes te recomendamos un menú degustación completo, ideal para eventos especiales.';
+      }
+      return 'Para 6 o más personas te sugerimos un menú degustación pensado para grupos, optimizando tiempos de servicio y variedad de platos.';
+    }
+
+    return '';
+  }
+
+  // 🤖 Buscar palabras clave de alergias en el comentario
+  private detectarAlergias(texto: string): string[] {
+    if (!texto) return [];
+
+    const posiblesAlergenos = [
+      'marisco',
+      'mariscos',
+      'camarón',
+      'camaron',
+      'langostino',
+      'pulpo',
+      'calamar',
+      'pescado',
+      'atún',
+      'atun',
+      'huevo',
+      'huevos',
+      'leche',
+      'lactosa',
+      'mantequilla',
+      'queso',
+      'gluten',
+      'trigo',
+      'pan',
+      'cebada',
+      'soya',
+      'soja',
+      'maní',
+      'mani',
+      'nuez',
+      'nueces',
+      'almendra',
+      'almendras',
+      'frutos secos',
+      'fruto seco'
+    ];
+
+    const encontrados: string[] = [];
+    for (const alergeno of posiblesAlergenos) {
+      if (texto.includes(alergeno) && !encontrados.includes(alergeno)) {
+        encontrados.push(alergeno);
+      }
+    }
+    return encontrados;
+  }
+
   confirmarReserva(event: Event) {
     event.preventDefault();
     this.errores = {};
@@ -37,7 +162,9 @@ export class ReservaComponent implements AfterViewInit {
     const correoElectronico = (document.querySelector('#email') as HTMLInputElement)?.value.trim();
     const telefono = (document.querySelector('#telefono') as HTMLInputElement)?.value.trim();
     const dni = (document.querySelector('#dni') as HTMLInputElement)?.value.trim();
-    const cantidadPersonas = Number((document.querySelector('#personas') as HTMLInputElement)?.value);
+    const cantidadPersonas = Number(
+      (document.querySelector('#personas') as HTMLInputElement)?.value
+    );
     const fecha = (document.querySelector('#fecha') as HTMLInputElement)?.value;      // yyyy-MM-dd
     const horaHHmm = (document.querySelector('#hora') as HTMLInputElement)?.value;    // HH:mm
     const notas = (document.querySelector('#mensaje') as HTMLTextAreaElement)?.value.trim();

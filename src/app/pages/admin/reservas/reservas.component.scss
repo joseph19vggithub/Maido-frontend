@@ -1,90 +1,341 @@
-/* Fondo oscuro que cubre toda la pantalla */
+/* ============================
+   VARIABLES MAIDO
+   ============================ */
+:host {
+  --primary:       #C81D25;
+  --primary-dark:  #8B0F1A;
+  --accent:        #FFB703;
+  --chip-bg:       rgba(15, 23, 42, 0.95);
+  --chip-border:   rgba(148, 163, 184, 0.5);
+  --chip-text:     #e5e7eb;
+  --muted:         #94a3b8;
+}
+
+/* ============================
+   ENCABEZADO DE PÁGINA (Título)
+   ============================ */
+
+.page-header {
+  margin-bottom: 0.5rem;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #f9fafb;
+  letter-spacing: 0.4px;
+  position: relative;
+  display: inline-block;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
+}
+
+/* Línea roja bajo el título */
+.page-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 95px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary), transparent);
+}
+
+.page-subtitle {
+  margin-top: 0.85rem;
+  font-size: 0.96rem;
+  color: #cbd5e1;
+}
+
+/* ============================
+   CARD PRINCIPAL — Glass Effect
+   ============================ */
+
+.card {
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 1.8rem 2rem 2rem;
+  margin-top: 0.9rem;
+  margin-bottom: 2.4rem;
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.28),
+    0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+/* ============================
+   CARD HEADER (Filtros)
+   ============================ */
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  margin-bottom: 0.9rem;
+}
+
+/* ============================
+   CHIPS — (Hoy / Ayer / Semana)
+   ============================ */
+
+.chip {
+  border-radius: 999px;
+  border: 1px solid var(--chip-border);
+  background: var(--chip-bg);
+  color: var(--chip-text);
+  padding: 7px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.06s ease,
+    color 0.18s ease;
+}
+
+.chip:hover {
+  background: rgba(30, 64, 175, 0.95);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
+  transform: translateY(-1px);
+}
+
+.chip.active {
+  background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 12px 28px rgba(200, 29, 37, 0.55);
+}
+
+/* ============================
+   INPUT TIPO FECHA
+   ============================ */
+
+.date-input {
+  background: rgba(15, 23, 42, 0.75);
+  color: var(--chip-text);
+  border: 1px solid var(--chip-border);
+  border-radius: 999px;
+  padding: 7px 18px;
+  font-size: 0.9rem;
+  min-width: 165px;
+
+  backdrop-filter: blur(6px);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.date-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 183, 3, 0.25);
+}
+
+/* ============================
+   ESTADOS
+   ============================ */
+
+.text-danger,
+.text-muted {
+  font-size: 0.96rem;
+}
+
+/* ============================
+   TABLA — estilo Maido
+   ============================ */
+
+.table-responsive {
+  margin-top: 0.5rem;
+}
+
+table thead th {
+  color: #e2e8f0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  font-weight: 600;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* Aparición suave */
+tbody tr {
+  animation: fadeRow 0.25s ease-out;
+  animation-fill-mode: both;
+}
+
+@keyframes fadeRow {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover fila */
+tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+table td {
+  color: #d1d5db;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* ============================
+   BOTONES TABLA
+   ============================ */
+
+.btn-sm {
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #2563eb, #1d4ed8);
+  border: none;
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.55);
+}
+
+.btn-primary:hover {
+  filter: brightness(1.07);
+  transform: translateY(-1px);
+}
+
+.btn-danger {
+  background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+  border: none;
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(200, 29, 37, 0.55);
+}
+
+.btn-danger:hover {
+  filter: brightness(1.07);
+  transform: translateY(-1px);
+}
+
+/* ============================
+   MODAL — Glass effect
+   ============================ */
+
 .modal-backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(15, 23, 42, 0.8); /* tono oscuro */
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 999;
+}
+
+.modal {
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  width: min(420px, 92vw);
+  padding: 24px 22px 20px;
+
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 0 25px rgba(0, 0, 0, 0.4),
+    0 24px 50px rgba(0, 0, 0, 0.55);
+
+  animation: modalFade 0.25s ease;
+}
+
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #fff;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  background: rgba(30, 41, 59, 0.65);
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 9px 12px;
+  color: #fff;
   backdrop-filter: blur(4px);
 }
 
-/* Ventanita centrada */
-.modal {
-  background: #0f172a;
-  color: #e5e7eb;
-  padding: 24px;
-  border-radius: 12px;
-  width: 420px;
-  border: 1px solid #1e293b;
-  box-shadow: 0 0 25px rgba(0,0,0,0.4);
-  animation: aparecer 0.2s ease-in-out;
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(200, 29, 37, 0.35);
 }
 
-/* Animación suave */
-@keyframes aparecer {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-/* Inputs */
-.form-group {
-  margin-bottom: 14px;
-
-  label {
-    display: block;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-
-  input, textarea {
-    width: 100%;
-    background: #1e293b;
-    color: #fff;
-    border: 1px solid #334155;
-    border-radius: 6px;
-    padding: 8px;
-    font-weight: 600;
-  }
-
-  input:focus, textarea:focus {
-    outline: none;
-    border-color: #f472b6; /* color rosado Maido */
-  }
-}
-
-/* Botones dentro del modal */
 .acciones {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-}
-
-.btn-primary {
-  background: #f472b6;
-  border: none;
-  color: #fff;
-  font-weight: 700;
-  border-radius: 6px;
-  padding: 6px 12px;
-}
-
-.btn-primary:hover {
-  background: #ec4899;
+  margin-top: 6px;
 }
 
 .btn-secondary {
-  background: #1e293b;
-  color: #e5e7eb;
+  background: rgba(30, 41, 59, 0.65);
   border: 1px solid #334155;
-  border-radius: 6px;
-  padding: 6px 12px;
+  color: #e5e7eb;
+  border-radius: 999px;
+  padding: 8px 18px;
 }
 
 .btn-secondary:hover {
-  background: #334155;
+  background: rgba(51, 65, 85, 0.75);
+  transform: translateY(-1px);
+}
+
+/* ============================
+   RESPONSIVE
+   ============================ */
+
+@media (max-width: 768px) {
+  .card {
+    padding: 1.3rem 1.2rem 1.5rem;
+    margin-top: 1.4rem;
+  }
+
+  .card-header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .date-input {
+    margin-top: 0.45rem;
+    width: 100%;
+  }
 }

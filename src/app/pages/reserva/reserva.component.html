@@ -39,7 +39,15 @@
       <div class="form-row">
         <div class="form-group">
           <label for="personas">Número de personas</label>
-          <input type="number" id="personas" min="1" max="10" placeholder="Entre 1 y 10" required />
+          <input
+            type="number"
+            id="personas"
+            min="1"
+            max="10"
+            placeholder="Entre 1 y 10"
+            required
+            (input)="onCambioContextoIA()"
+          />
           <p class="error-msg" *ngIf="errores['personas']">{{ errores['personas'] }}</p>
         </div>
 
@@ -59,7 +67,29 @@
       <!-- 💬 Comentarios -->
       <div class="form-group">
         <label for="mensaje">Comentarios</label>
-        <textarea id="mensaje" rows="3" placeholder="Ej.alergias o indicaciones especiales"></textarea>
+        <textarea
+          id="mensaje"
+          rows="3"
+          placeholder="Ej.alergias o indicaciones especiales"
+          (input)="onCambioContextoIA()"
+        ></textarea>
+      </div>
+
+      <!-- 🤖 IA: sugerencia de experiencia + alergias -->
+      <div class="ia-wrapper">
+        <div class="ia-box" *ngIf="iaSugerenciaExperiencia">
+          <div class="ia-icon">🤖</div>
+          <p class="ia-text">
+            {{ iaSugerenciaExperiencia }}
+          </p>
+        </div>
+
+        <div class="ia-box alert" *ngIf="iaAlertaAlergia">
+          <div class="ia-icon">⚠️</div>
+          <p class="ia-text">
+            {{ iaAlertaAlergia }}
+          </p>
+        </div>
       </div>
 
       <!-- 🔘 Botón de envío -->

@@ -1,33 +1,181 @@
-<div class="card" style="margin-bottom:14px;">
-  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-    <button class="btn primary">Esta semana</button>
-    <button class="btn">Hoy</button>
-    <button class="btn">Ayer</button>
-    <button class="btn">Semana pasada</button>
-    <button class="btn">Mes actual</button>
-    <span style="margin-left:auto;color:#64748b">Fecha</span>
-    <input type="date" />
+<div class="dashboard">
+
+  <!-- 🔹 Filtros de fecha dentro de una card -->
+  <div class="card filters-card">
+    <div class="filters-row">
+      <div class="filters-left">
+        <button class="pill"
+                [class.active]="filtroActual==='estaSemana'"
+                (click)="aplicarFiltro('estaSemana')">
+          Esta semana
+        </button>
+        <button class="pill"
+                [class.active]="filtroActual==='hoy'"
+                (click)="aplicarFiltro('hoy')">
+          Hoy
+        </button>
+        <button class="pill"
+                [class.active]="filtroActual==='ayer'"
+                (click)="aplicarFiltro('ayer')">
+          Ayer
+        </button>
+        <button class="pill"
+                [class.active]="filtroActual==='semanaPasada'"
+                (click)="aplicarFiltro('semanaPasada')">
+          Semana pasada
+        </button>
+        <button class="pill"
+                [class.active]="filtroActual==='mesActual'"
+                (click)="aplicarFiltro('mesActual')">
+          Mes actual
+        </button>
+      </div>
+
+      <div class="filters-right">
+        <span class="filters-label">Fecha</span>
+        <input type="date"
+               [(ngModel)]="fechaManual"
+               (change)="aplicarFechaManual()">
+      </div>
+    </div>
   </div>
-</div>
 
-<div style="display:grid;grid-template-columns:1.4fr .9fr;gap:16px;">
-  <section class="card">
-    <h3 style="margin:0 0 8px">Últimos pedidos</h3>
-    <div style="color:#94a3b8">Cargando…</div>
+  <!-- Tarjetas de resumen -->
+  <div class="stats-row">
+    <div class="stat-card stat-blue">
+      <div class="icon">🧾</div>
+      <div class="info">
+        <div class="label">PEDIDOS</div>
+        <div class="value">{{ totalPedidosRango }}</div>
+        <div class="hint">En el rango seleccionado</div>
+      </div>
+    </div>
+
+    <div class="stat-card stat-green">
+      <div class="icon">👤</div>
+      <div class="info">
+        <div class="label">CLIENTES</div>
+        <div class="value">{{ clientesNuevos }}</div>
+        <div class="hint">Clientes diferentes por DNI</div>
+      </div>
+    </div>
+
+    <div class="stat-card stat-purple">
+      <div class="icon">🎟️</div>
+      <div class="info">
+        <div class="label">EXPERIENCIAS</div>
+        <div class="value">{{ totalExperiencias }}</div>
+        <div class="hint">Total registradas</div>
+      </div>
+    </div>
+
+    <div class="stat-card stat-orange">
+      <div class="icon">📅</div>
+      <div class="info">
+        <div class="label">RESERVAS</div>
+        <div class="value">{{ totalReservasRango }}</div>
+        <div class="hint">En el rango seleccionado</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔹 Panel IA -->
+  <section class="card ia-card" *ngIf="insightMensajes.length > 0">
+    <div class="card-header ia-header" [ngClass]="insightNivel">
+      <div class="ia-title-row">
+        <span class="ia-pill">🤖 IA</span>
+        <h3>{{ insightTitulo }}</h3>
+      </div>
+    </div>
+    <div class="card-body ia-body">
+      <ul class="ia-list">
+        <li *ngFor="let msg of insightMensajes">
+          {{ msg }}
+        </li>
+      </ul>
+    </div>
   </section>
 
-  <section class="card">
-    <h3 style="margin:0 0 8px">Top experiencias por ingresos</h3>
-    <div style="color:#94a3b8">Sin datos.</div>
-  </section>
+  <!-- Contenido principal -->
+  <div class="content-grid">
 
-  <section class="card">
-    <h3 style="margin:0 0 8px">Ventas por día</h3>
-    <div style="color:#94a3b8">—</div>
-  </section>
+    <!-- Últimos pedidos -->
+    <section class="card last-orders">
+      <div class="card-header">
+        <h3>Últimos pedidos</h3>
+      </div>
 
-  <section class="card">
-    <h3 style="margin:0 0 8px">Clientes nuevos</h3>
-    <div style="color:#94a3b8">—</div>
-  </section>
+      <div *ngIf="cargandoUltimos" class="card-body">
+        Cargando...
+      </div>
+
+      <div *ngIf="!cargandoUltimos && ultimosPedidos.length === 0" class="card-body empty">
+        Sin datos.
+      </div>
+
+      <div *ngIf="!cargandoUltimos && ultimosPedidos.length > 0" class="card-body">
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Mesa</th>
+              <th>Fecha</th>
+              <th class="text-right">Monto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of ultimosPedidos">
+              <td>#{{ p.id }}</td>
+              <td>{{ getMesaLabel(p) }}</td>
+              <td>{{ getFechaPedido(p) | date:'short' }}</td>
+              <td class="text-right">
+                S/ {{ p.total | number:'1.2-2' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Columna derecha -->
+    <div class="side-column">
+
+      <section class="card mini">
+        <div class="card-header">
+          <h3>Ventas en el rango</h3>
+        </div>
+        <div class="card-body center">
+          <div class="big-number">
+            S/ {{ totalVentasRango | number:'1.2-2' }}
+          </div>
+          <div class="hint">Total vendido según el filtro de fecha</div>
+        </div>
+      </section>
+
+      <section class="card mini">
+        <div class="card-header">
+          <h3>Clientes nuevos</h3>
+        </div>
+        <div class="card-body center">
+          <div class="big-number">
+            {{ clientesNuevos }}
+          </div>
+          <div class="hint">Con reservas en el rango</div>
+        </div>
+      </section>
+
+      <section class="card mini">
+        <div class="card-header">
+          <h3>Reservas</h3>
+        </div>
+        <div class="card-body center">
+          <div class="big-number">
+            {{ totalReservasRango }}
+          </div>
+          <div class="hint">Total de reservas encontradas</div>
+        </div>
+      </section>
+
+    </div>
+  </div>
 </div>

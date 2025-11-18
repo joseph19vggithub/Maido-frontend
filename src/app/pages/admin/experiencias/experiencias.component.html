@@ -1,88 +1,148 @@
+<!-- ===== Encabezado de página (fuera de las cards) ===== -->
+<header class="page-header">
+  <h1 class="page-title">Experiencias</h1>
+  <p class="page-subtitle">
+    Gestión de las experiencias del menú
+  </p>
+</header>
+
+<!-- ===== LISTADO ===== -->
 <div class="card">
-  <h3 style="margin:0 0 10px">Experiencias</h3>
+  <div class="card-header">
+    <h3 class="card-title">Listado</h3>
 
-  <div *ngIf="error" style="color:#ef4444; margin-bottom:8px">{{ error }}</div>
+    <div class="card-header-actions">
+      <div *ngIf="error" class="error-text">{{ error }}</div>
 
-  <button class="btn" (click)="limpiar()">Nueva</button>
+      <button type="button" class="btn" (click)="limpiar()">
+        Nueva
+      </button>
+    </div>
+  </div>
 
   <table>
     <thead>
       <tr>
         <th>Nombre</th>
         <th>Precio</th>
-        <th>Descripción</th>
+        <th class="col-descripcion">Descripción</th>
         <th>Categoría</th>
         <th>Disponible</th>
         <th>Acciones</th>
       </tr>
     </thead>
+
     <tbody>
-      <tr *ngIf="cargando"><td colspan="6">Cargando…</td></tr>
-      <tr *ngIf="!cargando && data.length===0"><td colspan="6" style="color:#94a3b8">Sin datos.</td></tr>
+      <tr *ngIf="cargando" class="message-row">
+        <td colspan="6">Cargando…</td>
+      </tr>
+
+      <tr *ngIf="!cargando && data.length === 0" class="message-row">
+        <td colspan="6">Sin datos.</td>
+      </tr>
+
       <tr *ngFor="let x of data">
         <td>{{ x.nombre }}</td>
         <td>S/ {{ x.precio | number:'1.2-2' }}</td>
-        <td>{{ x.descripcion }}</td>
+        <td class="col-descripcion">{{ x.descripcion }}</td>
 
         <!-- Muestra nombre si viene el objeto categoria o resuelve por id -->
-<td>{{ catName(x) }}</td>
+        <td>{{ catName(x) }}</td>
 
-        <td><span [style.color]="x.disponible ? '#22c55e' : '#ef4444'">{{ x.disponible ? 'Sí' : 'No' }}</span></td>
         <td>
-          <button class="btn sm" (click)="editar(x)">Editar</button>
-          <button class="btn sm danger" (click)="eliminar(x)">Eliminar</button>
+          <span
+            class="status-pill"
+            [style.color]="x.disponible ? '#22c55e' : '#ef4444'">
+            {{ x.disponible ? 'Sí' : 'No' }}
+          </span>
+        </td>
+
+        <td>
+          <button
+            type="button"
+            class="btn sm"
+            (click)="editar(x)">
+            Editar
+          </button>
+
+          <button
+            type="button"
+            class="btn sm danger"
+            (click)="eliminar(x)">
+            Eliminar
+          </button>
         </td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<div class="card" style="margin-top:14px">
-  <h3 style="margin:0 0 10px">{{ f.id ? 'Editar' : 'Nueva' }} experiencia</h3>
+<!-- ===== FORMULARIO ===== -->
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">
+      {{ f.id ? 'Editar experiencia' : 'Nueva experiencia' }}
+    </h3>
+  </div>
 
   <div class="grid">
-    <label>Nombre
+    <label>
+      Nombre
       <input [(ngModel)]="f.nombre" placeholder="Nombre" />
     </label>
 
-    <label>Precio
-      <input type="number" min="0" step="0.01" [(ngModel)]="f.precio" />
+    <label>
+      Precio
+      <input
+        type="number"
+        min="0"
+        step="0.01"
+        [(ngModel)]="f.precio" />
     </label>
 
-    <label>Categoría
+    <label>
+      Categoría
       <select [(ngModel)]="f.idCategoria">
-        <option *ngIf="!categorias.length" [ngValue]="0" disabled>No hay categorías</option>
-        <option *ngFor="let c of categorias" [ngValue]="c.id">{{ c.nombre }}</option>
+        <option *ngIf="!categorias.length" [ngValue]="0" disabled>
+          No hay categorías
+        </option>
+        <option *ngFor="let c of categorias" [ngValue]="c.id">
+          {{ c.nombre }}
+        </option>
       </select>
     </label>
 
-    <label>Disponible
+    <label>
+      Disponible
       <select [(ngModel)]="f.disponible">
         <option [ngValue]="true">Sí</option>
         <option [ngValue]="false">No</option>
       </select>
     </label>
 
-    <label style="grid-column:1/-1">Descripción
-      <textarea rows="3" [(ngModel)]="f.descripcion" placeholder="Descripción breve"></textarea>
+    <label style="grid-column:1/-1">
+      Descripción
+      <textarea
+        rows="3"
+        [(ngModel)]="f.descripcion"
+        placeholder="Descripción breve">
+      </textarea>
     </label>
   </div>
 
-  <div style="margin-top:10px">
-    <button class="btn primary" (click)="guardar()">{{ f.id ? 'Actualizar' : 'Guardar' }}</button>
-    <button class="btn" (click)="limpiar()">Cancelar</button>
+  <div class="form-actions">
+    <button
+      type="button"
+      class="btn primary"
+      (click)="guardar()">
+      {{ f.id ? 'Actualizar' : 'Guardar' }}
+    </button>
+
+    <button
+      type="button"
+      class="btn"
+      (click)="limpiar()">
+      Cancelar
+    </button>
   </div>
 </div>
-
-<style>
-.card{background:#0f172a;border:1px solid #1f2937;border-radius:12px;padding:14px;color:#e5e7eb}
-table{width:100%;border-collapse:collapse;margin-top:8px}
-th,td{padding:8px;border-bottom:1px solid #1f2937;text-align:left}
-.btn{background:#111827;border:1px solid #374151;color:#e5e7eb;border-radius:8px;padding:6px 10px;cursor:pointer}
-.btn:hover{filter:brightness(1.1)}
-.btn.primary{background:#22c55e;border-color:#22c55e;color:#062015;font-weight:800}
-.btn.danger{background:#b91c1c;border-color:#b91c1c;color:#fff}
-.btn.sm{padding:4px 8px;font-size:12px}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-input,select,textarea{width:100%;border:1px solid #374151;border-radius:8px;background:#0b1220;color:#e5e7eb;padding:8px}
-</style>

@@ -1,49 +1,128 @@
-<div class="card bg-neutral-900 text-white p-6 rounded-2xl shadow">
-  <div class="flex items-center justify-between mb-4">
-    <h2 class="text-xl font-semibold">Roles</h2>
-    <button class="btn btn-primary" (click)="openCreate()">Nuevo</button>
+<!-- ===== Encabezado fuera de la card ===== -->
+<header class="page-header">
+  <h1 class="page-title">Roles</h1>
+  <p class="page-subtitle">
+    Define permisos y agrupa usuarios del sistema.
+  </p>
+</header>
+
+<!-- ===== Card principal ===== -->
+<div class="card roles-card">
+  <!-- HEADER -->
+  <div class="roles-header">
+    <div class="roles-header-left">
+      <h2 class="card-title">Listado de roles</h2>
+      <p class="card-subtitle">
+        Rol principal del personal y cantidad de usuarios asignados.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="openCreate()">
+      Nuevo rol
+    </button>
   </div>
 
-  <div *ngIf="loading">Cargando...</div>
-  <table class="w-full text-sm" *ngIf="!loading">
-    <thead>
-      <tr class="text-left border-b border-neutral-700">
-        <th class="py-2">Rol</th>
-        <th class="py-2">Usuarios asignados</th>
-        <th class="py-2">Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let r of roles" class="border-b border-neutral-800">
-        <td class="py-2">{{ r.nombre }}</td>
-        <!-- 👇 CAMBIO AQUÍ: ahora usamos r.asignados -->
-        <td class="py-2">{{ r.asignados }}</td>
-        <td class="py-2 space-x-2">
-          <button class="btn btn-sm btn-outline" (click)="openEdit(r)">Editar</button>
-          <button class="btn btn-sm btn-danger" (click)="delete(r.id)">Eliminar</button>
-        </td>
-      </tr>
-      <tr *ngIf="roles.length === 0">
-        <td colspan="3" class="py-4 text-neutral-400 text-center">Sin datos.</td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- ESTADO CARGANDO -->
+  <div *ngIf="loading" class="state-row">
+    Cargando...
+  </div>
+
+  <!-- TABLA -->
+  <div class="table-wrapper" *ngIf="!loading">
+    <table class="roles-table">
+      <thead>
+        <tr>
+          <th>Rol</th>
+          <th>Usuarios asignados</th>
+          <th class="col-actions">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let r of roles">
+          <td>{{ r.nombre }}</td>
+
+          <!-- usamos r.asignados como número -->
+          <td>
+            <span class="assigned-pill">
+              {{ r.asignados }}
+            </span>
+          </td>
+
+          <td class="col-actions">
+            <button
+              type="button"
+              class="btn btn-sm btn-outline"
+              (click)="openEdit(r)">
+              Editar
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-sm btn-danger"
+              (click)="delete(r.id)">
+              Eliminar
+            </button>
+          </td>
+        </tr>
+
+        <tr *ngIf="roles.length === 0">
+          <td colspan="3" class="empty-row">
+            Sin datos.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
-<!-- Modal -->
+<!-- ========= MODAL ========= -->
 <div *ngIf="modalOpen" class="modal-backdrop">
   <div class="modal-panel">
-    <h3 class="text-lg font-semibold mb-4">{{ editMode ? 'Editar rol' : 'Nuevo rol' }}</h3>
+    <div class="modal-header">
+      <h3 class="modal-title">
+        {{ editMode ? 'Editar rol' : 'Nuevo rol' }}
+      </h3>
 
-    <form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">
-      <div>
+      <button
+        type="button"
+        class="modal-close"
+        (click)="closeModal()">
+        ✕
+      </button>
+    </div>
+
+    <form
+      [formGroup]="form"
+      (ngSubmit)="save()"
+      class="modal-form">
+
+      <div class="form-group">
         <label>Nombre</label>
-        <input type="text" formControlName="nombre" placeholder="Administrador, Mesero..." />
+        <input
+          type="text"
+          formControlName="nombre"
+          placeholder="Administrador, Mesero, Cajero..." />
+        <p class="text-muted">
+          Usa nombres claros que identifiquen la función del rol.
+        </p>
       </div>
 
       <div class="modal-actions">
-        <button type="button" class="btn btn-outline" (click)="closeModal()">Cancelar</button>
-        <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+        <button
+          type="button"
+          class="btn btn-outline"
+          (click)="closeModal()">
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="form.invalid">
           {{ editMode ? 'Guardar cambios' : 'Crear' }}
         </button>
       </div>

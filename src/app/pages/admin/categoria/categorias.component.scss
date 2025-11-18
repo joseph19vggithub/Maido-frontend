@@ -1,0 +1,248 @@
+/* 🎨 Paleta Maido local */
+:host {
+  --primary:       #C81D25;
+  --primary-dark:  #8B0F1A;
+  --accent:        #FFB703;
+  --muted:         #94a3b8;
+  --text:          #e5e7eb;
+}
+
+/* ===== ENCABEZADO DE PÁGINA (como Mesas/Reservas) ===== */
+
+.page-header {
+  margin-bottom: 0.9rem;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #f9fafb;
+  letter-spacing: 0.4px;
+  position: relative;
+  text-shadow: 0 0 14px rgba(0,0,0,0.7);
+}
+
+.page-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 90px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #C81D25, transparent);
+  opacity: 0.85;
+}
+
+.page-subtitle {
+  margin: 0.8rem 0 0;
+  font-size: 0.95rem;
+  color: #e5e7eb;
+  opacity: 0.9;
+}
+
+/* ===== CARDS (lista + formulario) ===== */
+
+:host ::ng-deep .card {
+  position: relative;
+  background: rgba(15, 18, 25, 0.88);
+  border-radius: 18px;
+  padding: 1.1rem 1.3rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    0 22px 50px rgba(0, 0, 0, 0.55),
+    0 6px 14px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+/* separación entre lista y formulario */
+:host ::ng-deep .card + .card {
+  margin-top: 14px;
+}
+
+:host ::ng-deep .card::before {
+  content: "";
+  position: absolute;
+  inset: -1px -1px auto -1px;
+  height: 3px;
+  background: linear-gradient(90deg, #C81D25, #E23E36 55%, transparent);
+  opacity: 0.9;
+}
+
+/* header de cada card */
+
+:host ::ng-deep .card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+:host ::ng-deep .card-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: .3px;
+}
+
+:host ::ng-deep .card-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* mensaje de error */
+
+:host ::ng-deep .error-text {
+  color: #f97373;
+  font-size: 0.86rem;
+}
+
+/* ===== TABLA DE CATEGORÍAS ===== */
+
+:host ::ng-deep table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+  font-size: 0.95rem;
+}
+
+:host ::ng-deep th,
+:host ::ng-deep td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+:host ::ng-deep th {
+  color: #cfd8e3;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+/* filas hover / mensajes */
+
+:host ::ng-deep tbody tr {
+  transition: background 0.12s ease, transform 0.05s ease;
+}
+
+:host ::ng-deep tbody tr:hover td:not(.message-cell) {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+:host ::ng-deep .message-row td {
+  text-align: center;
+  color: var(--muted);
+}
+
+/* descripción acotada */
+
+:host ::ng-deep .col-descripcion {
+  max-width: 420px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:host ::ng-deep .col-actions {
+  width: 160px;
+  text-align: left;
+}
+
+/* ===== GRID DEL FORMULARIO (Nombre + Descripción) ===== */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.grid > label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.9rem;
+  color: #cbd5e1;
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== INPUTS / TEXTAREA ===== */
+
+:host ::ng-deep input,
+:host ::ng-deep textarea {
+  background: rgba(15, 23, 42, 0.95) !important;
+  color: var(--text) !important;
+  border: 1px solid rgba(148, 163, 184, 0.45) !important;
+  border-radius: 12px !important;
+  padding: 0.55rem 0.75rem !important;
+  outline: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.15s ease;
+}
+
+:host ::ng-deep input::placeholder,
+:host ::ng-deep textarea::placeholder {
+  color: var(--muted);
+}
+
+:host ::ng-deep input:focus,
+:host ::ng-deep textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(200, 29, 37, 0.35);
+}
+
+/* ===== BOTONES ===== */
+
+:host ::ng-deep .btn {
+  display: inline-block;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(15, 23, 42, 0.72);
+  color: #e5e7eb;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.05s, box-shadow 0.15s, opacity 0.1s;
+}
+
+:host ::ng-deep .btn:hover {
+  background: rgba(30, 64, 175, 0.85);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.4);
+}
+
+:host ::ng-deep .btn.primary {
+  border-color: transparent;
+  background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(200, 29, 37, 0.45);
+}
+
+:host ::ng-deep .btn.danger {
+  border-color: transparent;
+  background: #ef4444;
+  color: #fff;
+}
+
+:host ::ng-deep .btn.sm {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+}
+
+/* Footer acciones formulario */
+.form-actions {
+  margin-top: 10px;
+}

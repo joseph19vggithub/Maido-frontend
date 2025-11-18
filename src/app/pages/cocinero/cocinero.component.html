@@ -34,6 +34,25 @@
       <!-- Fecha -->
       <p class="fecha">🕒 {{ getFecha(pedido) | date: 'short' }}</p>
 
+      <!-- 🤖 IA: prioridad + tiempo -->
+      <div class="ia-meta">
+        <span class="ia-chip" [ngClass]="pedido.prioridad">
+          🤖 {{ getTextoPrioridad(pedido) }}
+        </span>
+
+        <span class="ia-tiempo">
+          Lleva {{ pedido.segundosEnCocina }} seg · Estimado {{ pedido.tiempoEstimadoSeg }} seg
+        </span>
+      </div>
+
+      <!-- ⚠️ IA: alerta de atraso -->
+      <div
+        class="ia-alert"
+        *ngIf="pedido.retrasado && pedido.estado !== 'listo'"
+      >
+        ⚠️ Este pedido está tardando más de lo esperado. Priorizar en cocina.
+      </div>
+
       <!-- Detalle -->
       <table class="detalle">
         <colgroup>

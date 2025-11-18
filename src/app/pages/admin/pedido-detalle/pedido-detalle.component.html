@@ -1,20 +1,33 @@
+<!-- ===== Encabezado fuera de las cards ===== -->
+<header class="page-header">
+  <h1 class="page-title">Detalle de pedidos</h1>
+  <p class="page-subtitle">
+    Gestión de los ítems asociados a cada pedido del restaurante
+  </p>
+</header>
+
 <div class="page">
 
-  <!-- FORMULARIO -->
+  <!-- ========== FORMULARIO ========== -->
   <section class="card form-card">
-    <h2>{{ editando ? 'Editar detalle' : 'Nuevo detalle' }}</h2>
+    <div class="card-header">
+      <h2 class="card-title">
+        {{ editando ? 'Editar detalle' : 'Nuevo detalle' }}
+      </h2>
+    </div>
 
-    <form (ngSubmit)="guardar()" #f="ngForm">
+    <form (ngSubmit)="guardar()" #f="ngForm" class="form-section">
+
       <div class="form-grid">
 
         <!-- PEDIDO -->
         <div class="form-control">
-          <label>Pedido</label>
+          <label for="idPedido">Pedido</label>
           <select
+            id="idPedido"
             name="idPedido"
             [(ngModel)]="form.idPedido"
-            required
-          >
+            required>
             <option value="0" disabled>Seleccione un pedido</option>
             <option *ngFor="let p of pedidos" [value]="p.id">
               Pedido {{ p.id }}
@@ -24,13 +37,13 @@
 
         <!-- EXPERIENCIA -->
         <div class="form-control">
-          <label>Experiencia</label>
+          <label for="idExperiencia">Experiencia</label>
           <select
+            id="idExperiencia"
             name="idExperiencia"
             [(ngModel)]="form.idExperiencia"
             required
-            (ngModelChange)="onExperienciaChange()"
-          >
+            (ngModelChange)="onExperienciaChange()">
             <option value="0" disabled>Seleccione una experiencia</option>
             <option *ngFor="let e of experiencias" [value]="e.id">
               {{ e.nombre }} - S/ {{ e.precio | number:'1.2-2' }}
@@ -40,64 +53,67 @@
 
         <!-- CANTIDAD -->
         <div class="form-control">
-          <label>Cantidad</label>
+          <label for="cantidad">Cantidad</label>
           <input
+            id="cantidad"
             type="number"
             name="cantidad"
             min="1"
             [(ngModel)]="form.cantidad"
-            required
-          />
+            required />
         </div>
 
         <!-- PRECIO UNITARIO (solo lectura) -->
         <div class="form-control">
-          <label>Precio unitario (desde experiencia)</label>
+          <label for="precioUnitario">Precio unitario</label>
           <input
+            id="precioUnitario"
             type="number"
             name="precioUnitario"
             [(ngModel)]="form.precioUnitario"
-            readonly
-          />
+            readonly />
         </div>
 
-        <!-- COMENTARIOS / DESCRIPCIÓN (solo lectura) -->
+        <!-- COMENTARIOS -->
         <div class="form-control full">
-          <label>Comentarios (descripción de la experiencia)</label>
+          <label for="comentarios">Comentarios</label>
           <textarea
+            id="comentarios"
             name="comentarios"
             rows="2"
             [(ngModel)]="form.comentarios"
-            readonly
-          ></textarea>
+            readonly>
+          </textarea>
         </div>
 
       </div>
 
-      <!-- BOTONES -->
+      <!-- Botones -->
       <div class="form-actions">
         <button class="btn primary" type="submit" [disabled]="f.invalid">
           {{ editando ? 'Guardar cambios' : 'Registrar detalle' }}
         </button>
+
         <button class="btn ghost" type="button" (click)="cancelar()">
           Cancelar
         </button>
       </div>
+
     </form>
   </section>
 
-  <!-- LISTADO -->
+  <!-- ========== TABLA ========== -->
   <section class="card table-card">
+
     <div class="table-header">
-      <h2>Listado de detalles</h2>
+      <h2 class="card-title">Listado de detalles</h2>
 
       <div class="search">
         <input
           type="text"
           placeholder="Buscar por pedido, experiencia o comentario..."
           [(ngModel)]="q"
-          (ngModelChange)="applyFilter()"
-        />
+          (ngModelChange)="applyFilter()" />
       </div>
 
       <span *ngIf="cargando" class="badge">Cargando...</span>
@@ -124,13 +140,9 @@
           <td>{{ d.experiencia?.nombre || d.idExperiencia }}</td>
           <td>{{ d.cantidad }}</td>
 
-          <td>
-            {{ d.precioUnitario | number:'1.2-2' }}
-          </td>
+          <td>{{ d.precioUnitario | number:'1.2-2' }}</td>
 
-          <td>
-            {{ (d.cantidad || 0) * (d.precioUnitario || 0) | number:'1.2-2' }}
-          </td>
+          <td>{{ (d.cantidad || 0) * (d.precioUnitario || 0) | number:'1.2-2' }}</td>
 
           <td>{{ d.comentarios }}</td>
 
@@ -145,6 +157,6 @@
         </tr>
       </tbody>
     </table>
-  </section>
 
+  </section>
 </div>
