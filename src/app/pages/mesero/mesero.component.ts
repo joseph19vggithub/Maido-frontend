@@ -9,9 +9,9 @@ import { Mesa } from '../../models/mesa.model';
 import { ExperienciaService } from '../../services/experiencia.service';
 import { Experiencia } from '../../models/experiencia.model';
 import { PedidoService } from '../../services/pedido.service';
-import { EstadoPedido } from '../../models/pedido.model';
+import { PedidoCreate } from '../../models/pedido.model';
 
-// 👇 NUEVO: servicios / modelos para reservas
+// servicios / modelos para reservas
 import { ReservaService } from '../../services/reserva.service';
 import { Reserva } from '../../models/reserva.model';
 import { ReservaMesaService } from '../../services/reserva-mesa.service';
@@ -82,7 +82,7 @@ export class MeseroComponent {
   cargando = false;
   qty: Record<number, number> = {};
 
-  /* ===== Pedidos por mesa ===== */
+  /* ===== Pedidos por mesa (solo en front) ===== */
   pedidosPorMesa: Record<string, Linea[]> = {};
   notaPorMesa: Record<string, string> = {};
 
@@ -107,7 +107,8 @@ export class MeseroComponent {
 
   addItem(it: MenuItem) {
     if (this.estadoMesa === 'reservada') {
-      this.toast('La mesa está reservada', 'warning'); return;
+      this.toast('La mesa está reservada', 'warning');
+      return;
     }
     const arr = this.pedidoActual;
     const q = Math.max(1, this.qty[it.id] ?? 1);
@@ -117,9 +118,11 @@ export class MeseroComponent {
     this.qty[it.id] = 1;
     this.toast('Agregado al pedido', 'success');
   }
+
   removeLine(i: number) {
     this.pedidoActual.splice(i, 1);
   }
+
   vaciarPedido() {
     this.pedidosPorMesa[this.mesaKey] = [];
   }
@@ -135,16 +138,19 @@ export class MeseroComponent {
       return;
     }
 
-    const pedido = {
+    // 🔥 Body que espera el backend (PedidoDto con PedidoDetalles)
+    const pedido: PedidoCreate = {
       fecha: new Date().toISOString(),
-      estado: 'pendiente' as EstadoPedido,
+      estado: 'pendiente',
       total: this.total,
-      idReserva: this.mesaSeleccionadaObj.id, // ajusta si tu BD usa otra relación
+      // OJO: aquí estás usando IdMesa como IdReserva
+      // si luego usas ReservaMesa deberás cambiar esto al Id de la Reserva real
+      idReserva: this.mesaSeleccionadaObj.id,
       pedidoDetalles: this.pedidoActual.map(it => ({
-        idPedido: 0,
-        experiencia: { id: it.id, nombre: it.nombre },
         cantidad: it.cantidad,
-        precioUnitario: it.precio
+        precioUnitario: it.precio,
+        comentarios: this.notaRapida || '',
+        idExperiencia: it.id
       }))
     };
 
@@ -164,7 +170,7 @@ export class MeseroComponent {
   }
 
   marcarListo() {
-    this.toast('Pedido marcado como listo', 'info');
+    this.toast('Pedido marcado como listo (solo visual por ahora)', 'info');
   }
 
   marcarReservada() {
@@ -180,9 +186,12 @@ export class MeseroComponent {
     });
   }
 
-  logout() { this.toast('Sesión cerrada', 'danger'); }
+  logout() {
+    this.toast('Sesión cerrada', 'danger');
+    // aquí podrías limpiar tokens o navegar al login
+  }
 
-  /* ===== Actualizar estado de mesa ===== */
+  /* ===== Actualizar estado de mesa (backend) ===== */
   private persistirEstado(m: Mesa, estado: 'Libre'|'Ocupada'|'Reservada', onOk?: () => void) {
     const body: Mesa = { ...m, estado };
     this.mesaSrv.update(m.id, body).subscribe({
@@ -230,7 +239,6 @@ export class MeseroComponent {
 
     this.reservaSrv.getAll().subscribe({
       next: (xs) => {
-        // filtra reservas de hoy (ajusta si tu campo se llama distinto)
         this.reservasDisponibles = (xs ?? []).filter(r => {
           const f = (r.fecha as any)?.toString().substring(0, 10) ?? '';
           return f === hoyStr;
@@ -278,8 +286,8 @@ export class MeseroComponent {
     private mesaSrv: MesaService,
     private expSvc: ExperienciaService,
     private pedidoSrv: PedidoService,
-    private reservaSrv: ReservaService,          // 👈 nuevo
-    private reservaMesaSrv: ReservaMesaService   // 👈 nuevo
+    private reservaSrv: ReservaService,
+    private reservaMesaSrv: ReservaMesaService
   ) {
     this.ensureMesaContainers();
     this.cargarMesas();

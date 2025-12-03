@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { ReservaService } from '../../services/reserva.service';
 import { ReservaCreate } from '../../models/reserva.model';
 
+// 👇 EmailJS
+import emailjs from '@emailjs/browser';
+
 @Component({
   selector: 'app-reserva',
   standalone: true,
@@ -17,6 +20,11 @@ export class ReservaComponent implements AfterViewInit {
   // 🤖 IA
   iaSugerenciaExperiencia: string = '';
   iaAlertaAlergia: string = '';
+
+  // 👇 Tus datos de EmailJS (CORREGIDOS)
+  private emailServiceId = 'service_f126obb';
+  private emailTemplateId = 'template_vy00ele';
+  private emailPublicKey = 'bc_4ODnDBuxbvKMt5';
 
   constructor(private router: Router, private reservaSvc: ReservaService) {}
 
@@ -35,7 +43,7 @@ export class ReservaComponent implements AfterViewInit {
     }
   }
 
-  // 🔹 Se ejecuta cuando cambia número de personas o comentarios
+  // 🔹 Cambio de contexto para la “IA”
   onCambioContextoIA(): void {
     const personasStr = (document.querySelector('#personas') as HTMLInputElement)?.value || '0';
     const personas = Number(personasStr);
@@ -43,10 +51,10 @@ export class ReservaComponent implements AfterViewInit {
       (document.querySelector('#mensaje') as HTMLTextAreaElement)?.value || '';
     const comentario = comentarioRaw.toLowerCase();
 
-    // IA 1: sugerencia de experiencia
+    // IA 1: sugerencia
     this.iaSugerenciaExperiencia = this.calcularSugerenciaExperiencia(personas, comentario);
 
-    // IA 2: detección de alergias
+    // IA 2: alergias
     const alergiasDetectadas = this.detectarAlergias(comentario);
     if (alergiasDetectadas.length > 0) {
       this.iaAlertaAlergia =
@@ -58,7 +66,6 @@ export class ReservaComponent implements AfterViewInit {
     }
   }
 
-  // 🤖 Regla simple para sugerir experiencia según personas + ocasión
   private calcularSugerenciaExperiencia(personas: number, comentario: string): string {
     if (!personas || personas <= 0) return '';
 
@@ -78,7 +85,7 @@ export class ReservaComponent implements AfterViewInit {
       comentario.includes('reunion') ||
       comentario.includes('trabajo');
 
-    // 1-2 personas
+    // 1–2 personas
     if (personas <= 2) {
       if (esRomantico || esAniversario) {
         return 'Para una ocasión especial en pareja te recomendamos una experiencia de maridaje Nikkei para 2 personas.';
@@ -86,7 +93,7 @@ export class ReservaComponent implements AfterViewInit {
       return 'Para 1 o 2 personas te sugerimos una experiencia de maridaje Nikkei en barra o en mesa, ideal para disfrutar del chef.';
     }
 
-    // 3 a 5 personas
+    // 3–5 personas
     if (personas >= 3 && personas <= 5) {
       if (esCumple) {
         return 'Para un cumpleaños en grupo pequeño te recomendamos una experiencia de degustación Nikkei con varios tiempos para compartir.';
@@ -97,7 +104,7 @@ export class ReservaComponent implements AfterViewInit {
       return 'Para grupos de 3 a 5 personas te recomendamos una experiencia de degustación Nikkei para compartir diferentes platos.';
     }
 
-    // 6 o más personas
+    // 6+ personas
     if (personas >= 6) {
       if (esCumple || esAniversario) {
         return 'Para celebraciones con grupos grandes te recomendamos un menú degustación completo, ideal para eventos especiales.';
@@ -108,7 +115,6 @@ export class ReservaComponent implements AfterViewInit {
     return '';
   }
 
-  // 🤖 Buscar palabras clave de alergias en el comentario
   private detectarAlergias(texto: string): string[] {
     if (!texto) return [];
 
@@ -165,8 +171,8 @@ export class ReservaComponent implements AfterViewInit {
     const cantidadPersonas = Number(
       (document.querySelector('#personas') as HTMLInputElement)?.value
     );
-    const fecha = (document.querySelector('#fecha') as HTMLInputElement)?.value;      // yyyy-MM-dd
-    const horaHHmm = (document.querySelector('#hora') as HTMLInputElement)?.value;    // HH:mm
+    const fecha = (document.querySelector('#fecha') as HTMLInputElement)?.value; // yyyy-MM-dd
+    const horaHHmm = (document.querySelector('#hora') as HTMLInputElement)?.value; // HH:mm
     const notas = (document.querySelector('#mensaje') as HTMLTextAreaElement)?.value.trim();
 
     // Validaciones
@@ -181,7 +187,6 @@ export class ReservaComponent implements AfterViewInit {
 
     if (Object.keys(this.errores).length > 0) return;
 
-    // Armar payload para tu backend (coincide con tu DTO)
     const payload: ReservaCreate = {
       nombreCompleto,
       correoElectronico,
@@ -189,12 +194,34 @@ export class ReservaComponent implements AfterViewInit {
       dni,
       cantidadPersonas,
       notas,
-      fecha,                 // el backend la mapea a Date
-      hora: `${horaHHmm}:00` // HH:mm:ss para TimeSpan
+      fecha,
+      hora: `${horaHHmm}:00`
     };
 
-    this.reservaSvc.create(payload).subscribe({
-      next: (id) => {
+        this.reservaSvc.create(payload).subscribe({
+      next: () => {
+        // 👉 Enviar correo usando EmailJS
+        const templateParams = {
+  to_name: nombreCompleto,
+  personas: cantidadPersonas,
+  fecha: fecha,
+  hora: horaHHmm,
+  notas: notas || '',
+  email: correoElectronico
+};
+
+emailjs
+  .send(this.emailServiceId, this.emailTemplateId, templateParams, this.emailPublicKey)
+  .then(
+    (result) => {
+      console.log('Correo de reserva enviado correctamente', result.status, result.text);
+    },
+    (error) => {
+      console.error('Error al enviar correo:', error);
+    }
+  );
+
+
         localStorage.setItem('reservaConfirmada', JSON.stringify(payload));
         this.router.navigate(['/confirmacion-reserva']);
       },
@@ -203,5 +230,6 @@ export class ReservaComponent implements AfterViewInit {
         alert('No se pudo registrar la reserva.');
       }
     });
+
   }
 }

@@ -1,3 +1,4 @@
+// src/app/pages/cocinero/cocinero.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -8,8 +9,7 @@ type Prioridad = 'alta' | 'media' | 'baja';
 
 type PedidoUI = Pedido & {
   animando: boolean;
-  // ahora usamos segundos para la demo
-  segundosEnCocina?: number;
+  segundosEnCocina?: number;   // ⏱
   prioridad?: Prioridad;
   retrasado?: boolean;
   tiempoEstimadoSeg?: number;
@@ -31,8 +31,11 @@ export class CocineroComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.cargarPedidos();
-    // refresco cada 5 segundos
-    this.timer = setInterval(() => this.cargarPedidos(), 5000);
+
+    // ⏰ Cada segundo incrementamos los tiempos y recalculamos prioridad
+    this.timer = setInterval(() => {
+      this.actualizarTiempos();
+    }, 1000);
   }
 
   ngOnDestroy(): void {
@@ -43,14 +46,40 @@ export class CocineroComponent implements OnInit, OnDestroy {
     this.cargando = true;
     this.pedidoService.getAll().subscribe({
       next: (data) => {
-        // 🔹 Solo mostramos pedidos que NO estén listos
-        const activos = data.filter(p => p.estado !== 'listo');
+        const activos = (data ?? []).filter(p => p.estado !== 'listo');
 
-        const base: PedidoUI[] = activos.map(p => ({ ...p, animando: false }));
-        this.pedidos = this.aplicarInteligenciaCocina(base);
+        const base: PedidoUI[] = activos.map(p => {
+          const existente = this.pedidos.find(x => x.id === p.id);
+
+          const segundos = existente?.segundosEnCocina ?? 0;
+
+          // Inicializamos cada pedido con su IA ya calculada
+          return this.calcularIA({
+            ...p,
+            animando: false,
+            segundosEnCocina: segundos
+          });
+        });
+
+        this.pedidos = base;
         this.cargando = false;
       },
       error: () => (this.cargando = false)
+    });
+  }
+
+  private actualizarTiempos(): void {
+    if (!this.pedidos || this.pedidos.length === 0) return;
+
+    this.pedidos = this.pedidos.map(p => {
+      if (p.estado === 'listo') return p;
+
+      const segundos = (p.segundosEnCocina ?? 0) + 1;
+
+      return this.calcularIA({
+        ...p,
+        segundosEnCocina: segundos
+      });
     });
   }
 
@@ -58,11 +87,10 @@ export class CocineroComponent implements OnInit, OnDestroy {
     pedido.estado = nuevoEstado;
     pedido.animando = true;
 
-    // 🤖 Recalcular IA para este pedido (por si pasa a en_proceso)
-    const actualizado = this.aplicarInteligenciaCocina([pedido])[0];
+    // Recalculamos IA para ese pedido
+    const actualizado = this.calcularIA(pedido);
     Object.assign(pedido, actualizado);
 
-    // 🚀 Si pasa a LISTO lo quitamos de la lista al toque
     if (nuevoEstado === 'listo') {
       this.pedidos = this.pedidos.filter(x => x.id !== pedido.id);
     }
@@ -96,36 +124,34 @@ export class CocineroComponent implements OnInit, OnDestroy {
     return String(mesa ?? '?');
   }
 
-  /** Normaliza líneas/detalles del pedido sin romper tipos */
   lineas(
     p: PedidoUI
   ): Array<{ plato: string; cantidad: number; comentarios?: string }> {
-    const dets: any[] = (p as any).detalles ?? (p as any).items ?? [];
+    const dets: any[] = (p as any).pedidoDetalles ?? [];
+
     return dets.map((d) => ({
-      plato: d.plato ?? d.nombre ?? '',
+      plato:
+        d.experiencia?.nombre ??
+        `Experiencia ${d.idExperiencia ?? ''}`,
       cantidad: Number(d.cantidad ?? 1),
-      comentarios: d.comentarios ?? d.observaciones ?? d.nota ?? ''
+      comentarios: d.comentarios ?? ''
     }));
   }
 
   getFecha(p: PedidoUI): string | Date {
-  const anyP: any = p;
+    const anyP: any = p;
 
-  // 👇 Probamos todos los nombres posibles de fecha del pedido
-  return (
-    anyP.fechaHora ||   // el más probable en tu modelo
-    anyP.fecha ||       // por si usas 'fecha'
-    anyP.creadoEn ||    // o 'creadoEn'
-    new Date()          // fallback
-  );
-}
+    return (
+      anyP.fechaHora ||
+      anyP.fecha ||
+      anyP.creadoEn ||
+      new Date()
+    );
+  }
 
-
-  // 🤖 Texto que muestra en el chip de prioridad
   getTextoPrioridad(p: PedidoUI): string {
     if (p.estado === 'listo') return 'Pedido completado';
 
-    // Si aún no hay prioridad, lo tratamos como normal
     if (!p.prioridad) {
       return 'Prioridad normal';
     }
@@ -136,65 +162,47 @@ export class CocineroComponent implements OnInit, OnDestroy {
       case 'media':
         return 'Prioridad media';
       case 'baja':
+      default:
         return 'Prioridad normal';
     }
   }
 
-  // 🤖 IA para cocina: AHORA en SEGUNDOS para la demo
-  private aplicarInteligenciaCocina(pedidos: PedidoUI[]): PedidoUI[] {
-    const ahora = new Date();
+  // 🔥 "IA" de cocina usando segundosEnCocina
+  private calcularIA(p: PedidoUI): PedidoUI {
+    const segundosEnCocina = p.segundosEnCocina ?? 0;
 
-    return pedidos.map((p) => {
-      // Fecha base del pedido
-      const fechaBase = new Date(this.getFecha(p) as any);
-      const diffMs = ahora.getTime() - fechaBase.getTime();
+    const lineas = this.lineas(p);
+    const totalPlatos = lineas.reduce(
+      (acc, l) => acc + (Number(l.cantidad) || 0),
+      0
+    );
 
-      // ⏱ SEGUNDOS que lleva el pedido en cocina
-      const segundosEnCocina =
-        diffMs > 0 ? Math.floor(diffMs / 1000) : 0;
+    let tiempoEstimadoSeg = 10;
+    if (totalPlatos <= 2) tiempoEstimadoSeg = 10;
+    else if (totalPlatos <= 5) tiempoEstimadoSeg = 15;
+    else tiempoEstimadoSeg = 20;
 
-      // Cantidad total de platos
-      const lineas = this.lineas(p);
-      const totalPlatos = lineas.reduce(
-        (acc, l) => acc + (Number(l.cantidad) || 0),
-        0
-      );
+    let prioridad: Prioridad = 'baja';
 
-      // ⏳ Tiempo estimado en SEGUNDOS (para demo)
-      let tiempoEstimadoSeg = 10;
-      if (totalPlatos <= 2) tiempoEstimadoSeg = 10;      // pedidos chicos
-      else if (totalPlatos <= 5) tiempoEstimadoSeg = 15; // medianos
-      else tiempoEstimadoSeg = 20;                       // grandes
-
-      // PRIORIDAD basándose en SEGUNDOS
-      let prioridad: Prioridad = 'baja';
-
-      if (p.estado !== 'listo') {
-        // 🔥 PRIORIDAD ALTA: 20+ seg o muchos platos
-        if (segundosEnCocina >= 20 || totalPlatos > 6) {
-          prioridad = 'alta';
-        }
-        // 🟡 PRIORIDAD MEDIA: 10–19 seg o 3–5 platos
-        else if (segundosEnCocina >= 10 || totalPlatos >= 3) {
-          prioridad = 'media';
-        }
-        // 🟢 PRIORIDAD NORMAL: resto
-        else {
-          prioridad = 'baja';
-        }
+    if (p.estado !== 'listo') {
+      if (segundosEnCocina >= 20 || totalPlatos > 6) {
+        prioridad = 'alta';
+      } else if (segundosEnCocina >= 10 || totalPlatos >= 3) {
+        prioridad = 'media';
+      } else {
+        prioridad = 'baja';
       }
+    }
 
-      // Atraso: pasó el tiempo estimado + 5 segundos
-      const retrasado =
-        p.estado !== 'listo' && segundosEnCocina >= tiempoEstimadoSeg + 5;
+    const retrasado =
+      p.estado !== 'listo' && segundosEnCocina >= tiempoEstimadoSeg + 5;
 
-      return {
-        ...p,
-        segundosEnCocina,
-        prioridad,
-        retrasado,
-        tiempoEstimadoSeg
-      };
-    });
+    return {
+      ...p,
+      segundosEnCocina,
+      prioridad,
+      retrasado,
+      tiempoEstimadoSeg
+    };
   }
 }
